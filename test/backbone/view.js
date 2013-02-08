@@ -7,11 +7,11 @@ $(function () {
 
     var View = Backbone.View.extend({
         initialize: function () {
-            this.addBinding('change', '[name="email"]', 'value:email', { validate: true });
-            this.addBinding('change', '[name="activated"]', 'checked:activated');
-            this.addBinding('change', '[name="gender"]', 'checked:gender');
-            this.addBinding('change', '[name="status"]', 'value:status');
-            this.addBinding('change', '[name="interests"]', 'checked:interests');
+            this.binding('change', '[name="email"]', 'value:email', { validate: true });
+            this.binding('change', '[name="activated"]', 'checked:activated');
+            this.binding('change', '[name="gender"]', 'checked:gender');
+            this.binding('change', '[name="status"]', 'value:status');
+            this.binding('change', '[name="interests"]', 'checked:interests');
         }
     });
 

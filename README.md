@@ -51,15 +51,18 @@ var userProfile = new Backbone.View({
 ```
 
 ### Add bindings
-#### model.addBinding(event, selector, binding, [options])
+#### model.binding(event, selector, binding, [options])
 ```js
-userProfile.addBinding('change', '[name="email"]', 'value:email', { validate: true });
-userProfile.addBinding('change', '[name="activated"]', 'checked:activated');
-userProfile.addBinding('change', '[name="gender"]', 'checked:gender');
-userProfile.addBinding('change', '[name="status"]', 'value:status');
-userProfile.addBinding('change', '[name="interests"]', 'checked:interests');
+userProfile.binding('change', '[name="email"]', 'value:email', { validate: true });
+userProfile.binding('change', '[name="activated"]', 'checked:activated');
+userProfile.binding('change', '[name="gender"]', 'checked:gender');
+userProfile.binding('change', '[name="status"]', 'value:status');
+userProfile.binding('change', '[name="interests"]', 'checked:interests');
 ```
 
 ## Changelog
+### 0.1.1
+  - Method `addBinding` renamed to `binding`
+
 ### 0.1.0
   - Initial release

@@ -1,5 +1,5 @@
 /*!
- * Backbone.DataBinding v0.1.0
+ * Backbone.DataBinding v0.1.1
  * https://github.com/DreamTheater/Backbone.DataBinding
  *
  * Copyright (c) 2013 Dmytro Nemoga
@@ -89,7 +89,7 @@
             return this;
         }),
 
-        addBinding: function (event, selector, binding, options) {
+        binding: function (event, selector, binding, options) {
             var tokens = binding.split(':'),
 
                 property = tokens[0],

@@ -82,7 +82,7 @@
             return this;
         }),
 
-        addBinding: function (event, selector, binding, options) {
+        binding: function (event, selector, binding, options) {
             var tokens = binding.split(':'),
 
                 property = tokens[0],
