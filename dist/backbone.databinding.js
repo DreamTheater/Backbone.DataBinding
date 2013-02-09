@@ -10,24 +10,21 @@
 
     var View = Backbone.View;
 
-    /**
-     * @class Backbone.View
-     */
     Backbone.View = View.extend({
         readers: {
-            html: function (attribute, elements) {
+            html: function (elements) {
                 return elements.html();
             },
 
-            text: function (attribute, elements) {
+            text: function (elements) {
                 return elements.text();
             },
 
-            value: function (attribute, elements) {
+            value: function (elements) {
                 return elements.val();
             },
 
-            checked: function (attribute, elements) {
+            checked: function (elements) {
                 if (elements.prop('type') === 'radio') {
                     return _.pluck(elements.serializeArray(), 'value')[0];
                 } else if (elements.length > 1) {
@@ -39,19 +36,19 @@
         },
 
         writers: {
-            html: function (attribute, value, elements) {
+            html: function (elements, value) {
                 elements.html(value);
             },
 
-            text: function (attribute, value, elements) {
+            text: function (elements, value) {
                 elements.text(value);
             },
 
-            value: function (attribute, value, elements) {
+            value: function (elements, value) {
                 elements.val(value);
             },
 
-            checked: function (attribute, value, elements) {
+            checked: function (elements, value) {
                 if (elements.prop('type') === 'radio') {
                     elements.filter('[value="' + value + '"]').prop('checked', true);
                 } else if (elements.length > 1) {
@@ -102,7 +99,7 @@
                         value = null;
 
                     if (reader) {
-                        value = reader.call(this, attribute, elements);
+                        value = reader.call(this, elements);
                     } else {
                         value = elements.prop(property);
                     }
@@ -119,7 +116,7 @@
                     value = model.get(attribute);
 
                 if (writer) {
-                    writer.call(this, attribute, value, elements);
+                    writer.call(this, elements, value);
                 } else {
                     elements.prop(property, value);
                 }
