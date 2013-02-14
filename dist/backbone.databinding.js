@@ -20,10 +20,6 @@
                 return elements.text();
             },
 
-            value: function (elements) {
-                return elements.val();
-            },
-
             checked: function (elements) {
                 if (elements.prop('type') === 'radio') {
                     return _.pluck(elements.serializeArray(), 'value')[0];
@@ -37,15 +33,19 @@
 
         writers: {
             html: function (elements, value) {
-                elements.html(value);
+                if (value) {
+                    elements.html(value);
+                } else {
+                    elements.empty();
+                }
             },
 
             text: function (elements, value) {
-                elements.text(value);
-            },
-
-            value: function (elements, value) {
-                elements.val(value);
+                if (value) {
+                    elements.text(value);
+                } else {
+                    elements.empty();
+                }
             },
 
             checked: function (elements, value) {
