@@ -130,7 +130,9 @@
         },
 
         syncToModel: function () {
-            this.model.trigger('change', this.model);
+            var model = this.model;
+
+            model.trigger('change', model);
 
             return this;
         },

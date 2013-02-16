@@ -17,7 +17,8 @@ var user = new Backbone.Model({
     activated: true,
     gender: 'MALE',
     status: 'SINGLE',
-    interests: ['MOVIE', 'MUSIC']
+    interests: ['MOVIE', 'MUSIC'],
+    notes: 'I like JavaScript!'
 });
 ```
 
