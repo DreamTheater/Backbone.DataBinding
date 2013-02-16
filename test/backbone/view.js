@@ -32,7 +32,7 @@ $(function () {
             });
 
             this.userProfile = new View({
-                el: '[name="userProfile"]',
+                el: '#userProfile',
                 model: this.user
             });
         }

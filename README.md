@@ -24,7 +24,7 @@ var user = new Backbone.Model({
 
 ### Create view
 ```html
-<form name="userProfile">
+<form id="userProfile">
     <input type="text" name="email">
 
     <input type="checkbox" name="activated">
@@ -48,7 +48,7 @@ var user = new Backbone.Model({
 
 ```js
 var userProfile = new Backbone.View({
-    el: '[name="userProfile"]',
+    el: '#userProfile',
     model: user
 });
 ```
