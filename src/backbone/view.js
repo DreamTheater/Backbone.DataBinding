@@ -14,13 +14,17 @@
             },
 
             checked: function (elements) {
+                var value, values = _.pluck(elements.serializeArray(), 'value');
+
                 if (elements.prop('type') === 'radio') {
-                    return _.pluck(elements.serializeArray(), 'value')[0];
+                    value = values[0];
                 } else if (elements.length > 1) {
-                    return _.pluck(elements.serializeArray(), 'value');
+                    value = values;
                 } else {
-                    return elements.prop('checked');
+                    value = !!values[0];
                 }
+
+                return value;
             }
         },
 
@@ -42,12 +46,17 @@
             },
 
             checked: function (elements, value) {
+                var values = _.isArray(value) ? value : [value],
+
+                    matchedElements = elements.filter(function () {
+                        return _.contains(values, this.value);
+                    });
+
                 if (elements.prop('type') === 'radio') {
-                    elements.filter('[value="' + value + '"]').prop('checked', true);
+                    matchedElements.prop('checked', true);
                 } else if (elements.length > 1) {
-                    elements.prop('checked', false).filter(_.map(value, function (value) {
-                        return '[value="' + value + '"]';
-                    }).join(', ')).prop('checked', true);
+                    elements.prop('checked', false);
+                    matchedElements.prop('checked', true);
                 } else {
                     elements.prop('checked', value);
                 }

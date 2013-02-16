@@ -12,6 +12,7 @@ $(function () {
             this.binding('change', '[name="gender"]', 'checked:gender');
             this.binding('change', '[name="status"]', 'value:status');
             this.binding('change', '[name="interests"]', 'checked:interests');
+            this.binding('change', '[name="notes"]', 'value:notes');
         }
     });
 
@@ -26,7 +27,8 @@ $(function () {
                 activated: true,
                 gender: 'MALE',
                 status: 'SINGLE',
-                interests: ['MOVIE', 'MUSIC']
+                interests: ['MOVIE', 'MUSIC'],
+                notes: 'I like JavaScript!'
             });
 
             this.userProfile = new View({

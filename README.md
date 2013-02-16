@@ -40,6 +40,8 @@ var user = new Backbone.Model({
     <input type="checkbox" name="interests" value="MUSIC">
     <input type="checkbox" name="interests" value="SPORT">
     <input type="checkbox" name="interests" value="DANCE">
+
+    <textarea name="notes"></textarea>
 </form>
 ```
 
@@ -58,6 +60,7 @@ userProfile.binding('change', '[name="activated"]', 'checked:activated');
 userProfile.binding('change', '[name="gender"]', 'checked:gender');
 userProfile.binding('change', '[name="status"]', 'value:status');
 userProfile.binding('change', '[name="interests"]', 'checked:interests');
+userProfile.binding('change', '[name="notes"]', 'value:notes');
 ```
 
 ## Changelog
