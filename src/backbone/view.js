@@ -13,6 +13,10 @@
                 return elements.text();
             },
 
+            value: function (elements) {
+                return elements.val();
+            },
+
             checked: function (elements) {
                 var value, values = _.pluck(elements.serializeArray(), 'value');
 
@@ -42,6 +46,14 @@
                     elements.text(value);
                 } else {
                     elements.empty();
+                }
+            },
+
+            value: function (elements, value) {
+                if (value) {
+                    elements.val(value);
+                } else {
+                    elements.val(null);
                 }
             },
 

@@ -17,7 +17,7 @@ var user = new Backbone.Model({
     activated: true,
     gender: 'MALE',
     status: 'SINGLE',
-    interests: ['MOVIE', 'MUSIC'],
+    interests: ['MOVIES', 'MUSIC'],
     notes: 'I like JavaScript!'
 });
 ```
@@ -37,10 +37,13 @@ var user = new Backbone.Model({
         <option value="MARRIED">Married</option>
     </select>
 
-    <input type="checkbox" name="interests" value="MOVIE">
-    <input type="checkbox" name="interests" value="MUSIC">
-    <input type="checkbox" name="interests" value="SPORT">
-    <input type="checkbox" name="interests" value="DANCE">
+    <select name="interests" multiple>
+        <option value="BOOKS">Books</option>
+        <option value="MUSIC">Music</option>
+        <option value="MOVIES">Movies</option>
+        <option value="DANCES">Dances</option>
+        <option value="SPORT">Sport</option>
+    </select>
 
     <textarea name="notes"></textarea>
 </form>
