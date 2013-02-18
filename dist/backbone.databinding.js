@@ -117,13 +117,7 @@
                 this._bindings[event + ' ' + selector] = _.bind(function () {
                     var elements = this.$(selector),
                         reader = this.readers[property],
-                        value = null;
-
-                    if (reader) {
-                        value = reader.call(this, elements);
-                    } else {
-                        value = elements.prop(property);
-                    }
+                        value = reader ? reader.call(this, elements) : elements.prop(property);
 
                     this.model.set(attribute, value, options);
                 }, this);
