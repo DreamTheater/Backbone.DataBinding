@@ -90,12 +90,12 @@
 
         setElement: _.wrap(View.prototype.setElement, function (setElement, element, delegate) {
             if (this.$el) {
-                this._undelegateBindings();
+                this.undelegateBindings();
             }
 
             setElement.call(this, element, delegate);
 
-            this._delegateBindings();
+            this.delegateBindings();
 
             return this;
         }),
@@ -115,7 +115,7 @@
                     this.model.set(attribute, value, options);
                 }, this);
 
-                this._delegateBindings();
+                this.delegateBindings();
             }
 
             this.listenTo(this.model, 'change', function (model) {
@@ -135,16 +135,8 @@
             return this;
         },
 
-        syncToModel: function () {
-            var model = this.model;
-
-            model.trigger('change', model);
-
-            return this;
-        },
-
-        _delegateBindings: function () {
-            this._undelegateBindings();
+        delegateBindings: function () {
+            this.undelegateBindings();
 
             _.each(this._bindings, function (handler, binding) {
                 var match = binding.match(/^(\S+)\s*(.*)$/),
@@ -156,8 +148,16 @@
             }, this);
         },
 
-        _undelegateBindings: function () {
+        undelegateBindings: function () {
             this.$el.off('.delegateBindings.' + this.cid);
+        },
+
+        syncToModel: function () {
+            var model = this.model;
+
+            model.trigger('change', model);
+
+            return this;
         }
     });
 }());

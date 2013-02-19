@@ -24,7 +24,7 @@ var user = new Backbone.Model({
 
 ### Create view
 ```html
-<form id="userProfile">
+<form id="profile">
     <input type="text" name="email">
 
     <input type="checkbox" name="activated">
@@ -50,8 +50,8 @@ var user = new Backbone.Model({
 ```
 
 ```js
-var userProfile = new Backbone.View({
-    el: '#userProfile',
+var profile = new Backbone.View({
+    el: '#profile',
     model: user
 });
 ```
@@ -59,15 +59,18 @@ var userProfile = new Backbone.View({
 ### Add bindings
 #### model.binding(event, selector, binding, [options])
 ```js
-userProfile.binding('change', '[name="email"]', 'value:email', { validate: true });
-userProfile.binding('change', '[name="activated"]', 'checked:activated');
-userProfile.binding('change', '[name="gender"]', 'checked:gender');
-userProfile.binding('change', '[name="status"]', 'value:status');
-userProfile.binding('change', '[name="interests"]', 'checked:interests');
-userProfile.binding('change', '[name="notes"]', 'value:notes');
+profile.binding('change', '[name="email"]', 'value:email', { validate: true });
+profile.binding('change', '[name="activated"]', 'checked:activated');
+profile.binding('change', '[name="gender"]', 'checked:gender');
+profile.binding('change', '[name="status"]', 'value:status');
+profile.binding('change', '[name="interests"]', 'value:interests');
+profile.binding('change', '[name="notes"]', 'value:notes');
 ```
 
 ## Changelog
+### 0.1.2
+  - Methods `delegateBindings` and `undelegateBindings` is public
+
 ### 0.1.1
   - Method `addBinding` renamed to `binding`
 
