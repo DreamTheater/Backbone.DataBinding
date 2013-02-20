@@ -74,8 +74,8 @@
                 if (elements.prop('type') === 'radio') {
                     matchedElements.prop('checked', true);
                 } else if (elements.length > 1) {
-                    elements.not(matchedElements).prop('checked', false);
-                    matchedElements.prop('checked', true);
+                    elements.not(matchedElements).filter(':checked').prop('checked', false);
+                    matchedElements.not(':checked').prop('checked', true);
                 } else {
                     elements.prop('checked', value);
                 }

@@ -90,8 +90,8 @@ $(function () {
         var elements = this.profile.$('[name="favoriteColors"]'),
             matchedElements = elements.filter('[value="YELLOW"], [value="INDIGO"]');
 
-        elements.not(matchedElements).prop('checked', false).trigger('change');
-        matchedElements.prop('checked', true).trigger('change');
+        elements.not(matchedElements).filter(':checked').prop('checked', false).trigger('change');
+        matchedElements.not(':checked').prop('checked', true).trigger('change');
         deepEqual(this.user.get('favoriteColors'), ['YELLOW', 'INDIGO']);
     });
 
