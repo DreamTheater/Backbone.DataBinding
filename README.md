@@ -58,6 +58,8 @@ var profile = new Backbone.View({
 
 ### Add bindings
 #### model.binding(event, selector, binding, [options])
+Defines binding between view and model.
+
 ```js
 profile.binding('change', '[name="email"]', 'value:email', { validate: true });
 profile.binding('change', '[name="activated"]', 'checked:activated');
