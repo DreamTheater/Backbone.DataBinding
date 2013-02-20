@@ -9,10 +9,11 @@ $(function () {
     var Profile = Backbone.View.extend({
         initialize: function () {
             this.binding('change', '[name="email"]', 'value:email', { validate: true });
-            this.binding('change', '[name="activated"]', 'checked:activated');
             this.binding('change', '[name="gender"]', 'checked:gender');
             this.binding('change', '[name="status"]', 'value:status');
-            this.binding('change', '[name="interests"]', 'value:interests');
+            this.binding('change', '[name="hasChildren"]', 'checked:hasChildren');
+            this.binding('change', '[name="favoriteDaysOfWeek"]', 'value:favoriteDaysOfWeek');
+            this.binding('change', '[name="favoriteColors"]', 'checked:favoriteColors');
             this.binding('change', '[name="notes"]', 'value:notes');
         }
     });
@@ -25,10 +26,11 @@ $(function () {
         setup: function () {
             this.user = new Backbone.Model({
                 email: 'dnemoga@gmail.com',
-                activated: true,
                 gender: 'MALE',
                 status: 'SINGLE',
-                interests: ['MOVIES', 'MUSIC'],
+                hasChildren: false,
+                favoriteDaysOfWeek: ['FRIDAY', 'SATURDAY'],
+                favoriteColors: ['RED', 'BLUE', 'VIOLET'],
                 notes: 'I like JavaScript!'
             });
 
@@ -55,21 +57,11 @@ $(function () {
         strictEqual(this.user.get('email'), 'vdudnyk@gmail.com');
     });
 
-    test('sync model with one checkbox', function () {
-        var elements = this.profile.$('[name="activated"]');
-
-        elements.prop('checked', false).trigger('change');
-        strictEqual(this.user.get('activated'), false);
-    });
-
-    test('sync model with multiple checkboxes', function () {
-        ok(true);
-    });
-
     test('sync model with radio', function () {
-        var elements = this.profile.$('[name="gender"][value="FEMALE"]');
+        var elements = this.profile.$('[name="gender"]'),
+            matchedElements = elements.filter('[value="FEMALE"]');
 
-        elements.prop('checked', true).trigger('change');
+        matchedElements.prop('checked', true).trigger('change');
         strictEqual(this.user.get('gender'), 'FEMALE');
     });
 
@@ -80,11 +72,27 @@ $(function () {
         strictEqual(this.user.get('status'), 'MARRIED');
     });
 
-    test('sync model with multiple select', function () {
-        var elements = this.profile.$('[name="interests"]');
+    test('sync model with one checkbox', function () {
+        var elements = this.profile.$('[name="hasChildren"]');
 
-        elements.val(['BOOKS', 'SPORT']).trigger('change');
-        deepEqual(this.user.get('interests'), ['BOOKS', 'SPORT']);
+        elements.prop('checked', true).trigger('change');
+        strictEqual(this.user.get('hasChildren'), true);
+    });
+
+    test('sync model with multiple select', function () {
+        var elements = this.profile.$('[name="favoriteDaysOfWeek"]');
+
+        elements.val(['SATURDAY', 'SUNDAY']).trigger('change');
+        deepEqual(this.user.get('favoriteDaysOfWeek'), ['SATURDAY', 'SUNDAY']);
+    });
+
+    test('sync model with multiple checkboxes', function () {
+        var elements = this.profile.$('[name="favoriteColors"]'),
+            matchedElements = elements.filter('[value="YELLOW"], [value="INDIGO"]');
+
+        elements.not(matchedElements).prop('checked', false).trigger('change');
+        matchedElements.prop('checked', true).trigger('change');
+        deepEqual(this.user.get('favoriteColors'), ['YELLOW', 'INDIGO']);
     });
 
     test('sync model with textarea', function () {
@@ -101,22 +109,12 @@ $(function () {
         strictEqual(elements.val(), 'vdudnyk@gmail.com');
     });
 
-    test('sync one checkbox with model', function () {
-        var elements = this.profile.$('[name="activated"]');
-
-        this.user.set('activated', false);
-        strictEqual(elements.prop('checked'), false);
-    });
-
-    test('sync multiple checkboxes with model', function () {
-        ok(true);
-    });
-
     test('sync radio with model', function () {
-        var elements = this.profile.$('[name="gender"][value="FEMALE"]');
+        var elements = this.profile.$('[name="gender"]'),
+            matchedElements = elements.filter('[value="FEMALE"]');
 
         this.user.set('gender', 'FEMALE');
-        strictEqual(elements.prop('checked'), true);
+        strictEqual(matchedElements.prop('checked'), true);
     });
 
     test('sync single select with model', function () {
@@ -126,11 +124,26 @@ $(function () {
         strictEqual(elements.val(), 'MARRIED');
     });
 
-    test('sync multiple select with model', function () {
-        var elements = this.profile.$('[name="interests"]');
+    test('sync one checkbox with model', function () {
+        var elements = this.profile.$('[name="hasChildren"]');
 
-        this.user.set('interests', ['BOOKS', 'SPORT']);
-        deepEqual(elements.val(), ['BOOKS', 'SPORT']);
+        this.user.set('hasChildren', true);
+        strictEqual(elements.prop('checked'), true);
+    });
+
+    test('sync multiple select with model', function () {
+        var elements = this.profile.$('[name="favoriteDaysOfWeek"]');
+
+        this.user.set('favoriteDaysOfWeek', ['SATURDAY', 'SUNDAY']);
+        deepEqual(elements.val(), ['SATURDAY', 'SUNDAY']);
+    });
+
+    test('sync multiple checkboxes with model', function () {
+        var elements = this.profile.$('[name="favoriteColors"]'),
+            matchedElements = elements.filter('[value="YELLOW"], [value="INDIGO"]');
+
+        this.user.set('favoriteColors', ['YELLOW', 'INDIGO']);
+        deepEqual(_.pluck(matchedElements.serializeArray(), 'value'), ['YELLOW', 'INDIGO']);
     });
 
     test('sync textarea with model', function () {

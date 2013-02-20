@@ -14,10 +14,11 @@ The plugin is for bidirectional binding between views and models.
 ```js
 var user = new Backbone.Model({
     email: 'dnemoga@gmail.com',
-    activated: true,
     gender: 'MALE',
     status: 'SINGLE',
-    interests: ['MOVIES', 'MUSIC'],
+    hasChildren: false,
+    favoriteDaysOfWeek: ['FRIDAY', 'SATURDAY'],
+    favoriteColors: ['RED', 'BLUE', 'VIOLET'],
     notes: 'I like JavaScript!'
 });
 ```
@@ -27,8 +28,6 @@ var user = new Backbone.Model({
 <form id="profile">
     <input type="text" name="email">
 
-    <input type="checkbox" name="activated">
-
     <input type="radio" name="gender" value="MALE">
     <input type="radio" name="gender" value="FEMALE">
 
@@ -37,13 +36,25 @@ var user = new Backbone.Model({
         <option value="MARRIED">Married</option>
     </select>
 
-    <select name="interests" multiple>
-        <option value="BOOKS">Books</option>
-        <option value="MUSIC">Music</option>
-        <option value="MOVIES">Movies</option>
-        <option value="DANCES">Dances</option>
-        <option value="SPORT">Sport</option>
+    <input type="checkbox" name="hasChildren">
+
+    <select name="favoriteDaysOfWeek" multiple>
+        <option value="MONDAY">Monday</option>
+        <option value="TUESDAY">Tuesday</option>
+        <option value="WEDNESDAY">Wednesday</option>
+        <option value="THURSDAY">Thursday</option>
+        <option value="FRIDAY">Friday</option>
+        <option value="SATURDAY">Saturday</option>
+        <option value="SUNDAY">Sunday</option>
     </select>
+
+    <input type="checkbox" name="favoriteColors" value="RED">
+    <input type="checkbox" name="favoriteColors" value="ORANGE">
+    <input type="checkbox" name="favoriteColors" value="YELLOW">
+    <input type="checkbox" name="favoriteColors" value="GREEN">
+    <input type="checkbox" name="favoriteColors" value="BLUE">
+    <input type="checkbox" name="favoriteColors" value="INDIGO">
+    <input type="checkbox" name="favoriteColors" value="VIOLET">
 
     <textarea name="notes"></textarea>
 </form>
@@ -62,10 +73,11 @@ Defines binding between view and model.
 
 ```js
 profile.binding('change', '[name="email"]', 'value:email', { validate: true });
-profile.binding('change', '[name="activated"]', 'checked:activated');
 profile.binding('change', '[name="gender"]', 'checked:gender');
 profile.binding('change', '[name="status"]', 'value:status');
-profile.binding('change', '[name="interests"]', 'value:interests');
+profile.binding('change', '[name="hasChildren"]', 'checked:hasChildren');
+profile.binding('change', '[name="favoriteDaysOfWeek"]', 'value:favoriteDaysOfWeek');
+profile.binding('change', '[name="favoriteColors"]', 'checked:favoriteColors');
 profile.binding('change', '[name="notes"]', 'value:notes');
 ```
 
