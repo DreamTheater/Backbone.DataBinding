@@ -82,6 +82,9 @@ profile.binding('change', '[name="notes"]', 'value:notes');
 ```
 
 ## Changelog
+### 0.1.3
+  - Added CommonJS support
+
 ### 0.1.2
   - Methods `delegateBindings` and `undelegateBindings` is public
 

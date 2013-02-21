@@ -1,9 +1,9 @@
 (function () {
     'use strict';
 
-    ///////////////////
-    // NORMALIZATION //
-    ///////////////////
+    ////////////////////
+    // INITIALIZATION //
+    ////////////////////
 
     var _, Backbone;
 
@@ -15,7 +15,7 @@
         Backbone = window.Backbone;
     }
 
-    ///////////////////
+    ////////////////////
 
     var View = Backbone.View;
 

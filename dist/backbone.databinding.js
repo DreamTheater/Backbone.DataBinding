@@ -1,5 +1,5 @@
 /*!
- * Backbone.DataBinding v0.1.2
+ * Backbone.DataBinding v0.1.3
  * https://github.com/DreamTheater/Backbone.DataBinding
  *
  * Copyright (c) 2013 Dmytro Nemoga
@@ -8,9 +8,9 @@
 (function () {
     'use strict';
 
-    ///////////////////
-    // NORMALIZATION //
-    ///////////////////
+    ////////////////////
+    // INITIALIZATION //
+    ////////////////////
 
     var _, Backbone;
 
@@ -22,7 +22,7 @@
         Backbone = window.Backbone;
     }
 
-    ///////////////////
+    ////////////////////
 
     var View = Backbone.View;
 
