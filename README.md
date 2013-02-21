@@ -67,7 +67,7 @@ var profile = new Backbone.View({
 });
 ```
 
-### Add bindings
+### Define bindings
 #### model.binding(event, selector, binding, [options])
 Defines binding between view and model.
 

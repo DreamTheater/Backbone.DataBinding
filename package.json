@@ -4,7 +4,15 @@
     "version": "0.1.3",
     "description": "The plugin is for bidirectional binding between views and models.",
 
-    "keywords": ["backbone", "plugin", "view", "databinding"],
+    "keywords": [
+        "backbone",
+        "plugin",
+        "view",
+        "model",
+        "data",
+        "binding",
+        "databinding"
+    ],
 
     "homepage": "https://github.com/DreamTheater/Backbone.DataBinding",
 
@@ -48,7 +56,5 @@
     "engines": {
         "node": "~0.8.20",
         "npm": "~1.2.12"
-    },
-
-    "private": true
+    }
 }
