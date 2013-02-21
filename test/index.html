@@ -17,54 +17,50 @@
         <!-- Sources -->
         <script src="../src/backbone/view.js"></script>
 
-        <!-- Backbone tests -->
+        <!-- Tests -->
         <script src="../lib/backbone/test/environment.js"></script>
         <script src="../lib/backbone/test/view.js"></script>
 
-        <!-- Backbone.DataBinding tests -->
         <script src="backbone/view.js"></script>
     </head>
 
     <body>
         <section id="qunit"></section>
+
         <section id="qunit-fixture">
-            <div id="testElement">
-                <h1>Test</h1>
-            </div>
+            <form id="profile">
+                <input type="text" name="email">
+
+                <input type="radio" name="gender" value="MALE">
+                <input type="radio" name="gender" value="FEMALE">
+
+                <select name="status">
+                    <option value="SINGLE">Single</option>
+                    <option value="MARRIED">Married</option>
+                </select>
+
+                <input type="checkbox" name="hasChildren">
+
+                <select name="favoriteDaysOfWeek" multiple>
+                    <option value="MONDAY">Monday</option>
+                    <option value="TUESDAY">Tuesday</option>
+                    <option value="WEDNESDAY">Wednesday</option>
+                    <option value="THURSDAY">Thursday</option>
+                    <option value="FRIDAY">Friday</option>
+                    <option value="SATURDAY">Saturday</option>
+                    <option value="SUNDAY">Sunday</option>
+                </select>
+
+                <input type="checkbox" name="favoriteColors" value="RED">
+                <input type="checkbox" name="favoriteColors" value="ORANGE">
+                <input type="checkbox" name="favoriteColors" value="YELLOW">
+                <input type="checkbox" name="favoriteColors" value="GREEN">
+                <input type="checkbox" name="favoriteColors" value="BLUE">
+                <input type="checkbox" name="favoriteColors" value="INDIGO">
+                <input type="checkbox" name="favoriteColors" value="VIOLET">
+
+                <textarea name="notes"></textarea>
+            </form>
         </section>
-
-        <form id="profile">
-            <input type="text" name="email">
-
-            <input type="radio" name="gender" value="MALE">
-            <input type="radio" name="gender" value="FEMALE">
-
-            <select name="status">
-                <option value="SINGLE">Single</option>
-                <option value="MARRIED">Married</option>
-            </select>
-
-            <input type="checkbox" name="hasChildren">
-
-            <select name="favoriteDaysOfWeek" multiple>
-                <option value="MONDAY">Monday</option>
-                <option value="TUESDAY">Tuesday</option>
-                <option value="WEDNESDAY">Wednesday</option>
-                <option value="THURSDAY">Thursday</option>
-                <option value="FRIDAY">Friday</option>
-                <option value="SATURDAY">Saturday</option>
-                <option value="SUNDAY">Sunday</option>
-            </select>
-
-            <input type="checkbox" name="favoriteColors" value="RED">
-            <input type="checkbox" name="favoriteColors" value="ORANGE">
-            <input type="checkbox" name="favoriteColors" value="YELLOW">
-            <input type="checkbox" name="favoriteColors" value="GREEN">
-            <input type="checkbox" name="favoriteColors" value="BLUE">
-            <input type="checkbox" name="favoriteColors" value="INDIGO">
-            <input type="checkbox" name="favoriteColors" value="VIOLET">
-
-            <textarea name="notes"></textarea>
-        </form>
     </body>
 </html>
