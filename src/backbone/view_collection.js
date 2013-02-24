@@ -16,11 +16,15 @@ Backbone.ViewCollection = (function (View) {
 
             View.apply(this, arguments);
 
-            this.listenTo(this.collection, 'add', this._addView);
-            this.listenTo(this.collection, 'reset', this._resetViews);
-            this.listenTo(this.collection, 'sort', this._sortViews);
+            /////////////////
 
-            this._resetViews(this.collection);
+            var collection = this.collection;
+
+            this.listenTo(collection, 'add', this._addView);
+            this.listenTo(collection, 'reset', this._resetViews);
+            this.listenTo(collection, 'sort', this._sortViews);
+
+            this._resetViews(collection);
         },
 
         remove: _.wrap(View.prototype.remove, function (remove) {

@@ -1,5 +1,5 @@
 /*!
- * Backbone.DataBinding v0.1.6
+ * Backbone.DataBinding v0.1.7
  * https://github.com/DreamTheater/Backbone.DataBinding
  *
  * Copyright (c) 2013 Dmytro Nemoga
@@ -9,6 +9,127 @@ Backbone.ViewModel = (function (View) {
     'use strict';
 
     return View.extend({
+        constructor: function () {
+
+            /////////////////
+            // DEFINITIONS //
+            /////////////////
+
+            this.bindings = {};
+
+            /////////////////
+
+            View.apply(this, arguments);
+
+            /////////////////
+
+            var model = this.model;
+
+            if (model.collection) {
+                this.listenTo(model, 'remove', function () {
+                    this.remove();
+                });
+            }
+        },
+
+        remove: _.wrap(View.prototype.remove, function (remove) {
+            var container = this.container, views, index;
+
+            if (container) {
+                views = container.views;
+                index = _.indexOf(views, this);
+
+                views.splice(index, 1);
+            }
+
+            return remove.call(this);
+        }),
+
+        setElement: _.wrap(View.prototype.setElement, function (setElement, element, delegate) {
+            if (this.$el) {
+                this.undelegateBindings();
+            }
+
+            setElement.call(this, element, delegate);
+
+            this.delegateBindings();
+
+            return this;
+        }),
+
+        binding: function (event, selector, binding, options) {
+            var tokens = binding.split(':'),
+
+                property = tokens[0],
+                attribute = tokens[1];
+
+            if (event) {
+                this.bindings[event + ' ' + selector] = _.bind(function () {
+                    var elements = this.$(selector),
+                        reader = this.constructor.readers[property],
+                        value = reader ? reader.call(this, elements) : elements.prop(property);
+
+                    this.model.set(attribute, value, options);
+                }, this);
+
+                this.delegateBindings();
+            }
+
+            this.listenTo(this.model, 'change', function (model) {
+                var elements = this.$(selector),
+                    writer = this.constructor.writers[property],
+                    value = model.get(attribute);
+
+                if (writer) {
+                    writer.call(this, elements, value);
+                } else {
+                    elements.prop(property, value);
+                }
+            });
+
+            this.syncToModel();
+
+            return this;
+        },
+
+        delegateBindings: function (bindings) {
+
+            ///////////////
+            // INSURANCE //
+            ///////////////
+
+            bindings = bindings || _.result(this, 'bindings');
+
+            ///////////////
+
+            this.undelegateBindings();
+
+            _.each(bindings, function (handler, binding) {
+                var match = binding.match(/^(\S+)\s*(.*)$/),
+
+                    event = match[1] + '.delegateBindings.' + this.cid,
+                    selector = match[2];
+
+                this.$el.on(event, selector, handler);
+            }, this);
+
+            return this;
+        },
+
+        undelegateBindings: function () {
+            this.$el.off('.delegateBindings.' + this.cid);
+
+            return this;
+        },
+
+        syncToModel: function () {
+            var model = this.model;
+
+            model.trigger('change', model);
+
+            return this;
+        }
+    }, {
         readers: {
             html: function (elements) {
                 return elements.html();
@@ -78,121 +199,6 @@ Backbone.ViewModel = (function (View) {
                     elements.prop('checked', value);
                 }
             }
-        },
-
-        constructor: function () {
-
-            /////////////////
-            // DEFINITIONS //
-            /////////////////
-
-            this.bindings = {};
-
-            /////////////////
-
-            View.apply(this, arguments);
-
-            this.listenTo(this.model, 'remove', function () {
-                this.remove();
-            });
-        },
-
-        remove: _.wrap(View.prototype.remove, function (remove) {
-            var container = this.container, views, index;
-
-            if (container) {
-                views = container.views;
-                index = _.indexOf(views, this);
-
-                views.splice(index, 1);
-            }
-
-            return remove.call(this);
-        }),
-
-        setElement: _.wrap(View.prototype.setElement, function (setElement, element, delegate) {
-            if (this.$el) {
-                this.undelegateBindings();
-            }
-
-            setElement.call(this, element, delegate);
-
-            this.delegateBindings();
-
-            return this;
-        }),
-
-        binding: function (event, selector, binding, options) {
-            var tokens = binding.split(':'),
-
-                property = tokens[0],
-                attribute = tokens[1];
-
-            if (event) {
-                this.bindings[event + ' ' + selector] = _.bind(function () {
-                    var elements = this.$(selector),
-                        reader = this.readers[property],
-                        value = reader ? reader.call(this, elements) : elements.prop(property);
-
-                    this.model.set(attribute, value, options);
-                }, this);
-
-                this.delegateBindings();
-            }
-
-            this.listenTo(this.model, 'change', function (model) {
-                var elements = this.$(selector),
-                    writer = this.writers[property],
-                    value = model.get(attribute);
-
-                if (writer) {
-                    writer.call(this, elements, value);
-                } else {
-                    elements.prop(property, value);
-                }
-            });
-
-            this.syncToModel();
-
-            return this;
-        },
-
-        delegateBindings: function (bindings) {
-
-            ///////////////
-            // INSURANCE //
-            ///////////////
-
-            bindings = bindings || _.result(this, 'bindings');
-
-            ///////////////
-
-            this.undelegateBindings();
-
-            _.each(bindings, function (handler, binding) {
-                var match = binding.match(/^(\S+)\s*(.*)$/),
-
-                    event = match[1] + '.delegateBindings.' + this.cid,
-                    selector = match[2];
-
-                this.$el.on(event, selector, handler);
-            }, this);
-
-            return this;
-        },
-
-        undelegateBindings: function () {
-            this.$el.off('.delegateBindings.' + this.cid);
-
-            return this;
-        },
-
-        syncToModel: function () {
-            var model = this.model;
-
-            model.trigger('change', model);
-
-            return this;
         }
     });
 }(Backbone.View));
@@ -215,11 +221,15 @@ Backbone.ViewCollection = (function (View) {
 
             View.apply(this, arguments);
 
-            this.listenTo(this.collection, 'add', this._addView);
-            this.listenTo(this.collection, 'reset', this._resetViews);
-            this.listenTo(this.collection, 'sort', this._sortViews);
+            /////////////////
 
-            this._resetViews(this.collection);
+            var collection = this.collection;
+
+            this.listenTo(collection, 'add', this._addView);
+            this.listenTo(collection, 'reset', this._resetViews);
+            this.listenTo(collection, 'sort', this._sortViews);
+
+            this._resetViews(collection);
         },
 
         remove: _.wrap(View.prototype.remove, function (remove) {

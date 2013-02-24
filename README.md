@@ -82,6 +82,9 @@ profile.binding('change', '[name="notes"]', 'value:notes');
 ```
 
 ## Changelog
+### 0.1.7
+  - Properties `readers` and `writers` is static
+
 ### 0.1.6
   - Removed CommonJS support
   - Databinding moved to `Backbone.ViewModel` class
