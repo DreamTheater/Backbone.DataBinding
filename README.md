@@ -61,7 +61,7 @@ var user = new Backbone.Model({
 ```
 
 ```js
-var profile = new Backbone.View({
+var profile = new Backbone.ViewModel({
     el: '#profile',
     model: user
 });
@@ -82,6 +82,11 @@ profile.binding('change', '[name="notes"]', 'value:notes');
 ```
 
 ## Changelog
+### 0.1.6
+  - Removed CommonJS support
+  - Databinding moved to `Backbone.ViewModel` class
+  - Added `Backbone.ViewCollection` class
+
 ### 0.1.3
   - Added CommonJS support
 

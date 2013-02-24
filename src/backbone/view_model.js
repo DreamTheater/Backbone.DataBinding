@@ -1,25 +1,7 @@
-(function () {
+Backbone.ViewModel = (function (View) {
     'use strict';
 
-    ////////////////////
-    // INITIALIZATION //
-    ////////////////////
-
-    var _, Backbone;
-
-    if (module && module.exports && exports) {
-        _ = require('underscore');
-        Backbone = require('backbone');
-    } else {
-        _ = window._;
-        Backbone = window.Backbone;
-    }
-
-    ////////////////////
-
-    var View = Backbone.View;
-
-    Backbone.View = View.extend({
+    return View.extend({
         readers: {
             html: function (elements) {
                 return elements.html();
@@ -97,12 +79,29 @@
             // DEFINITIONS //
             /////////////////
 
-            this._bindings = {};
+            this.bindings = {};
 
             /////////////////
 
             View.apply(this, arguments);
+
+            this.listenTo(this.model, 'remove', function () {
+                this.remove();
+            });
         },
+
+        remove: _.wrap(View.prototype.remove, function (remove) {
+            var container = this.container, views, index;
+
+            if (container) {
+                views = container.views;
+                index = _.indexOf(views, this);
+
+                views.splice(index, 1);
+            }
+
+            return remove.call(this);
+        }),
 
         setElement: _.wrap(View.prototype.setElement, function (setElement, element, delegate) {
             if (this.$el) {
@@ -123,7 +122,7 @@
                 attribute = tokens[1];
 
             if (event) {
-                this._bindings[event + ' ' + selector] = _.bind(function () {
+                this.bindings[event + ' ' + selector] = _.bind(function () {
                     var elements = this.$(selector),
                         reader = this.readers[property],
                         value = reader ? reader.call(this, elements) : elements.prop(property);
@@ -151,10 +150,19 @@
             return this;
         },
 
-        delegateBindings: function () {
+        delegateBindings: function (bindings) {
+
+            ///////////////
+            // INSURANCE //
+            ///////////////
+
+            bindings = bindings || _.result(this, 'bindings');
+
+            ///////////////
+
             this.undelegateBindings();
 
-            _.each(this._bindings, function (handler, binding) {
+            _.each(bindings, function (handler, binding) {
                 var match = binding.match(/^(\S+)\s*(.*)$/),
 
                     event = match[1] + '.delegateBindings.' + this.cid,
@@ -162,10 +170,14 @@
 
                 this.$el.on(event, selector, handler);
             }, this);
+
+            return this;
         },
 
         undelegateBindings: function () {
             this.$el.off('.delegateBindings.' + this.cid);
+
+            return this;
         },
 
         syncToModel: function () {
@@ -176,4 +188,4 @@
             return this;
         }
     });
-}());
+}(Backbone.View));

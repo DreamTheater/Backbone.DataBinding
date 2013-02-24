@@ -6,7 +6,9 @@ $(function () {
     // PREREQUISITES //
     ///////////////////
 
-    var Profile = Backbone.View.extend({
+    var Profile = Backbone.ViewModel.extend({
+        el: '#profile',
+
         initialize: function () {
             this.binding('change', '[name="email"]', 'value:email', { validate: true });
             this.binding('change', '[name="gender"]', 'checked:gender');
@@ -22,7 +24,7 @@ $(function () {
     // MODULE //
     ////////////
 
-    module('Backbone.DataBinding', {
+    module('Backbone.ViewModel', {
         setup: function () {
             this.user = new Backbone.Model({
                 email: 'dnemoga@gmail.com',
@@ -35,7 +37,6 @@ $(function () {
             });
 
             this.profile = new Profile({
-                el: '#profile',
                 model: this.user
             });
         },

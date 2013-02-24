@@ -1,32 +1,14 @@
 /*!
- * Backbone.DataBinding v0.1.3
+ * Backbone.DataBinding v0.1.6
  * https://github.com/DreamTheater/Backbone.DataBinding
  *
  * Copyright (c) 2013 Dmytro Nemoga
  * Released under the MIT license
  */
-(function () {
+Backbone.ViewModel = (function (View) {
     'use strict';
 
-    ////////////////////
-    // INITIALIZATION //
-    ////////////////////
-
-    var _, Backbone;
-
-    if (module && module.exports && exports) {
-        _ = require('underscore');
-        Backbone = require('backbone');
-    } else {
-        _ = window._;
-        Backbone = window.Backbone;
-    }
-
-    ////////////////////
-
-    var View = Backbone.View;
-
-    Backbone.View = View.extend({
+    return View.extend({
         readers: {
             html: function (elements) {
                 return elements.html();
@@ -104,12 +86,29 @@
             // DEFINITIONS //
             /////////////////
 
-            this._bindings = {};
+            this.bindings = {};
 
             /////////////////
 
             View.apply(this, arguments);
+
+            this.listenTo(this.model, 'remove', function () {
+                this.remove();
+            });
         },
+
+        remove: _.wrap(View.prototype.remove, function (remove) {
+            var container = this.container, views, index;
+
+            if (container) {
+                views = container.views;
+                index = _.indexOf(views, this);
+
+                views.splice(index, 1);
+            }
+
+            return remove.call(this);
+        }),
 
         setElement: _.wrap(View.prototype.setElement, function (setElement, element, delegate) {
             if (this.$el) {
@@ -130,7 +129,7 @@
                 attribute = tokens[1];
 
             if (event) {
-                this._bindings[event + ' ' + selector] = _.bind(function () {
+                this.bindings[event + ' ' + selector] = _.bind(function () {
                     var elements = this.$(selector),
                         reader = this.readers[property],
                         value = reader ? reader.call(this, elements) : elements.prop(property);
@@ -158,10 +157,19 @@
             return this;
         },
 
-        delegateBindings: function () {
+        delegateBindings: function (bindings) {
+
+            ///////////////
+            // INSURANCE //
+            ///////////////
+
+            bindings = bindings || _.result(this, 'bindings');
+
+            ///////////////
+
             this.undelegateBindings();
 
-            _.each(this._bindings, function (handler, binding) {
+            _.each(bindings, function (handler, binding) {
                 var match = binding.match(/^(\S+)\s*(.*)$/),
 
                     event = match[1] + '.delegateBindings.' + this.cid,
@@ -169,10 +177,14 @@
 
                 this.$el.on(event, selector, handler);
             }, this);
+
+            return this;
         },
 
         undelegateBindings: function () {
             this.$el.off('.delegateBindings.' + this.cid);
+
+            return this;
         },
 
         syncToModel: function () {
@@ -183,4 +195,87 @@
             return this;
         }
     });
-}());
+}(Backbone.View));
+
+Backbone.ViewCollection = (function (View) {
+    'use strict';
+
+    return View.extend({
+        view: Backbone.ViewModel,
+
+        constructor: function () {
+
+            /////////////////
+            // DEFINITIONS //
+            /////////////////
+
+            this.views = [];
+
+            /////////////////
+
+            View.apply(this, arguments);
+
+            this.listenTo(this.collection, 'add', this._addView);
+            this.listenTo(this.collection, 'reset', this._resetViews);
+            this.listenTo(this.collection, 'sort', this._sortViews);
+
+            this._resetViews(this.collection);
+        },
+
+        remove: _.wrap(View.prototype.remove, function (remove) {
+            this._removeViews();
+
+            return remove.call(this);
+        }),
+
+        get: function (object) {
+            return _.find(this.views, function (view) {
+                var model = view.model;
+
+                return model.id === object.id || model.cid === object.cid || model.id === object;
+            });
+        },
+
+        at: function (index) {
+            return this.views[index];
+        },
+
+        _addView: function (model) {
+            var view = this.get(model) || this._prepareView(model);
+
+            this.$el.append(view.el);
+        },
+
+        _resetViews: function (collection) {
+            this._removeViews();
+
+            collection.each(this._addView, this);
+        },
+
+        _sortViews: function (collection) {
+            this.$el.empty();
+
+            collection.each(this._addView, this);
+        },
+
+        _prepareView: function (model) {
+            var View = this.view, view = new View({
+                model: model
+            });
+
+            view.container = this;
+
+            this.views.push(view);
+
+            return view.render();
+        },
+
+        _removeViews: function () {
+            var views = this.views;
+
+            while (views.length > 0) {
+                views[0].remove();
+            }
+        }
+    });
+}(Backbone.View));
