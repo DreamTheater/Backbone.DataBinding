@@ -26,7 +26,7 @@ Backbone.ViewModel = (function (View) {
             var model = this.model;
 
             if (model.collection) {
-                this.listenTo(model, 'remove', function () {
+                this.listenToOnce(model, 'remove', function () {
                     this.remove();
                 });
             }
