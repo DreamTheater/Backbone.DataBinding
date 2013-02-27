@@ -34,10 +34,13 @@ Backbone.ViewCollection = (function (View) {
         }),
 
         get: function (object) {
+            var id = object.id || object,
+                cid = object.cid || object;
+
             return _.find(this.views, function (view) {
                 var model = view.model;
 
-                return model.id === object.id || model.cid === object.cid || model.id === object;
+                return model.id === id || model.cid === cid;
             });
         },
 
