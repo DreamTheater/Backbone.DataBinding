@@ -9,7 +9,39 @@ The plugin is for bidirectional binding between views and models.
   - [Backbone](https://github.com/documentcloud/backbone) `>= 0.9.10`
   - [Underscore](https://github.com/documentcloud/underscore) `>= 1.4.4`
 
-## Getting started
+## Reference API
+### Backbone.ViewModel
+#### Static members
+  - Object `readers`
+    - Function `html`
+    - Function `text`
+    - Function `value`
+    - Function `checked`
+  - Object `writers`
+    - Function `html`
+    - Function `text`
+    - Function `value`
+    - Function `checked`
+
+#### Instance members
+  - Function `binding(event, selector, binding, options)`
+    - String `event`
+    - String `selector`
+    - String `binding`
+    - Object `options`
+  - Function `delegateBindings(bindings)`
+    - Object `bindings`
+  - Function `undelegateBindings()`
+  - Function `syncToModel()`
+
+### Backbone.ViewCollection
+#### Instance members
+  - Function `get(object)`
+    - Object `object`
+  - Function `at(index)`
+    - Number `index`
+
+## Getting Started
 ### Create model
 ```js
 var user = new Backbone.Model({
