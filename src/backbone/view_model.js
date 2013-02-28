@@ -58,9 +58,10 @@ Backbone.ViewModel = (function (View) {
 
             if (event) {
                 this.bindings[event + ' ' + selector] = _.bind(function () {
-                    var elements = this.$(selector),
-                        reader = this.constructor.readers[property],
-                        value = reader ? reader.call(this, elements) : elements.prop(property);
+                    var readers = this.constructor.readers, reader = readers[property],
+
+                        elements = this.$(selector),
+                        value = reader ? reader.call(readers, elements) : elements.prop(property);
 
                     this.model.set(attribute, value, options);
                 }, this);
@@ -69,12 +70,13 @@ Backbone.ViewModel = (function (View) {
             }
 
             this.listenTo(this.model, 'change', function (model) {
-                var elements = this.$(selector),
-                    writer = this.constructor.writers[property],
+                var writers = this.constructor.writers, writer = writers[property],
+
+                    elements = this.$(selector),
                     value = model.get(attribute);
 
                 if (writer) {
-                    writer.call(this, elements, value);
+                    writer.call(writers, elements, value);
                 } else {
                     elements.prop(property, value);
                 }
