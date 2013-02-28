@@ -55,7 +55,7 @@ var user = new Backbone.Model({
 });
 ```
 
-### Create view
+### Create view of model
 ```html
 <form id="profile">
     <input type="text" name="email">
@@ -91,7 +91,6 @@ var user = new Backbone.Model({
     <textarea name="notes"></textarea>
 </form>
 ```
-
 ```js
 var profile = new Backbone.ViewModel({
     el: '#profile',
@@ -100,9 +99,6 @@ var profile = new Backbone.ViewModel({
 ```
 
 ### Define bindings
-#### model.binding(event, selector, binding, [options])
-Defines binding between view and model.
-
 ```js
 profile.binding('change', '[name="email"]', 'value:email', { validate: true });
 profile.binding('change', '[name="gender"]', 'checked:gender');
