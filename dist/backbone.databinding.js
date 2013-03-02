@@ -5,10 +5,10 @@
  * Copyright (c) 2013 Dmytro Nemoga
  * Released under the MIT license
  */
-Backbone.ViewModel = (function (View) {
+(function (View) {
     'use strict';
 
-    return View.extend({
+    Backbone.ViewModel = View.extend({
         constructor: function () {
 
             /////////////////
@@ -205,10 +205,10 @@ Backbone.ViewModel = (function (View) {
     });
 }(Backbone.View));
 
-Backbone.ViewCollection = (function (View) {
+(function (View) {
     'use strict';
 
-    return View.extend({
+    Backbone.ViewCollection = View.extend({
         view: Backbone.ViewModel,
 
         constructor: function () {

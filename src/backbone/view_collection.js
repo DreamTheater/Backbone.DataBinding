@@ -1,7 +1,7 @@
-Backbone.ViewCollection = (function (View) {
+(function (View) {
     'use strict';
 
-    return View.extend({
+    Backbone.ViewCollection = View.extend({
         view: Backbone.ViewModel,
 
         constructor: function () {

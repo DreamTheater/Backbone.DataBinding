@@ -1,7 +1,7 @@
-Backbone.ViewModel = (function (View) {
+(function (View) {
     'use strict';
 
-    return View.extend({
+    Backbone.ViewModel = View.extend({
         constructor: function () {
 
             /////////////////
