@@ -51,7 +51,7 @@
         _addView: function (model) {
             var view = this.get(model) || this._prepareView(model);
 
-            this.$el.append(view.el);
+            this.$el.append(view.$el);
         },
 
         _resetViews: function (collection) {
