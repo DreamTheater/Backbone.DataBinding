@@ -29,7 +29,9 @@
 
             setElement.call(this, element, delegate);
 
-            this.delegateBindings();
+            if (delegate !== false) {
+                this.delegateBindings();
+            }
 
             return this;
         }),
@@ -42,7 +44,8 @@
 
             if (event) {
                 this.bindings[event + ' ' + selector] = _.bind(function () {
-                    var readers = this.constructor.readers, reader = readers[type],
+                    var readers = this.constructor.readers,
+                        reader = readers[type],
 
                         elements = this.$(selector),
                         value = reader ? reader.call(readers, elements) : elements.prop(type);
@@ -54,7 +57,8 @@
             }
 
             this.listenTo(this.model, 'change', function (model) {
-                var writers = this.constructor.writers, writer = writers[type],
+                var writers = this.constructor.writers,
+                    writer = writers[type],
 
                     elements = this.$(selector),
                     value = model.get(attribute);
@@ -246,13 +250,23 @@
         },
 
         _addView: function (model) {
-            var view = this.get(model) || this._prepareView(model);
+            var views = this.views,
 
-            this.$el.append(view.$el);
+                view = this.get(model) || this._prepareView(model),
+                index = _.indexOf(views, view);
+
+            if (index === -1) {
+                views.push(view);
+            }
+
+            view.$el.appendTo(this.$el);
         },
 
         _removeView: function (model) {
-            var views = this.views, view = this.get(model), index = _.indexOf(views, view);
+            var views = this.views,
+
+                view = this.get(model),
+                index = _.indexOf(views, view);
 
             views.splice(index, 1);
 
@@ -271,20 +285,18 @@
             collection.each(this._addView, this);
         },
 
+        _prepareView: function (model) {
+            var View = this.view, view = new View({ model: model });
+
+            return view.render();
+        },
+
         _removeViews: function () {
             var views = this.views;
 
             while (views.length > 0) {
-                views[0].remove();
+                this._removeView(views[0].model);
             }
-        },
-
-        _prepareView: function (model) {
-            var View = this.view, view = new View({ model: model });
-
-            this.views.push(view);
-
-            return view.render();
         }
     });
 }(Backbone.View));
