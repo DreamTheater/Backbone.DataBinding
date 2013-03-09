@@ -5,7 +5,7 @@ $(function () {
     // PREREQUISITES //
     ///////////////////
 
-    var Item = Backbone.ViewModel.extend({
+    var ListItem = Backbone.ViewModel.extend({
             tagName: 'li',
 
             render: function () {
@@ -17,7 +17,7 @@ $(function () {
 
         List = Backbone.ViewCollection.extend({
             el: '#list',
-            view: Item
+            view: ListItem
         });
 
     ////////////
@@ -26,7 +26,7 @@ $(function () {
 
     module('Backbone.ViewCollection', {
         setup: function () {
-            this.items = new Backbone.Collection([
+            this.itemList = new Backbone.Collection([
                 { id: 1 },
                 { id: 2 },
                 { id: 3 },
@@ -44,7 +44,7 @@ $(function () {
             });
 
             this.list = new List({
-                collection: this.items
+                collection: this.itemList
             });
         }
     });

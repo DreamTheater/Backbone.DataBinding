@@ -13,30 +13,7 @@
             /////////////////
 
             View.apply(this, arguments);
-
-            /////////////////
-
-            var model = this.model;
-
-            if (model.collection) {
-                this.listenTo(model, 'remove', function () {
-                    this.remove();
-                });
-            }
         },
-
-        remove: _.wrap(View.prototype.remove, function (remove) {
-            var container = this.container, views, index;
-
-            if (container) {
-                views = container.views;
-                index = _.indexOf(views, this);
-
-                views.splice(index, 1);
-            }
-
-            return remove.call(this);
-        }),
 
         setElement: _.wrap(View.prototype.setElement, function (setElement, element, delegate) {
             if (this.$el) {
@@ -51,17 +28,17 @@
         }),
 
         binding: function (event, selector, binding, options) {
-            var tokens = binding.split(':'),
+            var match = binding.match(/^(\S+):(\S+)$/),
 
-                property = tokens[0],
-                attribute = tokens[1];
+                type = match[1],
+                attribute = match[2];
 
             if (event) {
                 this.bindings[event + ' ' + selector] = _.bind(function () {
-                    var readers = this.constructor.readers, reader = readers[property],
+                    var readers = this.constructor.readers, reader = readers[type],
 
                         elements = this.$(selector),
-                        value = reader ? reader.call(readers, elements) : elements.prop(property);
+                        value = reader ? reader.call(readers, elements) : elements.prop(type);
 
                     this.model.set(attribute, value, options);
                 }, this);
@@ -70,7 +47,7 @@
             }
 
             this.listenTo(this.model, 'change', function (model) {
-                var writers = this.constructor.writers, writer = writers[property],
+                var writers = this.constructor.writers, writer = writers[type],
 
                     elements = this.$(selector),
                     value = model.get(attribute);
@@ -78,7 +55,7 @@
                 if (writer) {
                     writer.call(writers, elements, value);
                 } else {
-                    elements.prop(property, value);
+                    elements.prop(type, value);
                 }
             });
 
@@ -134,6 +111,10 @@
                 return elements.text();
             },
 
+            data: function (elements) {
+                return elements.data();
+            },
+
             value: function (elements) {
                 return elements.val();
             },
@@ -167,6 +148,14 @@
                     elements.text(value);
                 } else {
                     elements.empty();
+                }
+            },
+
+            data: function (elements, value) {
+                if (value) {
+                    elements.data(value);
+                } else {
+                    elements.removeData();
                 }
             },
 

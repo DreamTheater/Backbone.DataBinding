@@ -21,6 +21,7 @@
             var collection = this.collection;
 
             this.listenTo(collection, 'add', this._addView);
+            this.listenTo(collection, 'remove', this._removeView);
             this.listenTo(collection, 'reset', this._resetViews);
             this.listenTo(collection, 'sort', this._sortViews);
 
@@ -54,6 +55,14 @@
             this.$el.append(view.$el);
         },
 
+        _removeView: function (model) {
+            var views = this.views, view = this.get(model), index = _.indexOf(views, view);
+
+            views.splice(index, 1);
+
+            view.remove();
+        },
+
         _resetViews: function (collection) {
             this._removeViews();
 
@@ -66,24 +75,20 @@
             collection.each(this._addView, this);
         },
 
-        _prepareView: function (model) {
-            var View = this.view, view = new View({
-                model: model
-            });
-
-            view.container = this;
-
-            this.views.push(view);
-
-            return view.render();
-        },
-
         _removeViews: function () {
             var views = this.views;
 
             while (views.length > 0) {
                 views[0].remove();
             }
+        },
+
+        _prepareView: function (model) {
+            var View = this.view, view = new View({ model: model });
+
+            this.views.push(view);
+
+            return view.render();
         }
     });
 }(Backbone.View));

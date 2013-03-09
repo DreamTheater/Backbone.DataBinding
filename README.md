@@ -15,20 +15,27 @@ The plugin is for bidirectional binding between views and models.
   - Object `readers`
     - Function `html`
     - Function `text`
+    - Function `data`
     - Function `value`
     - Function `checked`
   - Object `writers`
     - Function `html`
     - Function `text`
+    - Function `data`
     - Function `value`
     - Function `checked`
 
 #### Instance members
   - Function `binding(event, selector, binding, options)`
     - String `event`
+      - Event type (e. g. `change`, `input`).
     - String `selector`
-    - String `binding`
+      - Selector string to filter the descendants of the selected elements that trigger the event. If the selector is `null`, the event is always triggered when it reaches the selected element.
+    - String `binding` (`type:attribute`)
+      - `type` - binding type (e. g. `html`, `text`, `data`, `value`, `checked` or any other HTML attribute).
+      - `attribute` - model's attribute that would be linked to this element.
     - Object `options`
+      - Object that would be passed as the argument `options` to the method `set` each time when value sets to the model (e. g. `{ validate: true }` to validate current value).
   - Function `delegateBindings(bindings)`
     - Object `bindings`
   - Function `undelegateBindings()`
@@ -91,6 +98,7 @@ var user = new Backbone.Model({
     <textarea name="notes"></textarea>
 </form>
 ```
+
 ```js
 var profile = new Backbone.ViewModel({
     el: '#profile',
@@ -110,6 +118,10 @@ profile.binding('change', '[name="notes"]', 'value:notes');
 ```
 
 ## Changelog
+### 0.1.9
+  - Items removes via collection's listener and not model's
+  - Added binding type `data`
+
 ### 0.1.7
   - Properties `readers` and `writers` is static
 
