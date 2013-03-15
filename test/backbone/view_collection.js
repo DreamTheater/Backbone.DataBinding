@@ -38,9 +38,7 @@ $(function () {
                 { id: 9 },
                 { id: 10 }
             ], {
-                comparator: function (model) {
-                    return model.id;
-                }
+                comparator: 'id'
             });
 
             this.list = new List({

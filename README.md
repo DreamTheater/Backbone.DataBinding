@@ -15,13 +15,11 @@ The plugin is for bidirectional binding between views and models.
   - Object `readers`
     - Function `html`
     - Function `text`
-    - Function `data`
     - Function `value`
     - Function `checked`
   - Object `writers`
     - Function `html`
     - Function `text`
-    - Function `data`
     - Function `value`
     - Function `checked`
 
@@ -32,7 +30,7 @@ The plugin is for bidirectional binding between views and models.
     - String `selector`
       - Selector string to filter the descendants of the selected elements that trigger the event. If the selector is `null`, the event is always triggered when it reaches the selected element.
     - String `binding` (`type:attribute`)
-      - `type` - binding type (e. g. `html`, `text`, `data`, `value`, `checked` or any other HTML attribute).
+      - `type` - binding type (e. g. `html`, `text`, `value`, `checked` or any other HTML attribute).
       - `attribute` - model's attribute that would be linked to this element.
     - Object `options`
       - Object that would be passed as the argument `options` to the method `set` each time when value sets to the model (e. g. `{ validate: true }` to validate current value).
@@ -47,6 +45,8 @@ The plugin is for bidirectional binding between views and models.
     - Object `object`
   - Function `at(index)`
     - Number `index`
+  - Function `sort()`
+  - Function `reset()`
 
 ## Getting Started
 ### Create model
@@ -77,7 +77,7 @@ var user = new Backbone.Model({
 
     <input type="checkbox" name="hasChildren">
 
-    <select name="favoriteDaysOfWeek" multiple>
+    <select name="favoriteDaysOfWeek[]" multiple>
         <option value="MONDAY">Monday</option>
         <option value="TUESDAY">Tuesday</option>
         <option value="WEDNESDAY">Wednesday</option>
@@ -87,13 +87,13 @@ var user = new Backbone.Model({
         <option value="SUNDAY">Sunday</option>
     </select>
 
-    <input type="checkbox" name="favoriteColors" value="RED">
-    <input type="checkbox" name="favoriteColors" value="ORANGE">
-    <input type="checkbox" name="favoriteColors" value="YELLOW">
-    <input type="checkbox" name="favoriteColors" value="GREEN">
-    <input type="checkbox" name="favoriteColors" value="BLUE">
-    <input type="checkbox" name="favoriteColors" value="INDIGO">
-    <input type="checkbox" name="favoriteColors" value="VIOLET">
+    <input type="checkbox" name="favoriteColors[]" value="RED">
+    <input type="checkbox" name="favoriteColors[]" value="ORANGE">
+    <input type="checkbox" name="favoriteColors[]" value="YELLOW">
+    <input type="checkbox" name="favoriteColors[]" value="GREEN">
+    <input type="checkbox" name="favoriteColors[]" value="BLUE">
+    <input type="checkbox" name="favoriteColors[]" value="INDIGO">
+    <input type="checkbox" name="favoriteColors[]" value="VIOLET">
 
     <textarea name="notes"></textarea>
 </form>
@@ -112,12 +112,17 @@ profile.binding('change', '[name="email"]', 'value:email', { validate: true });
 profile.binding('change', '[name="gender"]', 'checked:gender');
 profile.binding('change', '[name="status"]', 'value:status');
 profile.binding('change', '[name="hasChildren"]', 'checked:hasChildren');
-profile.binding('change', '[name="favoriteDaysOfWeek"]', 'value:favoriteDaysOfWeek');
-profile.binding('change', '[name="favoriteColors"]', 'checked:favoriteColors');
+profile.binding('change', '[name="favoriteDaysOfWeek[]"]', 'value:favoriteDaysOfWeek');
+profile.binding('change', '[name="favoriteColors[]"]', 'checked:favoriteColors');
 profile.binding('change', '[name="notes"]', 'value:notes');
 ```
 
 ## Changelog
+### 0.2.2
+  - `ViewCollection` is sortable
+  - Method `reset` is public
+  - Removed binding type `data`
+
 ### 0.1.9
   - Items removes via collection's listener and not model's
   - Added binding type `data`

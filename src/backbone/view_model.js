@@ -37,8 +37,7 @@
 
             if (event) {
                 this.bindings[event + ' ' + selector] = _.bind(function () {
-                    var readers = this.constructor.readers,
-                        reader = readers[type],
+                    var readers = this.constructor.readers, reader = readers[type],
 
                         elements = this.$(selector),
                         value = reader ? reader.call(readers, elements) : elements.prop(type);
@@ -50,8 +49,7 @@
             }
 
             this.listenTo(this.model, 'change', function (model) {
-                var writers = this.constructor.writers,
-                    writer = writers[type],
+                var writers = this.constructor.writers, writer = writers[type],
 
                     elements = this.$(selector),
                     value = model.get(attribute);
@@ -115,10 +113,6 @@
                 return elements.text();
             },
 
-            data: function (elements) {
-                return elements.data();
-            },
-
             value: function (elements) {
                 return elements.val();
             },
@@ -152,14 +146,6 @@
                     elements.text(value);
                 } else {
                     elements.empty();
-                }
-            },
-
-            data: function (elements, value) {
-                if (value) {
-                    elements.data(value);
-                } else {
-                    elements.removeData();
                 }
             },
 

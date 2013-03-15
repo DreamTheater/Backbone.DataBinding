@@ -22,10 +22,10 @@
 
             this.listenTo(collection, 'add', this._addView);
             this.listenTo(collection, 'remove', this._removeView);
-            this.listenTo(collection, 'reset', this._resetViews);
-            this.listenTo(collection, 'sort', this._sortViews);
+            this.listenTo(collection, 'sort', this.sort);
+            this.listenTo(collection, 'reset', this.reset);
 
-            this._resetViews(collection);
+            this.reset();
         },
 
         remove: _.wrap(View.prototype.remove, function (remove) {
@@ -41,12 +41,43 @@
             return _.find(this.views, function (view) {
                 var model = view.model;
 
-                return model.id === id || model.cid === cid;
+                return (model.id === id || model.cid === cid);
             });
         },
 
         at: function (index) {
             return this.views[index];
+        },
+
+        sort: function () {
+            var views = this.views,
+
+                collection = this.collection,
+                comparator = collection.comparator;
+
+            if (_.isString(comparator)) {
+                this.views = _.sortBy(views, function (view) {
+                    return view.model[comparator];
+                });
+            } else if (comparator.length === 1) {
+                this.views = _.sortBy(views, function (view) {
+                    return comparator.call(collection, view.model);
+                });
+            } else {
+                views.sort(function (aView, bView) {
+                    return comparator.call(collection, aView.model, bView.model);
+                });
+            }
+
+            this._refreshViews();
+
+            return this;
+        },
+
+        reset: function () {
+            this._refreshViews(true);
+
+            return this;
         },
 
         _addView: function (model) {
@@ -73,22 +104,14 @@
             view.remove();
         },
 
-        _resetViews: function (collection) {
-            this._removeViews();
+        _refreshViews: function (force) {
+            if (force) {
+                this._removeViews();
+            } else {
+                this._cleanViews();
+            }
 
-            collection.each(this._addView, this);
-        },
-
-        _sortViews: function (collection) {
-            this.$el.empty();
-
-            collection.each(this._addView, this);
-        },
-
-        _prepareView: function (model) {
-            var View = this.view, view = new View({ model: model });
-
-            return view.render();
+            this.collection.each(this._addView, this);
         },
 
         _removeViews: function () {
@@ -97,6 +120,16 @@
             while (views.length > 0) {
                 this._removeView(views[0].model);
             }
+        },
+
+        _cleanViews: function () {
+            this.$el.empty();
+        },
+
+        _prepareView: function (model) {
+            var View = this.view, view = new View({ model: model });
+
+            return view.render();
         }
     });
 }(Backbone.View));

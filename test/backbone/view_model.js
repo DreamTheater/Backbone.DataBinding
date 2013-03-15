@@ -14,8 +14,8 @@ $(function () {
             this.binding('change', '[name="gender"]', 'checked:gender');
             this.binding('change', '[name="status"]', 'value:status');
             this.binding('change', '[name="hasChildren"]', 'checked:hasChildren');
-            this.binding('change', '[name="favoriteDaysOfWeek"]', 'value:favoriteDaysOfWeek');
-            this.binding('change', '[name="favoriteColors"]', 'checked:favoriteColors');
+            this.binding('change', '[name="favoriteDaysOfWeek[]"]', 'value:favoriteDaysOfWeek');
+            this.binding('change', '[name="favoriteColors[]"]', 'checked:favoriteColors');
             this.binding('change', '[name="notes"]', 'value:notes');
         }
     });
@@ -81,14 +81,14 @@ $(function () {
     });
 
     test('sync model with multiple select', function () {
-        var elements = this.profile.$('[name="favoriteDaysOfWeek"]');
+        var elements = this.profile.$('[name="favoriteDaysOfWeek[]"]');
 
         elements.val(['SATURDAY', 'SUNDAY']).trigger('change');
         deepEqual(this.user.get('favoriteDaysOfWeek'), ['SATURDAY', 'SUNDAY']);
     });
 
     test('sync model with multiple checkboxes', function () {
-        var elements = this.profile.$('[name="favoriteColors"]'),
+        var elements = this.profile.$('[name="favoriteColors[]"]'),
             matchedElements = elements.filter('[value="YELLOW"], [value="INDIGO"]');
 
         elements.not(matchedElements).filter(':checked').prop('checked', false).trigger('change');
@@ -133,14 +133,14 @@ $(function () {
     });
 
     test('sync multiple select with model', function () {
-        var elements = this.profile.$('[name="favoriteDaysOfWeek"]');
+        var elements = this.profile.$('[name="favoriteDaysOfWeek[]"]');
 
         this.user.set('favoriteDaysOfWeek', ['SATURDAY', 'SUNDAY']);
         deepEqual(elements.val(), ['SATURDAY', 'SUNDAY']);
     });
 
     test('sync multiple checkboxes with model', function () {
-        var elements = this.profile.$('[name="favoriteColors"]'),
+        var elements = this.profile.$('[name="favoriteColors[]"]'),
             matchedElements = elements.filter('[value="YELLOW"], [value="INDIGO"]');
 
         this.user.set('favoriteColors', ['YELLOW', 'INDIGO']);
