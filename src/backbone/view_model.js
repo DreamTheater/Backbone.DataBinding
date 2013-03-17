@@ -13,6 +13,9 @@
             /////////////////
 
             View.apply(this, arguments);
+
+            /////////////////
+
         },
 
         setElement: _.wrap(View.prototype.setElement, function (setElement, element, delegate) {

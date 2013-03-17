@@ -20,6 +20,9 @@
             /////////////////
 
             View.apply(this, arguments);
+
+            /////////////////
+
         },
 
         setElement: _.wrap(View.prototype.setElement, function (setElement, element, delegate) {
@@ -269,7 +272,7 @@
         _addView: function (model) {
             var views = this.views,
 
-                view = this.get(model) || this._prepareView(model),
+                view = this.get(model) || new this.view({ model: model }).render(),
                 index = _.indexOf(views, view);
 
             if (index === -1) {
@@ -310,12 +313,6 @@
 
         _cleanViews: function () {
             this.$el.empty();
-        },
-
-        _prepareView: function (model) {
-            var View = this.view, view = new View({ model: model });
-
-            return view.render();
         }
     });
 }(Backbone.View));

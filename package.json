@@ -9,9 +9,8 @@
         "plugin",
         "view",
         "model",
-        "data",
-        "binding",
-        "databinding"
+        "collection",
+        "binding"
     ],
 
     "homepage": "https://github.com/DreamTheater/Backbone.DataBinding",
