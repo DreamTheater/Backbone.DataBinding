@@ -1,7 +1,20 @@
-(function (View) {
+(function () {
     'use strict';
 
+    ////////////////
+    // SUPERCLASS //
+    ////////////////
+
+    var View = Backbone.View;
+
+    ///////////
+    // CLASS //
+    ///////////
+
     Backbone.ViewModel = View.extend({
+        /**
+         * @constructor
+         */
         constructor: function () {
 
             /////////////////
@@ -13,9 +26,6 @@
             /////////////////
 
             View.apply(this, arguments);
-
-            /////////////////
-
         },
 
         setElement: _.wrap(View.prototype.setElement, function (setElement, element, delegate) {
@@ -178,4 +188,4 @@
             }
         }
     });
-}(Backbone.View));
+}());

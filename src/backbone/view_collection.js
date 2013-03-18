@@ -1,9 +1,22 @@
-(function (View) {
+(function () {
     'use strict';
+
+    ////////////////
+    // SUPERCLASS //
+    ////////////////
+
+    var View = Backbone.View;
+
+    ///////////
+    // CLASS //
+    ///////////
 
     Backbone.ViewCollection = View.extend({
         view: Backbone.ViewModel,
 
+        /**
+         * @constructor
+         */
         constructor: function () {
 
             /////////////////
@@ -22,10 +35,10 @@
 
             this.listenTo(collection, 'add', this._addView);
             this.listenTo(collection, 'remove', this._removeView);
-            this.listenTo(collection, 'sort', this.sort);
-            this.listenTo(collection, 'reset', this.reset);
+            this.listenTo(collection, 'sort', this._sortViews);
+            this.listenTo(collection, 'reset', this._resetViews);
 
-            this.reset();
+            this._resetViews(collection);
         },
 
         remove: _.wrap(View.prototype.remove, function (remove) {
@@ -47,37 +60,6 @@
 
         at: function (index) {
             return this.views[index];
-        },
-
-        sort: function () {
-            var views = this.views,
-
-                collection = this.collection,
-                comparator = collection.comparator;
-
-            if (_.isString(comparator)) {
-                this.views = _.sortBy(views, function (view) {
-                    return view.model[comparator];
-                });
-            } else if (comparator.length === 1) {
-                this.views = _.sortBy(views, function (view) {
-                    return comparator.call(collection, view.model);
-                });
-            } else {
-                views.sort(function (aView, bView) {
-                    return comparator.call(collection, aView.model, bView.model);
-                });
-            }
-
-            this._refreshViews();
-
-            return this;
-        },
-
-        reset: function () {
-            this._refreshViews(true);
-
-            return this;
         },
 
         _addView: function (model) {
@@ -104,14 +86,38 @@
             view.remove();
         },
 
-        _refreshViews: function (force) {
-            if (force) {
+        _sortViews: function (collection) {
+            var views = this.views, comparator = collection.comparator;
+
+            if (_.isString(comparator)) {
+                this.views = _.sortBy(views, function (view) {
+                    return view.model[comparator];
+                });
+            } else if (comparator.length === 1) {
+                this.views = _.sortBy(views, function (view) {
+                    return comparator.call(collection, view.model);
+                });
+            } else {
+                views.sort(function (aView, bView) {
+                    return comparator.call(collection, aView.model, bView.model);
+                });
+            }
+
+            this._refreshViews(collection);
+        },
+
+        _resetViews: function (collection) {
+            this._refreshViews(collection, true);
+        },
+
+        _refreshViews: function (collection, remove) {
+            if (remove) {
                 this._removeViews();
             } else {
                 this._cleanViews();
             }
 
-            this.collection.each(this._addView, this);
+            collection.each(this._addView, this);
         },
 
         _removeViews: function () {
@@ -126,4 +132,4 @@
             this.$el.empty();
         }
     });
-}(Backbone.View));
+}());
