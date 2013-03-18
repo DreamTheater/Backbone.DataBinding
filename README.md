@@ -118,6 +118,9 @@ profile.binding('change', '[name="notes"]', 'value:notes');
 ```
 
 ## Changelog
+### 0.2.3
+  - Methods `sort` and `reset` are private
+
 ### 0.2.2
   - `ViewCollection` is sortable
   - Method `reset` is public
@@ -128,7 +131,7 @@ profile.binding('change', '[name="notes"]', 'value:notes');
   - Added binding type `data`
 
 ### 0.1.7
-  - Properties `readers` and `writers` is static
+  - Properties `readers` and `writers` are static
 
 ### 0.1.6
   - Removed CommonJS support
@@ -139,7 +142,7 @@ profile.binding('change', '[name="notes"]', 'value:notes');
   - Added CommonJS support
 
 ### 0.1.2
-  - Methods `delegateBindings` and `undelegateBindings` is public
+  - Methods `delegateBindings` and `undelegateBindings` are public
 
 ### 0.1.1
   - Method `addBinding` renamed to `binding`

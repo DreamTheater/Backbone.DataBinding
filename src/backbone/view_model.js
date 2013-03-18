@@ -1,7 +1,15 @@
-(function (View) {
+(function () {
     'use strict';
 
+    var View = Backbone.View;
+
+    /**
+     * @class
+     */
     Backbone.ViewModel = View.extend({
+        /**
+         * @constructor
+         */
         constructor: function () {
 
             /////////////////
@@ -13,9 +21,6 @@
             /////////////////
 
             View.apply(this, arguments);
-
-            /////////////////
-
         },
 
         setElement: _.wrap(View.prototype.setElement, function (setElement, element, delegate) {
@@ -178,4 +183,4 @@
             }
         }
     });
-}(Backbone.View));
+}());
