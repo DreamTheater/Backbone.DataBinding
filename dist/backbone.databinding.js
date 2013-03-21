@@ -1,4 +1,4 @@
-/*!
+/**
  * Backbone.DataBinding v0.2.3
  * https://github.com/DreamTheater/Backbone.DataBinding
  *
