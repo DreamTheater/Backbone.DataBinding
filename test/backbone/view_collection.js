@@ -43,7 +43,7 @@ $(function () {
 
             this.list = new List({
                 collection: this.itemList
-            });
+            }).render();
         }
     });
 

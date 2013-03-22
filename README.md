@@ -41,12 +41,11 @@ The plugin is for bidirectional binding between views and models.
 
 ### Backbone.ViewCollection
 #### Instance members
+  - Backbone.ViewModel `view`
   - Function `get(object)`
     - Object `object`
   - Function `at(index)`
     - Number `index`
-  - Function `sort()`
-  - Function `reset()`
 
 ## Getting Started
 ### Create model
@@ -118,6 +117,9 @@ profile.binding('change', '[name="notes"]', 'value:notes');
 ```
 
 ## Changelog
+### 0.2.4
+  - Added views allocation inside the root element
+
 ### 0.2.3
   - Methods `sort` and `reset` are private
 

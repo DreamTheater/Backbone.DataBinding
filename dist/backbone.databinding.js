@@ -1,5 +1,5 @@
 /**
- * Backbone.DataBinding v0.2.3
+ * Backbone.DataBinding v0.2.4
  * https://github.com/DreamTheater/Backbone.DataBinding
  *
  * Copyright (c) 2013 Dmytro Nemoga
@@ -231,6 +231,17 @@
 
                 this.views = [];
 
+                /**
+                 * @override
+                 */
+                this.render = _.wrap(this.render, function (render) {
+                    render.apply(this, Array.prototype.slice.call(arguments, 1));
+
+                    this._resetViews(this.collection);
+
+                    return this;
+                });
+
                 /////////////////
 
                 var collection = this.collection;
@@ -239,8 +250,6 @@
                 this.listenTo(collection, 'remove', this._removeView);
                 this.listenTo(collection, 'sort', this._sortViews);
                 this.listenTo(collection, 'reset', this._resetViews);
-
-                this._resetViews(collection);
 
                 return initialize.call(this, options);
             });
@@ -273,16 +282,16 @@
         },
 
         _addView: function (model) {
-            var views = this.views,
+            var views = this.views, place = this._ensurePlace(model),
 
-                view = this.get(model) || new this.view({ model: model }).render(),
+                view = this.get(model) || this._prepareView(model),
                 index = _.indexOf(views, view);
 
             if (index === -1) {
                 views.push(view);
             }
 
-            view.$el.appendTo(this.$el);
+            view.$el.appendTo(place);
         },
 
         _removeView: function (model) {
@@ -291,7 +300,9 @@
                 view = this.get(model),
                 index = _.indexOf(views, view);
 
-            views.splice(index, 1);
+            if (index !== -1) {
+                views.splice(index, 1);
+            }
 
             view.remove();
         },
@@ -317,14 +328,23 @@
         },
 
         _resetViews: function (collection) {
-            this._refreshViews(collection, true);
+            this._refreshViews(collection, { reset: true });
         },
 
-        _refreshViews: function (collection, remove) {
-            if (remove) {
+        _refreshViews: function (collection, options) {
+
+            ///////////////
+            // INSURANCE //
+            ///////////////
+
+            options = options || {};
+
+            ///////////////
+
+            if (options.reset) {
                 this._removeViews();
             } else {
-                this._cleanViews();
+                this._detachViews();
             }
 
             collection.each(this._addView, this);
@@ -338,8 +358,26 @@
             }
         },
 
-        _cleanViews: function () {
-            this.$el.empty();
+        _detachViews: function () {
+            var views = this.views;
+
+            _.each(views, function (view) {
+                view.$el.detach();
+            });
+        },
+
+        _prepareView: function (model) {
+            return new this.view({ model: model }).render();
+        },
+
+        _ensurePlace: function (model) {
+            var place = this.place;
+
+            if (_.isFunction(place)) {
+                place = place.call(this, model);
+            }
+
+            return (place ? this.$(place) : this.$el);
         }
     });
 }());
