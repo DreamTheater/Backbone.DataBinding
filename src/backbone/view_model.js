@@ -7,22 +7,34 @@
      * @class
      */
     Backbone.ViewModel = View.extend({
+
         /**
          * @constructor
          */
-        constructor: function () {
+        constructor: function (options) {
 
-            /////////////////
-            // DEFINITIONS //
-            /////////////////
+            /**
+             * @override
+             */
+            this.initialize = _.wrap(this.initialize, function (initialize, options) {
 
-            this.bindings = {};
+                /////////////////
+                // DEFINITIONS //
+                /////////////////
 
-            /////////////////
+                this.bindings = {};
 
-            View.apply(this, arguments);
+                /////////////////
+
+                return initialize.call(this, options);
+            });
+
+            View.call(this, options);
         },
 
+        /**
+         * @override
+         */
         setElement: _.wrap(View.prototype.setElement, function (setElement, element, delegate) {
             if (this.$el) {
                 this.undelegateBindings();

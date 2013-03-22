@@ -12,30 +12,39 @@
         /**
          * @constructor
          */
-        constructor: function () {
+        constructor: function (options) {
 
-            /////////////////
-            // DEFINITIONS //
-            /////////////////
+            /**
+             * @override
+             */
+            this.initialize = _.wrap(this.initialize, function (initialize, options) {
 
-            this.views = [];
+                /////////////////
+                // DEFINITIONS //
+                /////////////////
 
-            /////////////////
+                this.views = [];
 
-            View.apply(this, arguments);
+                /////////////////
 
-            /////////////////
+                var collection = this.collection;
 
-            var collection = this.collection;
+                this.listenTo(collection, 'add', this._addView);
+                this.listenTo(collection, 'remove', this._removeView);
+                this.listenTo(collection, 'sort', this._sortViews);
+                this.listenTo(collection, 'reset', this._resetViews);
 
-            this.listenTo(collection, 'add', this._addView);
-            this.listenTo(collection, 'remove', this._removeView);
-            this.listenTo(collection, 'sort', this._sortViews);
-            this.listenTo(collection, 'reset', this._resetViews);
+                this._resetViews(collection);
 
-            this._resetViews(collection);
+                return initialize.call(this, options);
+            });
+
+            View.call(this, options);
         },
 
+        /**
+         * @override
+         */
         remove: _.wrap(View.prototype.remove, function (remove) {
             this._removeViews();
 

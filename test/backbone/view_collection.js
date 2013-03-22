@@ -51,7 +51,7 @@ $(function () {
     // TESTS //
     ///////////
 
-    test('test', function () {
+    test('dummy', function () {
         ok(true);
     });
 });
