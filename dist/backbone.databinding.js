@@ -1,5 +1,5 @@
 /**
- * Backbone.DataBinding v0.2.4
+ * Backbone.DataBinding v0.2.5
  * https://github.com/DreamTheater/Backbone.DataBinding
  *
  * Copyright (c) 2013 Dmytro Nemoga
@@ -231,25 +231,14 @@
 
                 this.views = [];
 
-                /**
-                 * @override
-                 */
-                this.render = _.wrap(this.render, function (render) {
-                    render.apply(this, Array.prototype.slice.call(arguments, 1));
-
-                    this._resetViews(this.collection);
-
-                    return this;
-                });
-
                 /////////////////
 
                 var collection = this.collection;
 
+                this.listenTo(collection, 'reset', this.reset);
+                this.listenTo(collection, 'sort', this._sortViews);
                 this.listenTo(collection, 'add', this._addView);
                 this.listenTo(collection, 'remove', this._removeView);
-                this.listenTo(collection, 'sort', this._sortViews);
-                this.listenTo(collection, 'reset', this._resetViews);
 
                 return initialize.call(this, options);
             });
@@ -261,10 +250,16 @@
          * @override
          */
         remove: _.wrap(View.prototype.remove, function (remove) {
-            this._removeViews();
+            this._destroyViews();
 
             return remove.call(this);
         }),
+
+        reset: function () {
+            this._refreshViews({ reset: true });
+
+            return this;
+        },
 
         get: function (object) {
             var id = object.id || object,
@@ -281,8 +276,28 @@
             return this.views[index];
         },
 
+        _sortViews: function (collection) {
+            var views = this.views, comparator = collection.comparator;
+
+            if (_.isString(comparator)) {
+                this.views = _.sortBy(views, function (view) {
+                    return view.model[comparator];
+                });
+            } else if (comparator.length === 1) {
+                this.views = _.sortBy(views, function (view) {
+                    return comparator.call(collection, view.model);
+                });
+            } else {
+                views.sort(function (aView, bView) {
+                    return comparator.call(collection, aView.model, bView.model);
+                });
+            }
+
+            this._refreshViews();
+        },
+
         _addView: function (model) {
-            var views = this.views, place = this._ensurePlace(model),
+            var views = this.views, place = this._ensureContainer(model),
 
                 view = this.get(model) || this._prepareView(model),
                 index = _.indexOf(views, view);
@@ -307,31 +322,21 @@
             view.remove();
         },
 
-        _sortViews: function (collection) {
-            var views = this.views, comparator = collection.comparator;
+        _prepareView: function (model) {
+            return new this.view({ model: model }).render();
+        },
 
-            if (_.isString(comparator)) {
-                this.views = _.sortBy(views, function (view) {
-                    return view.model[comparator];
-                });
-            } else if (comparator.length === 1) {
-                this.views = _.sortBy(views, function (view) {
-                    return comparator.call(collection, view.model);
-                });
-            } else {
-                views.sort(function (aView, bView) {
-                    return comparator.call(collection, aView.model, bView.model);
-                });
+        _ensureContainer: function (model) {
+            var container = this.container;
+
+            if (_.isFunction(container)) {
+                container = container.call(this, model);
             }
 
-            this._refreshViews(collection);
+            return (container ? this.$(container) : this.$el);
         },
 
-        _resetViews: function (collection) {
-            this._refreshViews(collection, { reset: true });
-        },
-
-        _refreshViews: function (collection, options) {
+        _refreshViews: function (options) {
 
             ///////////////
             // INSURANCE //
@@ -342,15 +347,15 @@
             ///////////////
 
             if (options.reset) {
-                this._removeViews();
+                this._destroyViews();
             } else {
                 this._detachViews();
             }
 
-            collection.each(this._addView, this);
+            this.collection.each(this._addView, this);
         },
 
-        _removeViews: function () {
+        _destroyViews: function () {
             var views = this.views;
 
             while (views.length > 0) {
@@ -364,20 +369,6 @@
             _.each(views, function (view) {
                 view.$el.detach();
             });
-        },
-
-        _prepareView: function (model) {
-            return new this.view({ model: model }).render();
-        },
-
-        _ensurePlace: function (model) {
-            var place = this.place;
-
-            if (_.isFunction(place)) {
-                place = place.call(this, model);
-            }
-
-            return (place ? this.$(place) : this.$el);
         }
     });
 }());

@@ -117,6 +117,9 @@ profile.binding('change', '[name="notes"]', 'value:notes');
 ```
 
 ## Changelog
+### 0.2.5
+  - Added public method `reset` for refreshing a list manually
+
 ### 0.2.4
   - Added views allocation inside the root element
 
