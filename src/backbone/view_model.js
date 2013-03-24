@@ -49,7 +49,7 @@
             return this;
         }),
 
-        binding: function (event, selector, binding, options) {
+        binding: function (selector, binding, event, options) {
             var match = binding.match(/^(\S+):(\S+)$/),
 
                 type = match[1],

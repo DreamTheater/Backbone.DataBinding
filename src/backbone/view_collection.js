@@ -29,10 +29,12 @@
 
                 var collection = this.collection;
 
-                this.listenTo(collection, 'reset', this.reset);
+                this.listenTo(collection, 'reset', this.syncToCollection);
                 this.listenTo(collection, 'sort', this._sortViews);
                 this.listenTo(collection, 'add', this._addView);
                 this.listenTo(collection, 'remove', this._removeView);
+
+                this.syncToCollection();
 
                 return initialize.call(this, options);
             });
@@ -49,12 +51,6 @@
             return remove.call(this);
         }),
 
-        reset: function () {
-            this._refreshViews({ reset: true });
-
-            return this;
-        },
-
         get: function (object) {
             var id = object.id || object,
                 cid = object.cid || object;
@@ -68,6 +64,12 @@
 
         at: function (index) {
             return this.views[index];
+        },
+
+        syncToCollection: function () {
+            this._refreshViews({ reset: true });
+
+            return this;
         },
 
         _sortViews: function (collection) {

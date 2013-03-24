@@ -10,13 +10,13 @@ $(function () {
         el: '#profile',
 
         initialize: function () {
-            this.binding('change', '[name="email"]', 'value:email', { validate: true });
-            this.binding('change', '[name="gender"]', 'checked:gender');
-            this.binding('change', '[name="status"]', 'value:status');
-            this.binding('change', '[name="hasChildren"]', 'checked:hasChildren');
-            this.binding('change', '[name="favoriteDaysOfWeek[]"]', 'value:favoriteDaysOfWeek');
-            this.binding('change', '[name="favoriteColors[]"]', 'checked:favoriteColors');
-            this.binding('change', '[name="notes"]', 'value:notes');
+            this.binding('[name="email"]', 'value:email', 'change', { validate: true });
+            this.binding('[name="gender"]', 'checked:gender', 'change');
+            this.binding('[name="status"]', 'value:status', 'change');
+            this.binding('[name="hasChildren"]', 'checked:hasChildren', 'change');
+            this.binding('[name="favoriteDaysOfWeek[]"]', 'value:favoriteDaysOfWeek', 'change');
+            this.binding('[name="favoriteColors[]"]', 'checked:favoriteColors', 'change');
+            this.binding('[name="notes"]', 'value:notes', 'change');
         }
     });
 

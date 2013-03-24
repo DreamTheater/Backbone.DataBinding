@@ -24,14 +24,14 @@ The plugin is for bidirectional binding between views and models.
     - Function `checked`
 
 #### Instance members
-  - Function `binding(event, selector, binding, options)`
-    - String `event`
-      - Event type (e. g. `change`, `input`).
+  - Function `binding(selector, binding, event, options)`
     - String `selector`
       - Selector string to filter the descendants of the selected elements that trigger the event. If the selector is `null`, the event is always triggered when it reaches the selected element.
     - String `binding` (`type:attribute`)
       - `type` - binding type (e. g. `html`, `text`, `value`, `checked` or any other HTML attribute).
       - `attribute` - model's attribute that would be linked to this element.
+    - String `event`
+      - Event type (e. g. `change`, `input`).
     - Object `options`
       - Object that would be passed as the argument `options` to the method `set` each time when value sets to the model (e. g. `{ validate: true }` to validate current value).
   - Function `delegateBindings(bindings)`
@@ -46,6 +46,7 @@ The plugin is for bidirectional binding between views and models.
     - Object `object`
   - Function `at(index)`
     - Number `index`
+  - Function `syncToCollection()`
 
 ## Getting Started
 ### Create model
@@ -107,16 +108,20 @@ var profile = new Backbone.ViewModel({
 
 ### Define bindings
 ```js
-profile.binding('change', '[name="email"]', 'value:email', { validate: true });
-profile.binding('change', '[name="gender"]', 'checked:gender');
-profile.binding('change', '[name="status"]', 'value:status');
-profile.binding('change', '[name="hasChildren"]', 'checked:hasChildren');
-profile.binding('change', '[name="favoriteDaysOfWeek[]"]', 'value:favoriteDaysOfWeek');
-profile.binding('change', '[name="favoriteColors[]"]', 'checked:favoriteColors');
-profile.binding('change', '[name="notes"]', 'value:notes');
+profile.binding('[name="email"]', 'value:email', 'change', { validate: true });
+profile.binding('[name="gender"]', 'checked:gender', 'change');
+profile.binding('[name="status"]', 'value:status', 'change');
+profile.binding('[name="hasChildren"]', 'checked:hasChildren', 'change');
+profile.binding('[name="favoriteDaysOfWeek[]"]', 'value:favoriteDaysOfWeek', 'change');
+profile.binding('[name="favoriteColors[]"]', 'checked:favoriteColors', 'change');
+profile.binding('[name="notes"]', 'value:notes', 'change');
 ```
 
 ## Changelog
+### 0.2.7
+  - Method `reset` renamed to `syncToCollection`
+  - Changed signature of method `binding`
+
 ### 0.2.5
   - Added public method `reset` for refreshing a list manually
 
