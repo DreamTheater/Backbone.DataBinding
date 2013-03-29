@@ -13,7 +13,6 @@
          * @constructor
          */
         constructor: function (options) {
-
             /**
              * @override
              */
@@ -67,7 +66,9 @@
         },
 
         syncToCollection: function () {
-            this._refreshViews({ reset: true });
+            this._refreshViews({
+                reset: true
+            });
 
             return this;
         },
@@ -119,7 +120,13 @@
         },
 
         _prepareView: function (model) {
-            return new this.view({ model: model }).render();
+            var View = this.view,
+
+                view = new View({
+                    model: model
+                });
+
+            return view.render();
         },
 
         _ensureContainer: function (model) {

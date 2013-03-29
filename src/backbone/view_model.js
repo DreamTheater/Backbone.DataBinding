@@ -7,12 +7,10 @@
      * @class
      */
     Backbone.ViewModel = View.extend({
-
         /**
          * @constructor
          */
         constructor: function (options) {
-
             /**
              * @override
              */
