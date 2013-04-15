@@ -8,7 +8,13 @@
 (function () {
     'use strict';
 
+    ////////////////
+    // SUPERCLASS //
+    ////////////////
+
     var View = Backbone.View;
+
+    ////////////////
 
     /**
      * @class
@@ -205,7 +211,13 @@
 (function () {
     'use strict';
 
+    ////////////////
+    // SUPERCLASS //
+    ////////////////
+
     var View = Backbone.View;
+
+    ////////////////
 
     /**
      * @class

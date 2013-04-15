@@ -13,27 +13,24 @@ The plugin is for bidirectional binding between views and models.
 ### Backbone.ViewModel
 #### Static members
   - Object `readers`
-    - Function `html`
-    - Function `text`
-    - Function `value`
-    - Function `checked`
+    - Function `html` - Gets an inner HTML value of the element. Returns the string.
+    - Function `text` - Gets an inner HTML value of the element, escaping HTML characters. Returns the string.
+    - Function `value` - Gets a value of the element. Returns the string.
+    - Function `checked` - Gets a value of the element (applicable only to `checkbox` and `radio` types). Returns the boolean, string or array of strings when multiple elements.
   - Object `writers`
-    - Function `html`
-    - Function `text`
-    - Function `value`
-    - Function `checked`
+    - Function `html` - Assigns an inner HTML value to the element.
+    - Function `text` - Assigns an inner HTML value to the element, escaping HTML characters.
+    - Function `value` - Assigns a value to the element.
+    - Function `checked` - Assigns a value to the element (applicable only to `checkbox` and `radio` types).
 
 #### Instance members
   - Function `binding(selector, binding, event, options)`
-    - String `selector`
-      - Selector string to filter the descendants of the selected elements that trigger the event. If the selector is `null`, the event is always triggered when it reaches the selected element.
+    - String `selector` - Selector string to filter the descendants of the selected elements that trigger the event. If the selector is `null`, the event is always triggered when it reaches the selected element.
     - String `binding` (`type:attribute`)
-      - `type` - binding type (e. g. `html`, `text`, `value`, `checked` or any other HTML attribute).
-      - `attribute` - model's attribute that would be linked to this element.
-    - String `event`
-      - Event type (e. g. `change`, `input`).
-    - Object `options`
-      - Object that would be passed as the argument `options` to the method `set` each time when value sets to the model (e. g. `{ validate: true }` to validate current value).
+      - `type` - Binding type (e. g. `html`, `text`, `value`, `checked` or any other HTML attribute).
+      - `attribute` - Model's attribute that would be linked to this element.
+    - String `event` - Event type (e. g. `change`, `input`).
+    - Object `options` - Object that would be passed as the argument `options` to the method `set` each time when value sets to the model (e. g. `{ validate: true }` to validate current value).
   - Function `delegateBindings(bindings)`
     - Object `bindings`
   - Function `undelegateBindings()`
@@ -62,7 +59,7 @@ var user = new Backbone.Model({
 });
 ```
 
-### Create view of model
+### Create view
 ```html
 <form id="profile">
     <input type="text" name="email">
