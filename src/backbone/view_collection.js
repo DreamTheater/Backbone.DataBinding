@@ -22,15 +22,15 @@
             /**
              * @override
              */
-            this.initialize = _.wrap(this.initialize, function (initialize, options) {
+            this.initialize = _.wrap(this.initialize, function (fn, options) {
 
-                /////////////////
-                // DEFINITIONS //
-                /////////////////
+                ////////////////
+                // PROPERTIES //
+                ////////////////
 
                 this.views = [];
 
-                /////////////////
+                ////////////////
 
                 var collection = this.collection;
 
@@ -39,9 +39,11 @@
                 this.listenTo(collection, 'add', this._addView);
                 this.listenTo(collection, 'remove', this._removeView);
 
-                this.syncToCollection();
+                if (collection.length > 0) {
+                    this.syncToCollection();
+                }
 
-                return initialize.call(this, options);
+                return fn.call(this, options);
             });
 
             View.call(this, options);
@@ -50,10 +52,10 @@
         /**
          * @override
          */
-        remove: _.wrap(View.prototype.remove, function (remove) {
+        remove: _.wrap(View.prototype.remove, function (fn) {
             this._destroyViews();
 
-            return remove.call(this);
+            return fn.call(this);
         }),
 
         get: function (object) {
@@ -82,21 +84,23 @@
         _sortViews: function (collection) {
             var views = this.views, comparator = collection.comparator;
 
-            if (_.isString(comparator)) {
-                this.views = _.sortBy(views, function (view) {
-                    return view.model[comparator];
-                });
-            } else if (comparator.length === 1) {
-                this.views = _.sortBy(views, function (view) {
-                    return comparator.call(collection, view.model);
-                });
-            } else {
-                views.sort(function (aView, bView) {
-                    return comparator.call(collection, aView.model, bView.model);
-                });
-            }
+            if (comparator) {
+                if (_.isString(comparator)) {
+                    this.views = _.sortBy(views, function (view) {
+                        return view.model[comparator];
+                    });
+                } else if (comparator.length === 1) {
+                    this.views = _.sortBy(views, function (view) {
+                        return comparator.call(collection, view.model);
+                    });
+                } else {
+                    views.sort(function (aView, bView) {
+                        return comparator.call(collection, aView.model, bView.model);
+                    });
+                }
 
-            this._refreshViews();
+                this._refreshViews();
+            }
         },
 
         _addView: function (model) {

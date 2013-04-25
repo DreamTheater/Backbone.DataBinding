@@ -20,17 +20,17 @@
             /**
              * @override
              */
-            this.initialize = _.wrap(this.initialize, function (initialize, options) {
+            this.initialize = _.wrap(this.initialize, function (fn, options) {
 
-                /////////////////
-                // DEFINITIONS //
-                /////////////////
+                ////////////////
+                // PROPERTIES //
+                ////////////////
 
                 this.bindings = {};
 
-                /////////////////
+                ////////////////
 
-                return initialize.call(this, options);
+                return fn.call(this, options);
             });
 
             View.call(this, options);
@@ -39,12 +39,12 @@
         /**
          * @override
          */
-        setElement: _.wrap(View.prototype.setElement, function (setElement, element, delegate) {
+        setElement: _.wrap(View.prototype.setElement, function (fn, element, delegate) {
             if (this.$el) {
                 this.undelegateBindings();
             }
 
-            setElement.call(this, element, delegate);
+            fn.call(this, element, delegate);
 
             if (delegate !== false) {
                 this.delegateBindings();
@@ -84,8 +84,6 @@
                     elements.prop(type, value);
                 }
             });
-
-            this.syncToModel();
 
             return this;
         },
