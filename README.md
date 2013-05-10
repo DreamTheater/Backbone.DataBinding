@@ -1,7 +1,10 @@
-[lnk]: https://travis-ci.org/DreamTheater/Backbone.DataBinding
-[img]: https://secure.travis-ci.org/DreamTheater/Backbone.DataBinding.png
+[npm-badge]: https://badge.fury.io/js/backbone.databinding.png
+[npm-link]: https://badge.fury.io/js/backbone.databinding
 
-# Backbone.DataBinding [![Build Status][img]][lnk]
+[travis-badge]: https://secure.travis-ci.org/DreamTheater/Backbone.DataBinding.png
+[travis-link]: https://travis-ci.org/DreamTheater/Backbone.DataBinding
+
+# Backbone.DataBinding [![NPM Version][npm-badge]][npm-link] [![Build Status][travis-badge]][travis-link]
 The plugin is for bidirectional binding between views and models.
 
 **Dependencies:**
