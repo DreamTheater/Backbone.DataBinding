@@ -354,7 +354,7 @@
                 container = container.call(this, model);
             }
 
-            return (container ? this.$(container) : this.$el);
+            return container ? this.$(container) : this.$el;
         },
 
         _refreshViews: function (options) {
