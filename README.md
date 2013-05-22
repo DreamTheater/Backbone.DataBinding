@@ -118,6 +118,10 @@ profile.binding('[name="notes"]', 'value:notes', 'change');
 ```
 
 ## Changelog
+### 0.2.9
+  - Readers and writers runs in context `this`
+  - Added binding type `visible`
+
 ### 0.2.7
   - Method `reset` renamed to `syncToCollection`
   - Changed signature of method `binding`

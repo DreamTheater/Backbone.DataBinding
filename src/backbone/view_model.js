@@ -10,6 +10,13 @@
     ////////////////
 
     /**
+     * @function
+     */
+    function isTrue(value) {
+        return _.isBoolean(value) ? value : !_.isUndefined(value) && !_.isNull(value);
+    }
+
+    /**
      * @class
      */
     Backbone.ViewModel = View.extend({
@@ -61,10 +68,10 @@
 
             if (event) {
                 this.bindings[event + ' ' + selector] = _.bind(function () {
-                    var readers = this.constructor.readers, reader = readers[type],
+                    var reader = this.constructor.readers[type],
 
                         elements = this.$(selector),
-                        value = reader ? reader.call(readers, elements) : elements.prop(type);
+                        value = reader ? reader.call(this, elements) : elements.prop(type);
 
                     this.model.set(attribute, value, options);
                 }, this);
@@ -73,13 +80,13 @@
             }
 
             this.listenTo(this.model, 'change', function (model) {
-                var writers = this.constructor.writers, writer = writers[type],
+                var writer = this.constructor.writers[type],
 
                     elements = this.$(selector),
                     value = model.get(attribute);
 
                 if (writer) {
-                    writer.call(writers, elements, value);
+                    writer.call(this, elements, value);
                 } else {
                     elements.prop(type, value);
                 }
@@ -135,6 +142,10 @@
                 return elements.text();
             },
 
+            visible: function (elements) {
+                return elements.is(':visible');
+            },
+
             value: function (elements) {
                 return elements.val();
             },
@@ -156,7 +167,7 @@
 
         writers: {
             html: function (elements, value) {
-                if (value) {
+                if (isTrue(value)) {
                     elements.html(value);
                 } else {
                     elements.empty();
@@ -164,15 +175,23 @@
             },
 
             text: function (elements, value) {
-                if (value) {
+                if (isTrue(value)) {
                     elements.text(value);
                 } else {
                     elements.empty();
                 }
             },
 
+            visible: function (elements, value) {
+                if (isTrue(value)) {
+                    elements.show();
+                } else {
+                    elements.hide();
+                }
+            },
+
             value: function (elements, value) {
-                if (value) {
+                if (isTrue(value)) {
                     elements.val(value);
                 } else {
                     elements.val(null);
