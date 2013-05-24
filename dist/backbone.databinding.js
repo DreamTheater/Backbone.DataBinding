@@ -74,10 +74,10 @@
                 attribute = match[2];
 
             if (event) {
-                this.bindings[event + ' ' + selector] = _.bind(function () {
+                this.bindings[selector ? event + ' ' + selector : event] = _.bind(function () {
                     var reader = this.constructor.readers[type],
 
-                        elements = this.$(selector),
+                        elements = selector ? this.$(selector) : this.$el,
                         value = reader ? reader.call(this, elements) : elements.prop(type);
 
                     this.model.set(attribute, value, options);
@@ -89,7 +89,7 @@
             this.listenTo(this.model, 'change', function (model) {
                 var writer = this.constructor.writers[type],
 
-                    elements = this.$(selector),
+                    elements = selector ? this.$(selector) : this.$el,
                     value = model.get(attribute);
 
                 if (writer) {
