@@ -19,19 +19,19 @@
          * @constructor
          */
         constructor: function (options) {
+
+            ////////////////
+            // PROPERTIES //
+            ////////////////
+
+            this.views = [];
+
+            ////////////////
+
             /**
              * @override
              */
             this.initialize = _.wrap(this.initialize, function (fn, options) {
-
-                ////////////////
-                // PROPERTIES //
-                ////////////////
-
-                this.views = [];
-
-                ////////////////
-
                 var collection = this.collection;
 
                 this.listenTo(collection, 'reset', this.syncToCollection);
@@ -39,7 +39,7 @@
                 this.listenTo(collection, 'add', this._addView);
                 this.listenTo(collection, 'remove', this._removeView);
 
-                if (collection.length > 0) {
+                if (!collection.isEmpty()) {
                     this.syncToCollection();
                 }
 
@@ -151,13 +151,13 @@
 
         _refreshViews: function (options) {
 
-            ///////////////
-            // INSURANCE //
-            ///////////////
+            ///////////////////
+            // NORMALIZATION //
+            ///////////////////
 
             options = options || {};
 
-            ///////////////
+            ///////////////////
 
             if (options.reset) {
                 this._destroyViews();

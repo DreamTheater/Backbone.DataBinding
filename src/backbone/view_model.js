@@ -13,7 +13,7 @@
      * @function
      */
     function isTrue(value) {
-        return _.isBoolean(value) ? value : !_.isUndefined(value) && !_.isNull(value);
+        return _.isBoolean(value) ? value : !_.isNull(value) && !_.isUndefined(value);
     }
 
     /**
@@ -24,19 +24,19 @@
          * @constructor
          */
         constructor: function (options) {
+
+            ////////////////
+            // PROPERTIES //
+            ////////////////
+
+            this.bindings = {};
+
+            ////////////////
+
             /**
              * @override
              */
             this.initialize = _.wrap(this.initialize, function (fn, options) {
-
-                ////////////////
-                // PROPERTIES //
-                ////////////////
-
-                this.bindings = {};
-
-                ////////////////
-
                 return fn.call(this, options);
             });
 
@@ -97,13 +97,13 @@
 
         delegateBindings: function (bindings) {
 
-            ///////////////
-            // INSURANCE //
-            ///////////////
+            ///////////////////
+            // NORMALIZATION //
+            ///////////////////
 
             bindings = bindings || _.result(this, 'bindings');
 
-            ///////////////
+            ///////////////////
 
             this.undelegateBindings();
 
@@ -151,7 +151,11 @@
             },
 
             checked: function (elements) {
-                var value, values = _.pluck(elements.serializeArray(), 'value');
+                var value, values = [];
+
+                _.each(elements, function (element) {
+                    if (element.checked) values.push(element.value);
+                });
 
                 if (elements.prop('type') === 'radio') {
                     value = values[0];
@@ -199,11 +203,15 @@
             },
 
             checked: function (elements, value) {
-                var values = _.isArray(value) ? value : [value],
+                var values = _.isArray(value) ? value : [value], matchedElements;
 
-                    matchedElements = elements.filter(function () {
-                        return _.contains(values, this.value);
-                    });
+                values = _.map(values, function (value) {
+                    return String(value);
+                });
+
+                matchedElements = elements.filter(function () {
+                    return _.contains(values, this.value);
+                });
 
                 if (elements.prop('type') === 'radio') {
                     matchedElements.prop('checked', true);

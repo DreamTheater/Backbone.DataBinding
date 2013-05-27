@@ -6,11 +6,12 @@
 
     "keywords": [
         "backbone",
-        "plugin",
-        "view",
-        "model",
+        "binding",
         "collection",
-        "binding"
+        "data",
+        "model",
+        "plugin",
+        "view"
     ],
 
     "homepage": "https://github.com/DreamTheater/Backbone.DataBinding",
