@@ -2,7 +2,7 @@
     "name": "backbone.databinding",
     "title": "Backbone.DataBinding",
     "version": "0.2.9",
-    "description": "The plugin is for bidirectional binding between views and models.",
+    "description": "The plugin implements a bidirectional data binding between views and models/collections.",
 
     "keywords": [
         "backbone",

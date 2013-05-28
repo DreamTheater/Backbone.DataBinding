@@ -5,7 +5,7 @@
 [travis-link]: https://travis-ci.org/DreamTheater/Backbone.DataBinding
 
 # Backbone.DataBinding [![NPM Version][npm-badge]][npm-link] [![Build Status][travis-badge]][travis-link]
-The plugin is for bidirectional binding between views and models.
+The plugin implements a bidirectional data binding between views and models/collections.
 
 **Dependencies:**
 
