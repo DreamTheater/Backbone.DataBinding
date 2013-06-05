@@ -300,7 +300,7 @@
             return _.find(this.views, function (view) {
                 var model = view.model;
 
-                return (model.id === id || model.cid === cid);
+                return model.id === id || model.cid === cid;
             });
         },
 
