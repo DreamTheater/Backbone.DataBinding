@@ -10,78 +10,168 @@ The plugin implements a bidirectional data binding between views and models/coll
 **Dependencies:**
 
   - [Backbone](https://github.com/documentcloud/backbone) `>= 1.0.0`
-  - [Underscore](https://github.com/documentcloud/underscore) `>= 1.4.4`
+  - [Underscore](https://github.com/documentcloud/underscore) `>= 1.5.1`
 
 ## Getting Started
 ### Create model
 ```js
-var user = new Backbone.Model({
-    email: 'dnemoga@gmail.com',
-    gender: 'MALE',
-    status: 'SINGLE',
-    hasChildren: false,
-    favoriteDaysOfWeek: ['FRIDAY', 'SATURDAY'],
-    favoriteColors: ['RED', 'BLUE', 'VIOLET'],
-    notes: 'I like JavaScript!'
-});
+var model = new Backbone.Model();
 ```
 
-### Create view
-```html
-<form id="profile">
-    <input type="text" name="email">
-
-    <input type="radio" name="gender" value="MALE">
-    <input type="radio" name="gender" value="FEMALE">
-
-    <select name="status">
-        <option value="SINGLE">Single</option>
-        <option value="MARRIED">Married</option>
-    </select>
-
-    <input type="checkbox" name="hasChildren">
-
-    <select name="favoriteDaysOfWeek[]" multiple>
-        <option value="MONDAY">Monday</option>
-        <option value="TUESDAY">Tuesday</option>
-        <option value="WEDNESDAY">Wednesday</option>
-        <option value="THURSDAY">Thursday</option>
-        <option value="FRIDAY">Friday</option>
-        <option value="SATURDAY">Saturday</option>
-        <option value="SUNDAY">Sunday</option>
-    </select>
-
-    <input type="checkbox" name="favoriteColors[]" value="RED">
-    <input type="checkbox" name="favoriteColors[]" value="ORANGE">
-    <input type="checkbox" name="favoriteColors[]" value="YELLOW">
-    <input type="checkbox" name="favoriteColors[]" value="GREEN">
-    <input type="checkbox" name="favoriteColors[]" value="BLUE">
-    <input type="checkbox" name="favoriteColors[]" value="INDIGO">
-    <input type="checkbox" name="favoriteColors[]" value="VIOLET">
-
-    <textarea name="notes"></textarea>
-</form>
-```
-
+### Create view with data binding
 ```js
-var profile = new Backbone.ViewModel({
-    el: '#profile',
-    model: user
-});
+var view = new Backbone.View({ model: model }), modelBinder = new Backbone.ModelBinder(view);
 ```
 
 ### Define bindings
+#### Binding types
+##### Type `html`
+```html
+<output name="output-html"></output>
+```
 ```js
-profile.binding('[name="email"]', 'value:email', 'change', { validate: true });
-profile.binding('[name="gender"]', 'checked:gender', 'change');
-profile.binding('[name="status"]', 'value:status', 'change');
-profile.binding('[name="hasChildren"]', 'checked:hasChildren', 'change');
-profile.binding('[name="favoriteDaysOfWeek[]"]', 'value:favoriteDaysOfWeek', 'change');
-profile.binding('[name="favoriteColors[]"]', 'checked:favoriteColors', 'change');
-profile.binding('[name="notes"]', 'value:notes', 'change');
+modelBinder.define('html:output-html', {
+    selector: '[name="output-html"]'
+});
+```
+
+##### Type `text`
+```html
+<output name="output-text"></output>
+```
+```js
+modelBinder.define('text:output-text', {
+    selector: '[name="output-text"]'
+});
+```
+
+##### Type `value`
+###### Text input
+```html
+<input type="text" name="text-input-value">
+```
+```js
+modelBinder.define('value:text-input-value', {
+    selector: '[name="text-input-value"]'
+});
+```
+
+###### Text area
+```html
+<textarea name="textarea-value"></textarea>
+```
+```js
+modelBinder.define('value:textarea-value', {
+    selector: '[name="textarea-value"]'
+});
+```
+
+###### Single select
+```html
+<select name="single-select-value">
+    <option value="A">Option A</option>
+    <option value="B">Option B</option>
+</select>
+```
+```js
+modelBinder.define('value:single-select-value', {
+    selector: '[name="single-select-value"]'
+});
+```
+
+###### Multiple select
+```html
+<select name="multiple-select-value" multiple>
+    <option value="A">Option A</option>
+    <option value="B">Option B</option>
+</select>
+```
+```js
+modelBinder.define('value:multiple-select-value', {
+    selector: '[name="multiple-select-value"]'
+});
+```
+
+##### Type `checked`
+###### Single checkbox
+```html
+<input type="checkbox" name="single-checkbox-input-checked">
+```
+```js
+modelBinder.define('checked:single-checkbox-input-checked', {
+    selector: '[name="single-checkbox-input-checked"]'
+});
+```
+
+###### Multiple checkboxes
+```html
+<input type="checkbox" name="multiple-checkbox-input-checked" value="A">
+<input type="checkbox" name="multiple-checkbox-input-checked" value="B">
+```
+```js
+modelBinder.define('checked:multiple-checkbox-input-checked', {
+    selector: '[name="multiple-checkbox-input-checked"]'
+});
+```
+
+###### Radio buttons
+```html
+<input type="radio" name="radio-input-checked" value="A">
+<input type="radio" name="radio-input-checked" value="B">
+```
+```js
+modelBinder.define('checked:radio-input-checked', {
+    selector: '[name="radio-input-checked"]'
+});
+```
+
+##### Type `visible`
+```html
+<button type="button" name="button-visible">Visible</button>
+```
+```js
+modelBinder.define('visible:button-visible', {
+    selector: '[name="button-visible"]'
+});
+```
+
+##### Type `hidden`
+```html
+<button type="button" name="button-hidden">Hidden</button>
+```
+```js
+modelBinder.define('hidden:button-hidden', {
+    selector: '[name="button-hidden"]'
+});
+```
+
+##### Type `enabled`
+```html
+<button type="button" name="button-enabled">Enabled</button>
+```
+```js
+modelBinder.define('enabled:button-enabled', {
+    selector: '[name="button-enabled"]'
+});
+```
+
+##### Type `disabled`
+```html
+<button type="button" name="button-disabled">Disabled</button>
+```
+```js
+modelBinder.define('disabled:button-disabled', {
+    selector: '[name="button-disabled"]'
+});
 ```
 
 ## Changelog
+### 0.3.3
+  - Plugin implemented as decorator, not a class
+  - Readers and writers merged into types
+  - Added new binding types `hidden`, `enabled`, `disabled`
+  - A lot of fixes
+
 ### 0.2.9
   - Readers and writers runs in context `this`
   - Added binding type `visible`

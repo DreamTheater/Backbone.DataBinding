@@ -15,53 +15,59 @@
         <script src="../lib/backbone/backbone.js"></script>
 
         <!-- Sources -->
-        <script src="../src/backbone/view_model.js"></script>
-        <script src="../src/backbone/view_collection.js"></script>
+        <script src="../src/backbone/model_binder.js"></script>
+        <script src="../src/backbone/collection_binder.js"></script>
 
         <!-- Tests -->
-        <script src="backbone/view_model.js"></script>
-        <script src="backbone/view_collection.js"></script>
+        <script src="backbone/model_binder.js"></script>
+        <script src="backbone/collection_binder.js"></script>
+
+        <script>
+            _.extend(QUnit.config, {
+                hidepassed: true
+            });
+        </script>
     </head>
 
     <body>
         <section id="qunit"></section>
 
-        <section id="qunit-fixture">
-            <form id="profile">
-                <input type="text" name="email">
+        <!--<section id="qunit-fixture">-->
+            <form id="test-form">
+                <output name="output-html"></output>
+                <output name="output-text"></output>
 
-                <input type="radio" name="gender" value="MALE">
-                <input type="radio" name="gender" value="FEMALE">
+                <input type="text" name="text-input-value">
+                <textarea name="textarea-value"></textarea>
 
-                <select name="status">
-                    <option value="SINGLE">Single</option>
-                    <option value="MARRIED">Married</option>
+                <select name="single-select-value">
+                    <option value="A">Option A</option>
+                    <option value="B">Option B</option>
                 </select>
 
-                <input type="checkbox" name="hasChildren">
-
-                <select name="favoriteDaysOfWeek[]" multiple>
-                    <option value="MONDAY">Monday</option>
-                    <option value="TUESDAY">Tuesday</option>
-                    <option value="WEDNESDAY">Wednesday</option>
-                    <option value="THURSDAY">Thursday</option>
-                    <option value="FRIDAY">Friday</option>
-                    <option value="SATURDAY">Saturday</option>
-                    <option value="SUNDAY">Sunday</option>
+                <select name="multiple-select-value" multiple>
+                    <option value="A">Option A</option>
+                    <option value="B">Option B</option>
                 </select>
 
-                <input type="checkbox" name="favoriteColors[]" value="RED">
-                <input type="checkbox" name="favoriteColors[]" value="ORANGE">
-                <input type="checkbox" name="favoriteColors[]" value="YELLOW">
-                <input type="checkbox" name="favoriteColors[]" value="GREEN">
-                <input type="checkbox" name="favoriteColors[]" value="BLUE">
-                <input type="checkbox" name="favoriteColors[]" value="INDIGO">
-                <input type="checkbox" name="favoriteColors[]" value="VIOLET">
+                <input type="radio" name="radio-input-checked" value="A">
+                <input type="radio" name="radio-input-checked" value="B">
 
-                <textarea name="notes"></textarea>
+                <input type="checkbox" name="single-checkbox-input-checked" value="on">
+
+                <input type="checkbox" name="multiple-checkbox-input-checked" value="A">
+                <input type="checkbox" name="multiple-checkbox-input-checked" value="B">
+
+                <button type="button" name="button-visible">Visible</button>
+                <button type="button" name="button-hidden">Hidden</button>
+                <button type="button" name="button-enabled">Enabled</button>
+                <button type="button" name="button-disabled">Disabled</button>
             </form>
-        </section>
 
-        <ul id="list"></ul>
+            <section id="test-list">
+                <ul id="odd-id"></ul>
+                <ul id="even-id"></ul>
+            </section>
+        <!--</section>-->
     </body>
 </html>
