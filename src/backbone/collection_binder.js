@@ -62,6 +62,28 @@
 
     _.extend(CollectionBinder, {
         handlers: _.extend({
+            add: function (model) {
+                var views = this.views, view = this.view.get(model) || this._prepareView(model),
+                    index = _.indexOf(views, view), element = this._ensureElement(model);
+
+                if (index === -1) {
+                    views.push(view);
+                }
+
+                view.$el.appendTo(element);
+            },
+
+            remove: function (model) {
+                var views = this.views, view = this.view.get(model),
+                    index = _.indexOf(views, view);
+
+                if (index !== -1) {
+                    views.splice(index, 1);
+                }
+
+                view.remove();
+            },
+
             reset: function (collection) {
                 this.removeViews().renderViews(collection);
             },
@@ -85,36 +107,6 @@
                     }
 
                     this.detachViews().renderViews(collection);
-                }
-            },
-
-            add: function (model) {
-                var views = this.views, view = this.view.get(model) || this._prepareView(model),
-                    index = _.indexOf(views, view), element = this._ensureElement(model);
-
-                if (index === -1) {
-                    views.push(view);
-                }
-
-                view.$el.appendTo(element);
-            },
-
-            remove: function (model) {
-                var views = this.views, view = this.view.get(model),
-                    index = _.indexOf(views, view);
-
-                if (index !== -1) {
-                    views.splice(index, 1);
-                }
-
-                view.remove();
-            }
-        }, {
-            change: function () {
-                var collection = this.collection;
-
-                if (collection.comparator) {
-                    collection.sort();
                 }
             }
         })
@@ -191,9 +183,11 @@
         removeViews: function () {
             var views = this.views;
 
-            while (views.length > 0) {
-                this.constructor.handlers.remove.call(this, views[0].model);
-            }
+            _.each(views, function (view) {
+                view.remove();
+            });
+
+            views.splice(0);
 
             return this;
         },
@@ -211,13 +205,15 @@
         renderDummy: function () {
             var dummy = this.dummy, element;
 
-            if (this.options.dummy && !dummy) {
+            if (!dummy) {
                 dummy = this._prepareView();
                 element = this._ensureElement();
 
-                dummy.$el.appendTo(element);
+                if (dummy) {
+                    dummy.$el.appendTo(element);
 
-                this.dummy = dummy;
+                    this.dummy = dummy;
+                }
             }
 
             return this;
@@ -228,9 +224,9 @@
 
             if (dummy) {
                 dummy.remove();
-            }
 
-            delete this.dummy;
+                delete this.dummy;
+            }
 
             return this;
         },
@@ -246,20 +242,6 @@
             this.stopListening();
 
             this.events = _.defaults(options, {
-                reset: _.wrap(handlers.reset, function (fn, collection) {
-                    this.removeDummy();
-
-                    fn.call(this, collection);
-
-                    if (this.collection.isEmpty()) {
-                        this.renderDummy();
-                    }
-                }),
-
-                sort: _.wrap(handlers.sort, function (fn, collection) {
-                    fn.call(this, collection);
-                }),
-
                 add: _.wrap(handlers.add, function (fn, model) {
                     this.removeDummy();
 
@@ -272,9 +254,21 @@
                     if (this.collection.isEmpty()) {
                         this.renderDummy();
                     }
+                }),
+
+                reset: _.wrap(handlers.reset, function (fn, collection) {
+                    this.removeDummy();
+
+                    fn.call(this, collection);
+
+                    if (this.collection.isEmpty()) {
+                        this.renderDummy();
+                    }
+                }),
+
+                sort: _.wrap(handlers.sort, function (fn, collection) {
+                    fn.call(this, collection);
                 })
-            }, {
-                change: handlers.change
             });
 
             this._bindHandlers(options);
@@ -286,29 +280,45 @@
 
             ////////////////////
 
-            var reset = options.reset, sort = options.sort,
-                add = options.add, remove = options.remove;
+            var add = options.add, remove = options.remove,
+                reset = options.reset, sort = options.sort;
 
             ////////////////////
 
-            if (reset) options.reset = _.bind(reset, this);
-            if (sort) options.sort = _.bind(sort, this);
             if (add) options.add = _.bind(add, this);
             if (remove) options.remove = _.bind(remove, this);
+            if (reset) options.reset = _.bind(reset, this);
+            if (sort) options.sort = _.bind(sort, this);
         },
 
         _prepareView: function (model) {
-            var View = this.options.view, Dummy = this.options.dummy,
 
-                view = model ? new View({
-                    model: model
-                }) : new Dummy();
+            ////////////////////
 
-            return view.render();
+            var View = this.options.view, Dummy = this.options.dummy;
+
+            ////////////////////
+
+            var view;
+
+            if (model) {
+                view = new View({ model: model });
+            } else if (Dummy) {
+                view = new Dummy();
+            }
+
+            return view ? view.render() : null;
         },
 
         _ensureElement: function (model) {
-            var view = this.view, selector = this.options.selector;
+
+            ////////////////////
+
+            var selector = this.options.selector;
+
+            ////////////////////
+
+            var view = this.view;
 
             if (_.isFunction(selector)) {
                 selector = selector.call(view, model);

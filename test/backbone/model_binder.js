@@ -407,10 +407,10 @@ $(function () {
         var attribute = 'button-visible', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        $el.show().trigger('change');
+        $el.prop('hidden', false).trigger('change');
         strictEqual(attributes[attribute], true);
 
-        $el.hide().trigger('change');
+        $el.prop('hidden', true).trigger('change');
         strictEqual(attributes[attribute], false);
     });
 
@@ -418,10 +418,10 @@ $(function () {
         var attribute = 'button-hidden', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        $el.hide().trigger('change');
+        $el.prop('hidden', true).trigger('change');
         strictEqual(attributes[attribute], true);
 
-        $el.show().trigger('change');
+        $el.prop('hidden', false).trigger('change');
         strictEqual(attributes[attribute], false);
     });
 

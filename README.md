@@ -30,7 +30,7 @@ var view = new Backbone.View({ model: model }), modelBinder = new Backbone.Model
 <output name="output-html"></output>
 ```
 ```js
-modelBinder.define('html:output-html', {
+modelBinder.define('html: output-html', {
     selector: '[name="output-html"]'
 });
 ```
@@ -40,7 +40,7 @@ modelBinder.define('html:output-html', {
 <output name="output-text"></output>
 ```
 ```js
-modelBinder.define('text:output-text', {
+modelBinder.define('text: output-text', {
     selector: '[name="output-text"]'
 });
 ```
@@ -51,7 +51,7 @@ modelBinder.define('text:output-text', {
 <input type="text" name="text-input-value">
 ```
 ```js
-modelBinder.define('value:text-input-value', {
+modelBinder.define('value: text-input-value', {
     selector: '[name="text-input-value"]'
 });
 ```
@@ -61,7 +61,7 @@ modelBinder.define('value:text-input-value', {
 <textarea name="textarea-value"></textarea>
 ```
 ```js
-modelBinder.define('value:textarea-value', {
+modelBinder.define('value: textarea-value', {
     selector: '[name="textarea-value"]'
 });
 ```
@@ -74,7 +74,7 @@ modelBinder.define('value:textarea-value', {
 </select>
 ```
 ```js
-modelBinder.define('value:single-select-value', {
+modelBinder.define('value: single-select-value', {
     selector: '[name="single-select-value"]'
 });
 ```
@@ -87,7 +87,7 @@ modelBinder.define('value:single-select-value', {
 </select>
 ```
 ```js
-modelBinder.define('value:multiple-select-value', {
+modelBinder.define('value: multiple-select-value', {
     selector: '[name="multiple-select-value"]'
 });
 ```
@@ -98,7 +98,7 @@ modelBinder.define('value:multiple-select-value', {
 <input type="checkbox" name="single-checkbox-input-checked">
 ```
 ```js
-modelBinder.define('checked:single-checkbox-input-checked', {
+modelBinder.define('checked: single-checkbox-input-checked', {
     selector: '[name="single-checkbox-input-checked"]'
 });
 ```
@@ -109,7 +109,7 @@ modelBinder.define('checked:single-checkbox-input-checked', {
 <input type="checkbox" name="multiple-checkbox-input-checked" value="B">
 ```
 ```js
-modelBinder.define('checked:multiple-checkbox-input-checked', {
+modelBinder.define('checked: multiple-checkbox-input-checked', {
     selector: '[name="multiple-checkbox-input-checked"]'
 });
 ```
@@ -120,7 +120,7 @@ modelBinder.define('checked:multiple-checkbox-input-checked', {
 <input type="radio" name="radio-input-checked" value="B">
 ```
 ```js
-modelBinder.define('checked:radio-input-checked', {
+modelBinder.define('checked: radio-input-checked', {
     selector: '[name="radio-input-checked"]'
 });
 ```
@@ -130,7 +130,7 @@ modelBinder.define('checked:radio-input-checked', {
 <button type="button" name="button-visible">Visible</button>
 ```
 ```js
-modelBinder.define('visible:button-visible', {
+modelBinder.define('visible: button-visible', {
     selector: '[name="button-visible"]'
 });
 ```
@@ -140,7 +140,7 @@ modelBinder.define('visible:button-visible', {
 <button type="button" name="button-hidden">Hidden</button>
 ```
 ```js
-modelBinder.define('hidden:button-hidden', {
+modelBinder.define('hidden: button-hidden', {
     selector: '[name="button-hidden"]'
 });
 ```
@@ -150,7 +150,7 @@ modelBinder.define('hidden:button-hidden', {
 <button type="button" name="button-enabled">Enabled</button>
 ```
 ```js
-modelBinder.define('enabled:button-enabled', {
+modelBinder.define('enabled: button-enabled', {
     selector: '[name="button-enabled"]'
 });
 ```
@@ -160,12 +160,15 @@ modelBinder.define('enabled:button-enabled', {
 <button type="button" name="button-disabled">Disabled</button>
 ```
 ```js
-modelBinder.define('disabled:button-disabled', {
+modelBinder.define('disabled: button-disabled', {
     selector: '[name="button-disabled"]'
 });
 ```
 
 ## Changelog
+### 0.3.4
+  - Fixed `visible`, `hidden`, `enabled`, `disabled` bindings
+
 ### 0.3.3
   - Plugin implemented as decorator, not a class
   - Readers and writers merged into types

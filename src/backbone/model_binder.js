@@ -141,11 +141,7 @@
                 },
 
                 setter: function (value) {
-                    if (value) {
-                        this.show();
-                    } else {
-                        this.hide();
-                    }
+                    this.prop('hidden', !value);
                 }
             },
 
@@ -155,11 +151,7 @@
                 },
 
                 setter: function (value) {
-                    if (value) {
-                        this.hide();
-                    } else {
-                        this.show();
-                    }
+                    this.prop('hidden', value);
                 }
             },
 
@@ -169,7 +161,7 @@
                 },
 
                 setter: function (value) {
-                    this.find('*').addBack().prop('disabled', !value);
+                    this.prop('disabled', !value);
                 }
             },
 
@@ -179,7 +171,7 @@
                 },
 
                 setter: function (value) {
-                    this.find('*').addBack().prop('disabled', value);
+                    this.prop('disabled', value);
                 }
             }
         }
