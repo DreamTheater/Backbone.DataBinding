@@ -96,27 +96,14 @@
                 },
 
                 setter: function (value) {
-
-                    ////////////////////
-
                     var values = _.isArray(value) ? value : [value];
 
-                    values = _.map(values, function (value) {
-                        return String(value);
-                    });
-
-                    ////////////////////
-
-                    var $el = this.filter(function () {
-                        return _.contains(values, this.value);
-                    });
-
-                    this.prop('checked', false);
-
-                    if (this.prop('type') === 'radio' || this.prop('value') !== 'on') {
-                        $el.prop('checked', true);
-                    } else if (value) {
-                        this.prop('checked', true);
+                    if (this.prop('type') === 'radio') {
+                        this.val(values);
+                    } else if (this.prop('value') === 'on') {
+                        this.prop('checked', value);
+                    } else {
+                        this.val(values);
                     }
                 }
             },
@@ -181,6 +168,13 @@
             ////////////////////
 
             _.each(bindings, function (options, binding) {
+
+                ////////////////////
+
+                options = options || {};
+
+                ////////////////////
+
                 this._addHandlers(binding, options);
             }, this);
 
@@ -361,7 +355,7 @@
             this.handlers[binding] = _.defaults(options, {
                 getter: _.wrap(callbacks.getter, function (fn) {
                     var $el = selector ? this.$(selector) : this.$el,
-                        value = fn ? fn.call($el) : $el.prop(type);
+                        value = fn ? fn.call($el) : $el.attr(type);
 
                     return this.model.set(attribute, value, options);
                 }),
@@ -370,7 +364,7 @@
                     var $el = selector ? this.$(selector) : this.$el,
                         value = this.model.get(attribute);
 
-                    return fn ? fn.call($el, value) : $el.prop(type, value);
+                    return fn ? fn.call($el, value) : $el.attr(type, value);
                 })
             });
 

@@ -185,6 +185,10 @@ var view = new Backbone.View({ collection: collection }),
 ```
 
 ## Changelog
+### 0.3.9
+  - Fixed `checked` binding
+  - Using `attr()` instead of `prop()` for standard bindings
+
 ### 0.3.7
   - Renaming `types` to `handlers`
   - Method `refresh` moved from view to binders

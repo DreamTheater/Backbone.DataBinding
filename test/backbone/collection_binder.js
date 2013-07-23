@@ -64,7 +64,7 @@ $(function () {
         },
 
         teardown: function () {
-//            this.view.collectionBinder.removeViews();
+            this.view.collectionBinder.removeViews();
         }
     });
 
@@ -72,23 +72,19 @@ $(function () {
     // TESTS //
     ///////////
 
-    test('reset', function () {
+    test('add', function () {
         ok(true);
     });
 
-//    test('sort', function () {
-//        ok(true);
-//    });
-//
-//    test('add', function () {
-//        ok(true);
-//    });
-//
 //    test('remove', function () {
 //        ok(true);
 //    });
 //
-//    test('change', function () {
+//    test('reset', function () {
+//        ok(true);
+//    });
+//
+//    test('sort', function () {
 //        ok(true);
 //    });
 });

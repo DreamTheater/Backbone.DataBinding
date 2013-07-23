@@ -122,13 +122,11 @@
 
             ////////////////////
 
-            var callbacks = _.pick(this.handlers, 'reset');
+            var callback = this.handlers.reset;
 
             ////////////////////
 
-            _.each(callbacks, function (callback) {
-                if (callback) callback(this.collection);
-            }, this);
+            if (callback) callback(this.collection);
 
             return this;
         },
@@ -209,7 +207,7 @@
             var dummy = this.dummy, element;
 
             if (!dummy) {
-                dummy = this._prepareView();
+                dummy = this._prepareDummy();
                 element = this._ensureElement();
 
                 if (dummy) {
@@ -298,19 +296,38 @@
 
             ////////////////////
 
-            var View = this.options.view, Dummy = this.options.dummy;
+            var View = this.options.view;
 
             ////////////////////
 
             var view;
 
-            if (model) {
+            try {
                 view = new View({ model: model });
-            } else if (Dummy) {
-                view = new Dummy();
+            } catch (error) {
+                throw error;
             }
 
-            return view ? view.render() : null;
+            return view.render();
+        },
+
+        _prepareDummy: function () {
+
+            ////////////////////
+
+            var Dummy = this.options.dummy;
+
+            ////////////////////
+
+            var dummy;
+
+            try {
+                dummy = new Dummy();
+            } catch (error) {
+                return;
+            }
+
+            return dummy.render();
         },
 
         _ensureElement: function (model) {

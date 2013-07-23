@@ -1,5 +1,5 @@
 /**
- * Backbone.DataBinding v0.3.7
+ * Backbone.DataBinding v0.3.9
  * https://github.com/DreamTheater/Backbone.DataBinding
  *
  * Copyright (c) 2013 Dmytro Nemoga
@@ -103,27 +103,14 @@
                 },
 
                 setter: function (value) {
-
-                    ////////////////////
-
                     var values = _.isArray(value) ? value : [value];
 
-                    values = _.map(values, function (value) {
-                        return String(value);
-                    });
-
-                    ////////////////////
-
-                    var $el = this.filter(function () {
-                        return _.contains(values, this.value);
-                    });
-
-                    this.prop('checked', false);
-
-                    if (this.prop('type') === 'radio' || this.prop('value') !== 'on') {
-                        $el.prop('checked', true);
-                    } else if (value) {
-                        this.prop('checked', true);
+                    if (this.prop('type') === 'radio') {
+                        this.val(values);
+                    } else if (this.prop('value') === 'on') {
+                        this.prop('checked', value);
+                    } else {
+                        this.val(values);
                     }
                 }
             },
@@ -188,6 +175,13 @@
             ////////////////////
 
             _.each(bindings, function (options, binding) {
+
+                ////////////////////
+
+                options = options || {};
+
+                ////////////////////
+
                 this._addHandlers(binding, options);
             }, this);
 
@@ -368,7 +362,7 @@
             this.handlers[binding] = _.defaults(options, {
                 getter: _.wrap(callbacks.getter, function (fn) {
                     var $el = selector ? this.$(selector) : this.$el,
-                        value = fn ? fn.call($el) : $el.prop(type);
+                        value = fn ? fn.call($el) : $el.attr(type);
 
                     return this.model.set(attribute, value, options);
                 }),
@@ -377,7 +371,7 @@
                     var $el = selector ? this.$(selector) : this.$el,
                         value = this.model.get(attribute);
 
-                    return fn ? fn.call($el, value) : $el.prop(type, value);
+                    return fn ? fn.call($el, value) : $el.attr(type, value);
                 })
             });
 
@@ -526,13 +520,11 @@
 
             ////////////////////
 
-            var callbacks = _.pick(this.handlers, 'reset');
+            var callback = this.handlers.reset;
 
             ////////////////////
 
-            _.each(callbacks, function (callback) {
-                if (callback) callback(this.collection);
-            }, this);
+            if (callback) callback(this.collection);
 
             return this;
         },
@@ -613,7 +605,7 @@
             var dummy = this.dummy, element;
 
             if (!dummy) {
-                dummy = this._prepareView();
+                dummy = this._prepareDummy();
                 element = this._ensureElement();
 
                 if (dummy) {
@@ -702,19 +694,38 @@
 
             ////////////////////
 
-            var View = this.options.view, Dummy = this.options.dummy;
+            var View = this.options.view;
 
             ////////////////////
 
             var view;
 
-            if (model) {
+            try {
                 view = new View({ model: model });
-            } else if (Dummy) {
-                view = new Dummy();
+            } catch (error) {
+                throw error;
             }
 
-            return view ? view.render() : null;
+            return view.render();
+        },
+
+        _prepareDummy: function () {
+
+            ////////////////////
+
+            var Dummy = this.options.dummy;
+
+            ////////////////////
+
+            var dummy;
+
+            try {
+                dummy = new Dummy();
+            } catch (error) {
+                return;
+            }
+
+            return dummy.render();
         },
 
         _ensureElement: function (model) {
