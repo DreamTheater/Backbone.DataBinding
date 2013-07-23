@@ -10,7 +10,7 @@ $(function () {
         el: '#test-form',
 
         initialize: function () {
-            var modelBinder = new Backbone.ModelBinder(this);
+            var modelBinder = this.modelBinder = new Backbone.ModelBinder(this);
 
             modelBinder.define({
                 'html: output-html': { selector: '[name="output-html"]' },

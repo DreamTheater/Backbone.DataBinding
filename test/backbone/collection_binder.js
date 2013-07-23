@@ -9,7 +9,7 @@ $(function () {
         el: '#test-list',
 
         initialize: function () {
-            var collectionBinder = new Backbone.CollectionBinder(this, {
+            var collectionBinder = this.collectionBinder = new Backbone.CollectionBinder(this, {
                 view: Backbone.View.extend({
                     tagName: 'li',
 

@@ -1,4 +1,4 @@
-(function () {
+(function (self) {
     'use strict';
 
     var ModelBinder = Backbone.ModelBinder = function (view) {
@@ -11,45 +11,31 @@
 
         ////////////////////
 
-        this.bindings = {};
+        self = _.extend(this, { view: view, model: view.model }, {
+            handlers: {}
+        });
 
         ////////////////////
 
-        _.extend(this, { view: view, model: view.model });
-
         _.extend(view, {
-            modelBinder: this
-        }, {
             setElement: _.wrap(view.setElement, function (fn, element, delegate) {
-                var modelBinder = this.modelBinder;
-
                 if (this.$el) {
-                    modelBinder.undelegateEvents();
+                    self.undelegateEvents();
                 }
 
                 fn.call(this, element, delegate);
 
                 if (delegate !== false) {
-                    modelBinder.delegateEvents();
+                    self.delegateEvents();
                 }
 
                 return this;
             })
-        }, {
-            refresh: function () {
-                var bindings = this.modelBinder.bindings;
-
-                _.each(bindings, function (options) {
-                    _.result(options, 'setter');
-                });
-
-                return this;
-            }
         });
     };
 
     _.extend(ModelBinder, {
-        types: {
+        handlers: {
             html: {
                 getter: function () {
                     return this.html();
@@ -195,10 +181,25 @@
             ////////////////////
 
             _.each(bindings, function (options, binding) {
-                this._addBinding(binding, options);
+                this._addHandlers(binding, options);
             }, this);
 
-            this.view.refresh();
+            this.refresh();
+
+            return this;
+        },
+
+        refresh: function () {
+
+            ////////////////////
+
+            var callbacks = _.pluck(this.handlers, 'setter');
+
+            ////////////////////
+
+            _.each(callbacks, function (callback) {
+                if (callback) callback();
+            });
 
             return this;
         },
@@ -207,15 +208,15 @@
 
             ////////////////////
 
-            var bindings = this.bindings;
+            var handlers = this.handlers;
 
             if (binding) {
-                bindings = _.pick(bindings, binding);
+                handlers = _.pick(handlers, binding);
             }
 
             ////////////////////
 
-            _.each(bindings, function (options, binding) {
+            _.each(handlers, function (options, binding) {
 
                 ////////////////////
 
@@ -237,15 +238,15 @@
 
             ////////////////////
 
-            var bindings = this.bindings;
+            var handlers = this.handlers;
 
             if (binding) {
-                bindings = _.pick(bindings, binding);
+                handlers = _.pick(handlers, binding);
             }
 
             ////////////////////
 
-            _.each(bindings, function (options) {
+            _.each(handlers, function (options) {
 
                 ////////////////////
 
@@ -265,15 +266,15 @@
 
             ////////////////////
 
-            var bindings = this.bindings;
+            var handlers = this.handlers;
 
             if (binding) {
-                bindings = _.pick(bindings, binding);
+                handlers = _.pick(handlers, binding);
             }
 
             ////////////////////
 
-            _.each(bindings, function (options, binding) {
+            _.each(handlers, function (options, binding) {
 
                 ////////////////////
 
@@ -296,15 +297,15 @@
 
             ////////////////////
 
-            var bindings = this.bindings;
+            var handlers = this.handlers;
 
             if (binding) {
-                bindings = _.pick(bindings, binding);
+                handlers = _.pick(handlers, binding);
             }
 
             ////////////////////
 
-            _.each(bindings, function (options, binding) {
+            _.each(handlers, function (options, binding) {
 
                 ////////////////////
 
@@ -338,7 +339,7 @@
             return events.join(' ');
         },
 
-        _addBinding: function (binding, options) {
+        _addHandlers: function (binding, options) {
 
             ////////////////////
 
@@ -351,21 +352,21 @@
 
             ////////////////////
 
-            var handlers = this.constructor.types[type] || {};
+            var callbacks = this.constructor.handlers[type] || {};
 
             ////////////////////
 
             this.undelegateEvents(binding).stopListening(binding);
 
-            this.bindings[binding] = _.defaults(options, {
-                getter: _.wrap(handlers.getter, function (fn) {
+            this.handlers[binding] = _.defaults(options, {
+                getter: _.wrap(callbacks.getter, function (fn) {
                     var $el = selector ? this.$(selector) : this.$el,
                         value = fn ? fn.call($el) : $el.prop(type);
 
                     return this.model.set(attribute, value, options);
                 }),
 
-                setter: _.wrap(handlers.setter, function (fn) {
+                setter: _.wrap(callbacks.setter, function (fn) {
                     var $el = selector ? this.$(selector) : this.$el,
                         value = this.model.get(attribute);
 
@@ -373,12 +374,12 @@
                 })
             });
 
-            this._bindHandlers(options);
+            this._bindCallbacks(options);
 
             this.delegateEvents(binding).startListening(binding);
         },
 
-        _bindHandlers: function (options) {
+        _bindCallbacks: function (options) {
 
             ////////////////////
 

@@ -18,7 +18,7 @@ The plugin implements a bidirectional data binding between views and models/coll
 var model = new Backbone.Model();
 ```
 
-### Create view with data binding
+### Create view and model binder
 ```js
 var view = new Backbone.View({ model: model }), modelBinder = new Backbone.ModelBinder(view);
 ```
@@ -165,7 +165,31 @@ modelBinder.define('disabled: button-disabled', {
 });
 ```
 
+### Create collection
+```js
+var collection = new Backbone.Collection();
+```
+
+### Create view and collection binder
+```js
+var view = new Backbone.View({ collection: collection }),
+
+    options = {
+        view: Backbone.View.extend({ ... }),
+        dummy: Backbone.View.extend({ ... }),
+
+        selector: '.container'
+    },
+
+    collectionBinder = new Backbone.CollectionBinder(view, options);
+```
+
 ## Changelog
+### 0.3.7
+  - Renaming `types` to `handlers`
+  - Method `refresh` moved from view to binders
+  - Removed backward reference to binders
+
 ### 0.3.4
   - Fixed `visible`, `hidden`, `enabled`, `disabled` bindings
 

@@ -1,5 +1,5 @@
 /*jshint maxstatements:12 */
-(function () {
+(function (self) {
     'use strict';
 
     var CollectionBinder = Backbone.CollectionBinder = function (view, options) {
@@ -12,31 +12,19 @@
 
         ////////////////////
 
-        this.views = [];
+        self = _.extend(this, { view: view, collection: view.collection }, { options: options }, {
+            views: []
+        });
 
         ////////////////////
 
-        _.extend(this, { view: view, collection: view.collection }, {
-            options: options
-        });
-
         _.extend(view, {
-            collectionBinder: this
-        }, {
             remove: _.wrap(view.remove, function (fn) {
-                this.collectionBinder.removeViews().removeDummy();
+                self.removeViews().removeDummy();
 
                 return fn.call(this);
             })
         }, {
-            refresh: function () {
-                var events = this.collectionBinder.events;
-
-                events.reset(this.collection);
-
-                return this;
-            },
-
             get: function (object) {
 
                 ////////////////////
@@ -45,7 +33,7 @@
 
                 ////////////////////
 
-                var views = this.collectionBinder.views;
+                var views = self.views;
 
                 return _.find(views, function (view) {
                     var model = view.model;
@@ -55,13 +43,13 @@
             },
 
             at: function (index) {
-                return this.collectionBinder.views[index];
+                return self.views[index];
             }
         });
     };
 
     _.extend(CollectionBinder, {
-        handlers: _.extend({
+        handlers: {
             add: function (model) {
                 var views = this.views, view = this.view.get(model) || this._prepareView(model),
                     index = _.indexOf(views, view), element = this._ensureElement(model);
@@ -81,7 +69,7 @@
                     views.splice(index, 1);
                 }
 
-                view.remove();
+                if (view) view.remove();
             },
 
             reset: function (collection) {
@@ -109,7 +97,7 @@
                     this.detachViews().renderViews(collection);
                 }
             }
-        })
+        }
     });
 
     _.extend(CollectionBinder.prototype, {
@@ -123,9 +111,24 @@
 
             ////////////////////
 
-            this._addEvents(options);
+            this._addHandlers(options);
 
-            this.view.refresh();
+            this.refresh();
+
+            return this;
+        },
+
+        refresh: function () {
+
+            ////////////////////
+
+            var callbacks = _.pick(this.handlers, 'reset');
+
+            ////////////////////
+
+            _.each(callbacks, function (callback) {
+                if (callback) callback(this.collection);
+            }, this);
 
             return this;
         },
@@ -134,15 +137,15 @@
 
             ////////////////////
 
-            var events = this.events;
+            var handlers = this.handlers;
 
             if (event) {
-                events = _.pick(events, event);
+                handlers = _.pick(handlers, event);
             }
 
             ////////////////////
 
-            _.each(events, function (callback, event) {
+            _.each(handlers, function (callback, event) {
                 this.stopListening(event);
 
                 if (callback) {
@@ -157,15 +160,15 @@
 
             ////////////////////
 
-            var events = this.events;
+            var handlers = this.handlers;
 
             if (event) {
-                events = _.pick(events, event);
+                handlers = _.pick(handlers, event);
             }
 
             ////////////////////
 
-            _.each(events, function (callback, event) {
+            _.each(handlers, function (callback, event) {
                 if (callback) {
                     this.view.stopListening(this.collection, event, callback);
                 }
@@ -231,24 +234,24 @@
             return this;
         },
 
-        _addEvents: function (options) {
+        _addHandlers: function (options) {
 
             ////////////////////
 
-            var handlers = this.constructor.handlers;
+            var callbacks = this.constructor.handlers;
 
             ////////////////////
 
             this.stopListening();
 
-            this.events = _.defaults(options, {
-                add: _.wrap(handlers.add, function (fn, model) {
+            this.handlers = _.defaults(options, {
+                add: _.wrap(callbacks.add, function (fn, model) {
                     this.removeDummy();
 
                     fn.call(this, model);
                 }),
 
-                remove: _.wrap(handlers.remove, function (fn, model) {
+                remove: _.wrap(callbacks.remove, function (fn, model) {
                     fn.call(this, model);
 
                     if (this.collection.isEmpty()) {
@@ -256,7 +259,7 @@
                     }
                 }),
 
-                reset: _.wrap(handlers.reset, function (fn, collection) {
+                reset: _.wrap(callbacks.reset, function (fn, collection) {
                     this.removeDummy();
 
                     fn.call(this, collection);
@@ -266,17 +269,17 @@
                     }
                 }),
 
-                sort: _.wrap(handlers.sort, function (fn, collection) {
+                sort: _.wrap(callbacks.sort, function (fn, collection) {
                     fn.call(this, collection);
                 })
             });
 
-            this._bindHandlers(options);
+            this._bindCallbacks(options);
 
             this.startListening();
         },
 
-        _bindHandlers: function (options) {
+        _bindCallbacks: function (options) {
 
             ////////////////////
 
