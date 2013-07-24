@@ -184,6 +184,11 @@ var view = new Backbone.View({ collection: collection }),
     collectionBinder = new Backbone.CollectionBinder(view, options);
 ```
 
+### Start listening
+```js
+collectionBinder.listen();
+```
+
 ## Changelog
 ### 0.3.9
   - Fixed `checked` binding
