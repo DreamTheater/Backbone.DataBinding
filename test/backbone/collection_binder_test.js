@@ -9,7 +9,7 @@ $(function () {
         el: '#test-list',
 
         initialize: function () {
-            var collectionBinder = this.collectionBinder = new Backbone.CollectionBinder(this, {
+            var collectionBinder = new Backbone.CollectionBinder(this, this.collection, {
                 view: Backbone.View.extend({
                     tagName: 'li',
 
@@ -24,7 +24,7 @@ $(function () {
                     tagName: 'li',
 
                     render: function () {
-                        this.$el.text('I am a dummy!');
+                        this.$el.text('I\'m a dummy!');
 
                         return this;
                     }
@@ -35,7 +35,7 @@ $(function () {
                 }
             });
 
-            collectionBinder.listen();
+            this.collectionBinder = collectionBinder.listen();
         }
     });
 

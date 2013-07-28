@@ -13,17 +13,22 @@ The plugin implements a bidirectional data binding between views and models/coll
   - [Underscore](https://github.com/documentcloud/underscore) `>= 1.5.1`
 
 ## Getting Started
-### Create model
+### Create view and model
 ```js
-var model = new Backbone.Model();
+var view = new Backbone.View(), model = new Backbone.Model();
 ```
 
-### Create view and model binder
+### Create model binder
+The class `Backbone.ModelBinder` is a decorator. Just pass a view and model instances into constructor of class to getting started.
 ```js
-var view = new Backbone.View({ model: model }), modelBinder = new Backbone.ModelBinder(view);
+var modelBinder = new Backbone.ModelBinder(view, model);
 ```
+
+You can use both `new Backbone.ModelBinder(view)` and `Backbone.ModelBinder(view)` notations. Use option that you more prefer.
 
 ### Define bindings
+Use `modelBinder.define(binding, options)` method to define bindings between your view and model. If you want to define a lot of bindings in one action use `modelBinder.define(bindings)` option.
+
 #### Binding types
 ##### Type `html`
 ```html
@@ -165,31 +170,67 @@ modelBinder.define('disabled: button-disabled', {
 });
 ```
 
-### Create collection
+#### Option `selector`
+Specify selector to find element in the view's DOM tree. Leave selector empty to bind attribute to the root element of the view.
 ```js
-var collection = new Backbone.Collection();
+modelBinder.define('{{type}}: {{attribute}}', {
+    selector: 'div.foo' // Any jQuery selector
+});
 ```
 
-### Create view and collection binder
+#### Option `event`
+Specify events that you want to listen (by default equal to `'change'`).
 ```js
-var view = new Backbone.View({ collection: collection }),
+modelBinder.define('{{type}}: {{attribute}}', {
+    event: 'change input keyup' // Space separated event list
+});
+```
 
-    options = {
-        view: Backbone.View.extend({ ... }),
-        dummy: Backbone.View.extend({ ... }),
+#### Options `getter` and `setter`
+If you want to define one-way binding you can disable `getter` (view-to-model binding) or `setter` (model-to-view binding).
+```js
+modelBinder.define('{{type}}: {{attribute}}', {
+    getter: false // In this case the model will not synchronizes with the element
+});
+```
+```js
+modelBinder.define('{{type}}: {{attribute}}', {
+    setter: false // In this case the element will not synchronizes with the model
+});
+```
 
-        selector: '.container'
-    },
+### Create view and collection
+```js
+var view = new Backbone.View(), collection = new Backbone.Collection();
+```
 
-    collectionBinder = new Backbone.CollectionBinder(view, options);
+### Create collection binder
+```js
+var collectionBinder = new Backbone.CollectionBinder(view, collection, {
+    view: Backbone.View.extend({ ... }),
+    dummy: Backbone.View.extend({ ... }),
+
+    selector: '{{selector}}'
+});
 ```
 
 ### Start listening
+By default `Backbone.CollectionBinder` listens four collection events: `add`, `remove`, `reset` and `sort`.
 ```js
 collectionBinder.listen();
 ```
 
+If you don't want to listen some events you can use an additional options.
+```js
+collectionBinder.listen({
+    sort: false // In this case DOM will not react on collection's sorting
+});
+```
+
 ## Changelog
+### 0.4.0
+  - `Backbone.ModelBinder` and `Backbone.CollectionBinder` configures with any model/collection
+
 ### 0.3.9
   - Fixed `checked` binding
   - Using `attr()` instead of `prop()` for standard bindings

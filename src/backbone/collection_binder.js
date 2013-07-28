@@ -2,17 +2,21 @@
 (function (self) {
     'use strict';
 
-    var CollectionBinder = Backbone.CollectionBinder = function (view, options) {
+    var CollectionBinder = Backbone.CollectionBinder = function (view, collection, options) {
 
         ////////////////////
 
         if (!(this instanceof CollectionBinder)) {
-            return new CollectionBinder(view, options);
+            return new CollectionBinder(view, collection, options);
         }
 
         ////////////////////
 
-        self = _.extend(this, { view: view, collection: view.collection }, { options: options }, {
+        self = _.extend(this, {
+            view: view,
+            collection: collection,
+            options: options
+        }, {
             views: []
         });
 

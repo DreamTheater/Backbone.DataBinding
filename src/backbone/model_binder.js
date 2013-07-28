@@ -1,17 +1,20 @@
 (function (self) {
     'use strict';
 
-    var ModelBinder = Backbone.ModelBinder = function (view) {
+    var ModelBinder = Backbone.ModelBinder = function (view, model) {
 
         ////////////////////
 
         if (!(this instanceof ModelBinder)) {
-            return new ModelBinder(view);
+            return new ModelBinder(view, model);
         }
 
         ////////////////////
 
-        self = _.extend(this, { view: view, model: view.model }, {
+        self = _.extend(this, {
+            view: view,
+            model: model
+        }, {
             handlers: {}
         });
 
