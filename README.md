@@ -14,17 +14,16 @@ The plugin implements a bidirectional data binding between views and models/coll
 
 ## Getting Started
 ### Create view and model
+Define the view and the model. They should be an instances of `Backbone.View`/`Backbone.Model` or their inheritors.
 ```js
 var view = new Backbone.View(), model = new Backbone.Model();
 ```
 
 ### Create model binder
-The class `Backbone.ModelBinder` is a decorator. Just pass a view and model instances into constructor of class to getting started.
+`Backbone.ModelBinder` is a decorator. Just pass the view and the model into constructor of class to getting started.
 ```js
 var modelBinder = new Backbone.ModelBinder(view, model);
 ```
-
-You can use both `new Backbone.ModelBinder(view)` and `Backbone.ModelBinder(view)` notations. Use option that you more prefer.
 
 ### Define bindings
 Use `modelBinder.define(binding, options)` method to define bindings between your view and model. If you want to define a lot of bindings in one action use `modelBinder.define(bindings)` option.
@@ -38,6 +37,8 @@ Use `modelBinder.define(binding, options)` method to define bindings between you
 modelBinder.define('html: output-html', {
     selector: '[name="output-html"]'
 });
+
+model.set('output-html', 'HTML');
 ```
 
 ##### Type `text`
@@ -48,6 +49,8 @@ modelBinder.define('html: output-html', {
 modelBinder.define('text: output-text', {
     selector: '[name="output-text"]'
 });
+
+model.set('output-text', 'Text');
 ```
 
 ##### Type `value`
@@ -59,6 +62,8 @@ modelBinder.define('text: output-text', {
 modelBinder.define('value: text-input-value', {
     selector: '[name="text-input-value"]'
 });
+
+model.set('text-input-value', 'Value');
 ```
 
 ###### Text area
@@ -69,6 +74,8 @@ modelBinder.define('value: text-input-value', {
 modelBinder.define('value: textarea-value', {
     selector: '[name="textarea-value"]'
 });
+
+model.set('textarea-value', 'Text');
 ```
 
 ###### Single select
@@ -82,6 +89,8 @@ modelBinder.define('value: textarea-value', {
 modelBinder.define('value: single-select-value', {
     selector: '[name="single-select-value"]'
 });
+
+model.set('single-select-value', 'A');
 ```
 
 ###### Multiple select
@@ -95,6 +104,8 @@ modelBinder.define('value: single-select-value', {
 modelBinder.define('value: multiple-select-value', {
     selector: '[name="multiple-select-value"]'
 });
+
+model.set('multiple-select-value', ['A', 'B']);
 ```
 
 ##### Type `checked`
@@ -106,6 +117,8 @@ modelBinder.define('value: multiple-select-value', {
 modelBinder.define('checked: single-checkbox-input-checked', {
     selector: '[name="single-checkbox-input-checked"]'
 });
+
+model.set('single-checkbox-input-checked', true);
 ```
 
 ###### Multiple checkboxes
@@ -117,6 +130,8 @@ modelBinder.define('checked: single-checkbox-input-checked', {
 modelBinder.define('checked: multiple-checkbox-input-checked', {
     selector: '[name="multiple-checkbox-input-checked"]'
 });
+
+model.set('multiple-checkbox-input-checked', ['A', 'B']);
 ```
 
 ###### Radio buttons
@@ -128,6 +143,8 @@ modelBinder.define('checked: multiple-checkbox-input-checked', {
 modelBinder.define('checked: radio-input-checked', {
     selector: '[name="radio-input-checked"]'
 });
+
+model.set('radio-input-checked', 'A');
 ```
 
 ##### Type `visible`
@@ -138,6 +155,8 @@ modelBinder.define('checked: radio-input-checked', {
 modelBinder.define('visible: button-visible', {
     selector: '[name="button-visible"]'
 });
+
+model.set('button-visible', true);
 ```
 
 ##### Type `hidden`
@@ -148,6 +167,8 @@ modelBinder.define('visible: button-visible', {
 modelBinder.define('hidden: button-hidden', {
     selector: '[name="button-hidden"]'
 });
+
+model.set('button-hidden', true);
 ```
 
 ##### Type `enabled`
@@ -158,6 +179,8 @@ modelBinder.define('hidden: button-hidden', {
 modelBinder.define('enabled: button-enabled', {
     selector: '[name="button-enabled"]'
 });
+
+model.set('button-enabled', true);
 ```
 
 ##### Type `disabled`
@@ -168,12 +191,14 @@ modelBinder.define('enabled: button-enabled', {
 modelBinder.define('disabled: button-disabled', {
     selector: '[name="button-disabled"]'
 });
+
+model.set('button-disabled', true);
 ```
 
 #### Option `selector`
 Specify selector to find element in the view's DOM tree. Leave selector empty to bind attribute to the root element of the view.
 ```js
-modelBinder.define('{{type}}: {{attribute}}', {
+modelBinder.define('...', {
     selector: 'div.foo' // Any jQuery selector
 });
 ```
@@ -181,7 +206,7 @@ modelBinder.define('{{type}}: {{attribute}}', {
 #### Option `event`
 Specify events that you want to listen (by default equal to `'change'`).
 ```js
-modelBinder.define('{{type}}: {{attribute}}', {
+modelBinder.define('...', {
     event: 'change input keyup' // Space separated event list
 });
 ```
@@ -189,30 +214,41 @@ modelBinder.define('{{type}}: {{attribute}}', {
 #### Options `getter` and `setter`
 If you want to define one-way binding you can disable `getter` (view-to-model binding) or `setter` (model-to-view binding).
 ```js
-modelBinder.define('{{type}}: {{attribute}}', {
+modelBinder.define('...', {
     getter: false // In this case the model will not synchronizes with the element
 });
 ```
 ```js
-modelBinder.define('{{type}}: {{attribute}}', {
+modelBinder.define('...', {
     setter: false // In this case the element will not synchronizes with the model
 });
 ```
 
 ### Create view and collection
+Define the view and the collection. They should be an instances of `Backbone.View`/`Backbone.Collection` or their inheritors.
 ```js
 var view = new Backbone.View(), collection = new Backbone.Collection();
 ```
 
 ### Create collection binder
+`Backbone.CollectionBinder` is a decorator. Just pass the view and the collection into constructor of class to getting started. Don't forget about options.
 ```js
 var collectionBinder = new Backbone.CollectionBinder(view, collection, {
     view: Backbone.View.extend({ ... }),
     dummy: Backbone.View.extend({ ... }),
 
-    selector: '{{selector}}'
+    selector: '...'
 });
 ```
+
+#### Option `view`
+It should be an instance of `Backbone.View` or its inheritor. It will represent each model in collection.
+
+#### Option `dummy`
+It should be an instance of `Backbone.View` or its inheritor. It will used in case if collection is empty and no items to be shown.
+
+#### Option `selector`
+If specified, views will be inserted into element corresponding this selector. If not, views will be inserted just to the root element of the view.
 
 ### Start listening
 By default `Backbone.CollectionBinder` listens four collection events: `add`, `remove`, `reset` and `sort`.
@@ -220,7 +256,7 @@ By default `Backbone.CollectionBinder` listens four collection events: `add`, `r
 collectionBinder.listen();
 ```
 
-If you don't want to listen some events you can use an additional options.
+If you don't want to listen some events you should use an additional options.
 ```js
 collectionBinder.listen({
     sort: false // In this case DOM will not react on collection's sorting
