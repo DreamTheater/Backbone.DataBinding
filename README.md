@@ -5,7 +5,7 @@
 [travis-link]: https://travis-ci.org/DreamTheater/Backbone.DataBinding
 
 # Backbone.DataBinding [![NPM Version][npm-badge]][npm-link] [![Build Status][travis-badge]][travis-link]
-The plugin implements a bidirectional data binding between views and models/collections.
+The plugin implements a two-way data binding between views and models/collections.
 
 **Dependencies:**
 
@@ -26,7 +26,7 @@ var modelBinder = new Backbone.ModelBinder(view, model);
 ```
 
 ### Define bindings
-Use `modelBinder.define(binding, options)` method to define bindings between your view and model. If you want to define a lot of bindings in one action use `modelBinder.define(bindings)` option.
+Use `modelBinder.watch(binding, options)` method to define bindings between your view and model. If you want to define a lot of bindings in one action use `modelBinder.watch(bindings)` option.
 
 #### Binding types
 ##### Type `html`
@@ -34,7 +34,7 @@ Use `modelBinder.define(binding, options)` method to define bindings between you
 <output name="output-html"></output>
 ```
 ```js
-modelBinder.define('html: output-html', {
+modelBinder.watch('html: output-html', {
     selector: '[name="output-html"]'
 });
 
@@ -46,7 +46,7 @@ model.set('output-html', 'HTML');
 <output name="output-text"></output>
 ```
 ```js
-modelBinder.define('text: output-text', {
+modelBinder.watch('text: output-text', {
     selector: '[name="output-text"]'
 });
 
@@ -59,7 +59,7 @@ model.set('output-text', 'Text');
 <input type="text" name="text-input-value">
 ```
 ```js
-modelBinder.define('value: text-input-value', {
+modelBinder.watch('value: text-input-value', {
     selector: '[name="text-input-value"]'
 });
 
@@ -71,7 +71,7 @@ model.set('text-input-value', 'Value');
 <textarea name="textarea-value"></textarea>
 ```
 ```js
-modelBinder.define('value: textarea-value', {
+modelBinder.watch('value: textarea-value', {
     selector: '[name="textarea-value"]'
 });
 
@@ -86,7 +86,7 @@ model.set('textarea-value', 'Text');
 </select>
 ```
 ```js
-modelBinder.define('value: single-select-value', {
+modelBinder.watch('value: single-select-value', {
     selector: '[name="single-select-value"]'
 });
 
@@ -101,7 +101,7 @@ model.set('single-select-value', 'A');
 </select>
 ```
 ```js
-modelBinder.define('value: multiple-select-value', {
+modelBinder.watch('value: multiple-select-value', {
     selector: '[name="multiple-select-value"]'
 });
 
@@ -114,7 +114,7 @@ model.set('multiple-select-value', ['A', 'B']);
 <input type="checkbox" name="single-checkbox-input-checked">
 ```
 ```js
-modelBinder.define('checked: single-checkbox-input-checked', {
+modelBinder.watch('checked: single-checkbox-input-checked', {
     selector: '[name="single-checkbox-input-checked"]'
 });
 
@@ -127,7 +127,7 @@ model.set('single-checkbox-input-checked', true);
 <input type="checkbox" name="multiple-checkbox-input-checked" value="B">
 ```
 ```js
-modelBinder.define('checked: multiple-checkbox-input-checked', {
+modelBinder.watch('checked: multiple-checkbox-input-checked', {
     selector: '[name="multiple-checkbox-input-checked"]'
 });
 
@@ -140,7 +140,7 @@ model.set('multiple-checkbox-input-checked', ['A', 'B']);
 <input type="radio" name="radio-input-checked" value="B">
 ```
 ```js
-modelBinder.define('checked: radio-input-checked', {
+modelBinder.watch('checked: radio-input-checked', {
     selector: '[name="radio-input-checked"]'
 });
 
@@ -152,7 +152,7 @@ model.set('radio-input-checked', 'A');
 <button type="button" name="button-visible">Visible</button>
 ```
 ```js
-modelBinder.define('visible: button-visible', {
+modelBinder.watch('visible: button-visible', {
     selector: '[name="button-visible"]'
 });
 
@@ -164,7 +164,7 @@ model.set('button-visible', true);
 <button type="button" name="button-hidden">Hidden</button>
 ```
 ```js
-modelBinder.define('hidden: button-hidden', {
+modelBinder.watch('hidden: button-hidden', {
     selector: '[name="button-hidden"]'
 });
 
@@ -176,7 +176,7 @@ model.set('button-hidden', true);
 <button type="button" name="button-enabled">Enabled</button>
 ```
 ```js
-modelBinder.define('enabled: button-enabled', {
+modelBinder.watch('enabled: button-enabled', {
     selector: '[name="button-enabled"]'
 });
 
@@ -188,7 +188,7 @@ model.set('button-enabled', true);
 <button type="button" name="button-disabled">Disabled</button>
 ```
 ```js
-modelBinder.define('disabled: button-disabled', {
+modelBinder.watch('disabled: button-disabled', {
     selector: '[name="button-disabled"]'
 });
 
@@ -198,7 +198,7 @@ model.set('button-disabled', true);
 #### Option `selector`
 Specify selector to find element in the view's DOM tree. Leave selector empty to bind attribute to the root element of the view.
 ```js
-modelBinder.define('...', {
+modelBinder.watch('...', {
     selector: 'div.foo' // Any jQuery selector
 });
 ```
@@ -206,7 +206,7 @@ modelBinder.define('...', {
 #### Option `event`
 Specify events that you want to listen (by default equal to `'change'`).
 ```js
-modelBinder.define('...', {
+modelBinder.watch('...', {
     event: 'change input keyup' // Space separated event list
 });
 ```
@@ -214,12 +214,12 @@ modelBinder.define('...', {
 #### Options `getter` and `setter`
 If you want to define one-way binding you can disable `getter` (view-to-model binding) or `setter` (model-to-view binding).
 ```js
-modelBinder.define('...', {
+modelBinder.watch('...', {
     getter: false // In this case the model will not synchronizes with the element
 });
 ```
 ```js
-modelBinder.define('...', {
+modelBinder.watch('...', {
     setter: false // In this case the element will not synchronizes with the model
 });
 ```
@@ -264,6 +264,10 @@ collectionBinder.listen({
 ```
 
 ## Changelog
+### 0.4.2
+  - Renaming method `define` to `watch`
+  - Update API to getting views
+
 ### 0.4.0
   - `Backbone.ModelBinder` and `Backbone.CollectionBinder` configures with any model/collection
 

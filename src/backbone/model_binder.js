@@ -156,7 +156,7 @@
     _.extend(ModelBinder.prototype, {
         constructor: ModelBinder,
 
-        define: function (binding, options) {
+        watch: function (binding, options) {
 
             ////////////////////
 
@@ -197,6 +197,74 @@
             _.each(callbacks, function (callback) {
                 if (callback) callback();
             });
+
+            return this;
+        },
+
+        delegateEvents: function (binding) {
+
+            ////////////////////
+
+            var handlers = this.handlers;
+
+            if (binding) {
+                handlers = _.pick(handlers, binding);
+            }
+
+            ////////////////////
+
+            _.each(handlers, function (options, binding) {
+
+                ////////////////////
+
+                var events = this._resolveEvents.call({
+                        view: this.view,
+                        options: options
+                    }, binding),
+
+                    selector = options.selector, getter = options.getter;
+
+                ////////////////////
+
+                this.undelegateEvents(binding);
+
+                if (getter) {
+                    this.view.$el.on(events, selector, getter);
+                }
+            }, this);
+
+            return this;
+        },
+
+        undelegateEvents: function (binding) {
+
+            ////////////////////
+
+            var handlers = this.handlers;
+
+            if (binding) {
+                handlers = _.pick(handlers, binding);
+            }
+
+            ////////////////////
+
+            _.each(handlers, function (options, binding) {
+
+                ////////////////////
+
+                var events = this._resolveEvents.call({
+                        view: this.view,
+                        options: options
+                    }, binding),
+
+                    selector = options.selector, getter = options.getter;
+
+                ////////////////////
+
+                if (getter) {
+                    this.view.$el.off(events, selector, getter);
+                }
+            }, this);
 
             return this;
         },
@@ -259,83 +327,6 @@
             return this;
         },
 
-        delegateEvents: function (binding) {
-
-            ////////////////////
-
-            var handlers = this.handlers;
-
-            if (binding) {
-                handlers = _.pick(handlers, binding);
-            }
-
-            ////////////////////
-
-            _.each(handlers, function (options, binding) {
-
-                ////////////////////
-
-                var events = this.resolveEvents(binding, options),
-                    selector = options.selector, getter = options.getter;
-
-                ////////////////////
-
-                this.undelegateEvents(binding);
-
-                if (getter) {
-                    this.view.$el.on(events, selector, getter);
-                }
-            }, this);
-
-            return this;
-        },
-
-        undelegateEvents: function (binding) {
-
-            ////////////////////
-
-            var handlers = this.handlers;
-
-            if (binding) {
-                handlers = _.pick(handlers, binding);
-            }
-
-            ////////////////////
-
-            _.each(handlers, function (options, binding) {
-
-                ////////////////////
-
-                var events = this.resolveEvents(binding, options),
-                    selector = options.selector, getter = options.getter;
-
-                ////////////////////
-
-                if (getter) {
-                    this.view.$el.off(events, selector, getter);
-                }
-            }, this);
-
-            return this;
-        },
-
-        resolveEvents: function (binding, options) {
-
-            ////////////////////
-
-            var event = options.event || 'change';
-
-            ////////////////////
-
-            var events = event.match(/\S+/g);
-
-            events = _.map(events, function (event) {
-                return event + '.' + binding + '.modelBinder.' + this.view.cid;
-            }, this);
-
-            return events.join(' ');
-        },
-
         _addHandlers: function (binding, options) {
 
             ////////////////////
@@ -388,6 +379,23 @@
 
             if (getter) options.getter = _.bind(getter, view);
             if (setter) options.setter = _.bind(setter, view);
+        },
+
+        _resolveEvents: function (binding) {
+
+            ////////////////////
+
+            var event = this.options.event || 'change';
+
+            ////////////////////
+
+            var events = event.match(/\S+/g);
+
+            events = _.map(events, function (event) {
+                return event + '.' + binding + '.modelBinder.' + this.view.cid;
+            }, this);
+
+            return events.join(' ');
         }
     });
 }());

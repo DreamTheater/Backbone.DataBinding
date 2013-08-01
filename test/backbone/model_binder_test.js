@@ -12,7 +12,7 @@ $(function () {
         initialize: function () {
             var modelBinder = new Backbone.ModelBinder(this, this.model);
 
-            this.modelBinder = modelBinder.define({
+            this.modelBinder = modelBinder.watch({
                 'html: output-html': { selector: '[name="output-html"]' },
                 'text: output-text': { selector: '[name="output-text"]' },
 

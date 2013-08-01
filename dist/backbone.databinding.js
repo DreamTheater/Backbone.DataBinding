@@ -1,5 +1,5 @@
 /**
- * Backbone.DataBinding v0.4.0
+ * Backbone.DataBinding v0.4.2
  * https://github.com/DreamTheater/Backbone.DataBinding
  *
  * Copyright (c) 2013 Dmytro Nemoga
@@ -163,7 +163,7 @@
     _.extend(ModelBinder.prototype, {
         constructor: ModelBinder,
 
-        define: function (binding, options) {
+        watch: function (binding, options) {
 
             ////////////////////
 
@@ -204,6 +204,74 @@
             _.each(callbacks, function (callback) {
                 if (callback) callback();
             });
+
+            return this;
+        },
+
+        delegateEvents: function (binding) {
+
+            ////////////////////
+
+            var handlers = this.handlers;
+
+            if (binding) {
+                handlers = _.pick(handlers, binding);
+            }
+
+            ////////////////////
+
+            _.each(handlers, function (options, binding) {
+
+                ////////////////////
+
+                var events = this._resolveEvents.call({
+                        view: this.view,
+                        options: options
+                    }, binding),
+
+                    selector = options.selector, getter = options.getter;
+
+                ////////////////////
+
+                this.undelegateEvents(binding);
+
+                if (getter) {
+                    this.view.$el.on(events, selector, getter);
+                }
+            }, this);
+
+            return this;
+        },
+
+        undelegateEvents: function (binding) {
+
+            ////////////////////
+
+            var handlers = this.handlers;
+
+            if (binding) {
+                handlers = _.pick(handlers, binding);
+            }
+
+            ////////////////////
+
+            _.each(handlers, function (options, binding) {
+
+                ////////////////////
+
+                var events = this._resolveEvents.call({
+                        view: this.view,
+                        options: options
+                    }, binding),
+
+                    selector = options.selector, getter = options.getter;
+
+                ////////////////////
+
+                if (getter) {
+                    this.view.$el.off(events, selector, getter);
+                }
+            }, this);
 
             return this;
         },
@@ -266,83 +334,6 @@
             return this;
         },
 
-        delegateEvents: function (binding) {
-
-            ////////////////////
-
-            var handlers = this.handlers;
-
-            if (binding) {
-                handlers = _.pick(handlers, binding);
-            }
-
-            ////////////////////
-
-            _.each(handlers, function (options, binding) {
-
-                ////////////////////
-
-                var events = this.resolveEvents(binding, options),
-                    selector = options.selector, getter = options.getter;
-
-                ////////////////////
-
-                this.undelegateEvents(binding);
-
-                if (getter) {
-                    this.view.$el.on(events, selector, getter);
-                }
-            }, this);
-
-            return this;
-        },
-
-        undelegateEvents: function (binding) {
-
-            ////////////////////
-
-            var handlers = this.handlers;
-
-            if (binding) {
-                handlers = _.pick(handlers, binding);
-            }
-
-            ////////////////////
-
-            _.each(handlers, function (options, binding) {
-
-                ////////////////////
-
-                var events = this.resolveEvents(binding, options),
-                    selector = options.selector, getter = options.getter;
-
-                ////////////////////
-
-                if (getter) {
-                    this.view.$el.off(events, selector, getter);
-                }
-            }, this);
-
-            return this;
-        },
-
-        resolveEvents: function (binding, options) {
-
-            ////////////////////
-
-            var event = options.event || 'change';
-
-            ////////////////////
-
-            var events = event.match(/\S+/g);
-
-            events = _.map(events, function (event) {
-                return event + '.' + binding + '.modelBinder.' + this.view.cid;
-            }, this);
-
-            return events.join(' ');
-        },
-
         _addHandlers: function (binding, options) {
 
             ////////////////////
@@ -395,11 +386,28 @@
 
             if (getter) options.getter = _.bind(getter, view);
             if (setter) options.setter = _.bind(setter, view);
+        },
+
+        _resolveEvents: function (binding) {
+
+            ////////////////////
+
+            var event = this.options.event || 'change';
+
+            ////////////////////
+
+            var events = event.match(/\S+/g);
+
+            events = _.map(events, function (event) {
+                return event + '.' + binding + '.modelBinder.' + this.view.cid;
+            }, this);
+
+            return events.join(' ');
         }
     });
 }());
 
-/*jshint maxstatements:12 */
+/*jshint maxstatements:12, maxlen:102 */
 (function (self) {
     'use strict';
 
@@ -427,54 +435,46 @@
             remove: _.wrap(view.remove, function (fn) {
                 self.removeViews().removeDummy();
 
-                return fn.call(this);
+                fn.call(this);
+
+                return this;
             })
-        }, {
-            get: function (object) {
-
-                ////////////////////
-
-                var id = object.id || object, cid = object.cid || object;
-
-                ////////////////////
-
-                var views = self.views;
-
-                return _.find(views, function (view) {
-                    var model = view.model;
-
-                    return model.id === id || model.cid === cid;
-                });
-            },
-
-            at: function (index) {
-                return self.views[index];
-            }
         });
     };
 
     _.extend(CollectionBinder, {
         handlers: {
             add: function (model) {
-                var views = this.views, view = this.view.get(model) || this._prepareView(model),
-                    index = _.indexOf(views, view), element = this._ensureElement(model);
+                var views = this.views, view = this.getViewByModel(model) || this._prepareView(model),
+
+                    index = _.indexOf(views, view);
 
                 if (index === -1) {
                     views.push(view);
                 }
 
-                view.$el.appendTo(element);
+                if (view.$el.parent().length === 0) {
+                    var element = this._resolveElement.call({
+                        view: this.view,
+                        options: this.options
+                    }, model);
+
+                    view.$el.appendTo(element);
+                }
             },
 
             remove: function (model) {
-                var views = this.views, view = this.view.get(model),
+                var views = this.views, view = this.getViewByModel(model),
+
                     index = _.indexOf(views, view);
 
                 if (index !== -1) {
                     views.splice(index, 1);
                 }
 
-                if (view) view.remove();
+                if (view) {
+                    view.remove();
+                }
             },
 
             reset: function (collection) {
@@ -487,7 +487,7 @@
                 if (comparator) {
                     if (_.isString(comparator)) {
                         this.views = _.sortBy(views, function (view) {
-                            return view.model[comparator];
+                            return view.model.get(comparator);
                         });
                     } else if (comparator.length === 1) {
                         this.views = _.sortBy(views, function (view) {
@@ -536,6 +536,97 @@
             return this;
         },
 
+        renderViews: function (collection) {
+            collection.each(this.constructor.handlers.add, this);
+
+            return this;
+        },
+
+        removeViews: function () {
+            var views = this.views;
+
+            while (views.length > 0) {
+                this.constructor.handlers.remove.call(this, views[0].model);
+            }
+
+            return this;
+        },
+
+        detachViews: function () {
+            var views = this.views;
+
+            _.each(views, function (view) {
+                view.$el.detach();
+            });
+
+            return this;
+        },
+
+        renderDummy: function () {
+            var dummy = this.getDummy() || this._prepareDummy();
+
+            if (dummy) {
+                this.dummy = dummy;
+
+                if (dummy.$el.parent().length === 0) {
+                    var element = this._resolveElement.call({
+                        view: this.view,
+                        options: this.options
+                    });
+
+                    dummy.$el.appendTo(element);
+                }
+            }
+
+            return this;
+        },
+
+        removeDummy: function () {
+            var dummy = this.getDummy();
+
+            delete this.dummy;
+
+            if (dummy) {
+                dummy.remove();
+            }
+
+            return this;
+        },
+
+        detachDummy: function () {
+            var dummy = this.getDummy();
+
+            if (dummy) {
+                dummy.$el.detach();
+            }
+
+            return this;
+        },
+
+        getViewByCid: function (cid) {
+            var views = this.views;
+
+            return _.find(views, function (view) {
+                return view.cid === cid;
+            });
+        },
+
+        getViewByIndex: function (index) {
+            return this.views[index];
+        },
+
+        getViewByModel: function (model) {
+            var views = this.views;
+
+            return _.find(views, function (view) {
+                return view.model === model;
+            });
+        },
+
+        getDummy: function () {
+            return this.dummy;
+        },
+
         startListening: function (event) {
 
             ////////////////////
@@ -580,63 +671,6 @@
             return this;
         },
 
-        renderViews: function (collection) {
-            collection.each(this.constructor.handlers.add, this);
-
-            return this;
-        },
-
-        removeViews: function () {
-            var views = this.views;
-
-            _.each(views, function (view) {
-                view.remove();
-            });
-
-            views.splice(0);
-
-            return this;
-        },
-
-        detachViews: function () {
-            var views = this.views;
-
-            _.each(views, function (view) {
-                view.$el.detach();
-            });
-
-            return this;
-        },
-
-        renderDummy: function () {
-            var dummy = this.dummy, element;
-
-            if (!dummy) {
-                dummy = this._prepareDummy();
-                element = this._ensureElement();
-
-                if (dummy) {
-                    dummy.$el.appendTo(element);
-
-                    this.dummy = dummy;
-                }
-            }
-
-            return this;
-        },
-
-        removeDummy: function () {
-            var dummy = this.dummy;
-
-            if (dummy) {
-                dummy.remove();
-
-                delete this.dummy;
-            }
-
-            return this;
-        },
-
         _addHandlers: function (options) {
 
             ////////////////////
@@ -649,7 +683,7 @@
 
             this.handlers = _.defaults(options, {
                 add: _.wrap(callbacks.add, function (fn, model) {
-                    this.removeDummy();
+                    this.detachDummy();
 
                     fn.call(this, model);
                 }),
@@ -697,6 +731,23 @@
             if (sort) options.sort = _.bind(sort, this);
         },
 
+        _resolveElement: function (model) {
+
+            ////////////////////
+
+            var selector = this.options.selector;
+
+            ////////////////////
+
+            var view = this.view;
+
+            if (_.isFunction(selector)) {
+                selector = selector.call(view, model);
+            }
+
+            return selector ? view.$(selector) : view.$el;
+        },
+
         _prepareView: function (model) {
 
             ////////////////////
@@ -733,23 +784,6 @@
             }
 
             return dummy.render();
-        },
-
-        _ensureElement: function (model) {
-
-            ////////////////////
-
-            var selector = this.options.selector;
-
-            ////////////////////
-
-            var view = this.view;
-
-            if (_.isFunction(selector)) {
-                selector = selector.call(view, model);
-            }
-
-            return selector ? view.$(selector) : view.$el;
         }
     });
 }());
