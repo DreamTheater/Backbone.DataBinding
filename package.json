@@ -1,7 +1,7 @@
 {
     "name": "backbone.databinding",
     "title": "Backbone.DataBinding",
-    "version": "0.4.2",
+    "version": "0.4.3",
     "description": "The plugin implements a two-way data binding between views and models/collections.",
 
     "keywords": [
@@ -37,11 +37,6 @@
 
     "scripts": {
         "test": "./node_modules/.bin/grunt jshint qunit"
-    },
-
-    "dependencies": {
-        "backbone": "~1.0.0",
-        "underscore": "~1.5.1"
     },
 
     "devDependencies": {

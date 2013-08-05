@@ -1,5 +1,5 @@
 /**
- * Backbone.DataBinding v0.4.2
+ * Backbone.DataBinding v0.4.3
  * https://github.com/DreamTheater/Backbone.DataBinding
  *
  * Copyright (c) 2013 Dmytro Nemoga
@@ -634,14 +634,6 @@
             }
 
             return this;
-        },
-
-        getViewByCid: function (cid) {
-            var views = this.views;
-
-            return _.find(views, function (view) {
-                return view.cid === cid;
-            });
         },
 
         getViewByIndex: function (index) {

@@ -6,7 +6,7 @@ $(function () {
     ///////////////////
 
     var View = Backbone.View.extend({
-        el: '#test-list',
+        el: '#list-fixture',
 
         initialize: function () {
             var collectionBinder = new Backbone.CollectionBinder(this, this.collection, {
@@ -16,7 +16,7 @@ $(function () {
                     render: function () {
                         var model = this.model;
 
-                        this.$el.text(model.id).data('model', model);
+                        this.$el.text(model.cid).data('model', model);
 
                         return this;
                     }
@@ -31,7 +31,7 @@ $(function () {
                 }),
 
                 selector: function (model) {
-                    return model ? (model.id % 2 === 0 ? '#odd-id' : '#even-id') : null;
+                    return model ? (model.id % 2 === 0 ? '.odd' : '.even') : null;
                 }
             });
 
@@ -64,7 +64,7 @@ $(function () {
         },
 
         teardown: function () {
-            this.view.$('#odd-id, #even-id').empty();
+            this.view.$('.odd, .even').empty();
         }
     });
 
@@ -74,71 +74,67 @@ $(function () {
 
     test('initialize with models', function () {
         var collection = this.collection, view = this.view,
-            oddIdList = view.$('#odd-id'), evenIdList = view.$('#even-id'),
+            $oddIdList = view.$('.odd'), $evenIdList = view.$('.even');
 
-            oddModels = oddIdList.children().map(function () {
-                return $(this).data('model');
-            }).get(),
-
-            evenModels = evenIdList.children().map(function () {
-                return $(this).data('model');
-            }).get();
-
-        deepEqual(oddModels, collection.filter(function (model) {
+        deepEqual($oddIdList.children().map(function () {
+            return $(this).data('model');
+        }).get(), collection.filter(function (model) {
             return model.id % 2 === 0;
         }));
 
-        deepEqual(evenModels, collection.filter(function (model) {
+        deepEqual($evenIdList.children().map(function () {
+            return $(this).data('model');
+        }).get(), collection.filter(function (model) {
             return model.id % 2 === 1;
         }));
     });
 
     test('add model', function () {
         var collection = this.collection, view = this.view,
-            oddIdList = view.$('#odd-id'), evenIdList = view.$('#even-id');
+            $oddIdList = view.$('.odd'), $evenIdList = view.$('.even');
 
         collection.add({ id: 10 });
-        strictEqual(oddIdList.children().last().data('model'), collection.get(10));
+        strictEqual($oddIdList.children().last().data('model'), collection.get(10));
 
         collection.add({ id: 11 });
-        strictEqual(evenIdList.children().last().data('model'), collection.get(11));
+        strictEqual($evenIdList.children().last().data('model'), collection.get(11));
     });
 
     test('remove model', function () {
         var collection = this.collection, view = this.view,
-            oddIdList = view.$('#odd-id'), evenIdList = view.$('#even-id');
+            $oddIdList = view.$('.odd'), $evenIdList = view.$('.even');
 
         collection.remove({ id: 8 });
-        strictEqual(oddIdList.children().last().data('model'), collection.get(6));
+        strictEqual($oddIdList.children().last().data('model'), collection.get(6));
 
         collection.remove({ id: 9 });
-        strictEqual(evenIdList.children().last().data('model'), collection.get(7));
+        strictEqual($evenIdList.children().last().data('model'), collection.get(7));
     });
 
     test('reset models', function () {
         var collection = this.collection, view = this.view,
-            oddIdList = view.$('#odd-id'), evenIdList = view.$('#even-id');
+            $oddIdList = view.$('.odd'), $evenIdList = view.$('.even');
 
         collection.reset([
             { id: 10 },
             { id: 11 }
         ]);
 
-        strictEqual(oddIdList.children().length, 1);
-        strictEqual(evenIdList.children().length, 1);
+        strictEqual($oddIdList.children().length, 1);
+        strictEqual($evenIdList.children().length, 1);
 
-        strictEqual(oddIdList.children().first().data('model'), collection.get(10));
-        strictEqual(evenIdList.children().first().data('model'), collection.get(11));
+        strictEqual($oddIdList.children().first().data('model'), collection.get(10));
+        strictEqual($evenIdList.children().first().data('model'), collection.get(11));
     });
 
     test('sort models', function () {
         var collection = this.collection, view = this.view,
-            oddIdList = view.$('#odd-id'), evenIdList = view.$('#even-id');
+            $oddIdList = view.$('.odd'), $evenIdList = view.$('.even');
 
         collection.add({ id: -1 });
-        strictEqual(evenIdList.children().first().data('model'), collection.get(-1));
+        strictEqual($evenIdList.children().first().data('model'), collection.get(-1));
 
         collection.add({ id: -2 });
-        strictEqual(oddIdList.children().first().data('model'), collection.get(-2));
+        strictEqual($oddIdList.children().first().data('model'), collection.get(-2));
     });
 });

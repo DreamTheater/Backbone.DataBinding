@@ -1,4 +1,4 @@
-/*jshint maxstatements:28, maxlen:131 */
+/*jshint maxstatements:28, maxlen:117 */
 $(function () {
     'use strict';
 
@@ -7,7 +7,7 @@ $(function () {
     ///////////////////
 
     var View = Backbone.View.extend({
-        el: '#test-form',
+        el: '#form-fixture',
 
         initialize: function () {
             var modelBinder = new Backbone.ModelBinder(this, this.model);
@@ -605,35 +605,32 @@ $(function () {
 
         $el.val([]).trigger('change');
         deepEqual(attributes[attribute], []);
-
-        $el.val(null).trigger('change');
-        deepEqual(attributes[attribute], ['']);
     });
 
     test('sync model with radio-input-checked', function () {
         var attribute = 'radio-input-checked', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        $el.filter('[value="string"]').prop('checked', true).trigger('change');
+        $el.val(['string']).trigger('change');
         strictEqual(attributes[attribute], 'string');
 
-        $el.filter('[value=""]').prop('checked', true).trigger('change');
+        $el.val(['']).trigger('change');
         strictEqual(attributes[attribute], '');
 
-        $el.filter('[value="1"]').prop('checked', true).trigger('change');
+        $el.val(['1']).trigger('change');
         strictEqual(attributes[attribute], '1');
 
-        $el.filter('[value="0"]').prop('checked', true).trigger('change');
+        $el.val(['0']).trigger('change');
         strictEqual(attributes[attribute], '0');
 
-        $el.filter('[value="true"]').prop('checked', true).trigger('change');
+        $el.val(['true']).trigger('change');
         strictEqual(attributes[attribute], 'true');
 
-        $el.filter('[value="false"]').prop('checked', true).trigger('change');
+        $el.val(['false']).trigger('change');
         strictEqual(attributes[attribute], 'false');
 
-        $el.val(null).trigger('change');
-        strictEqual(attributes[attribute], '');
+        $el.val([]).trigger('change');
+        strictEqual(attributes[attribute], undefined);
     });
 
     test('sync model with single-checkbox-input-checked', function () {
@@ -651,13 +648,13 @@ $(function () {
         var attribute = 'multiple-checkbox-input-checked', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        $el.prop('checked', false).filter('[value="string"], [value="1"], [value="true"]').prop('checked', true).trigger('change');
+        $el.val(['string', '1', 'true']).trigger('change');
         deepEqual(attributes[attribute], ['string', '1', 'true']);
 
-        $el.prop('checked', false).filter('[value=""], [value="0"], [value="false"]').prop('checked', true).trigger('change');
+        $el.val(['', '0', 'false']).trigger('change');
         deepEqual(attributes[attribute], ['', '0', 'false']);
 
-        $el.prop('checked', false).trigger('change');
+        $el.val([]).trigger('change');
         deepEqual(attributes[attribute], []);
     });
 

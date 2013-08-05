@@ -11,6 +11,7 @@ The plugin implements a two-way data binding between views and models/collection
 
   - [Backbone](https://github.com/documentcloud/backbone) `>= 1.0.0`
   - [Underscore](https://github.com/documentcloud/underscore) `>= 1.5.1`
+  - [jQuery](https://github.com/jquery/jquery) `>= 2.0.3`
 
 ## Getting Started
 ### Create view and model
@@ -26,7 +27,7 @@ var modelBinder = new Backbone.ModelBinder(view, model);
 ```
 
 ### Define bindings
-Use `modelBinder.watch(binding, options)` method to define bindings between your view and model. If you want to define a lot of bindings in one action use `modelBinder.watch(bindings)` option.
+Use `modelBinder.watch(binding, options)` method to define bindings between view and model. If you want to define a lot of bindings in one action use `modelBinder.watch(bindings)` option.
 
 #### Binding types
 ##### Type `html`
@@ -40,6 +41,9 @@ modelBinder.watch('html: output-html', {
 
 model.set('output-html', 'HTML');
 ```
+```html
+<output name="output-html">HTML</output>
+```
 
 ##### Type `text`
 ```html
@@ -51,6 +55,9 @@ modelBinder.watch('text: output-text', {
 });
 
 model.set('output-text', 'Text');
+```
+```html
+<output name="output-text">Text</output>
 ```
 
 ##### Type `value`
@@ -65,6 +72,9 @@ modelBinder.watch('value: text-input-value', {
 
 model.set('text-input-value', 'Value');
 ```
+```html
+<input type="text" name="text-input-value" value="Value">
+```
 
 ###### Text area
 ```html
@@ -77,12 +87,16 @@ modelBinder.watch('value: textarea-value', {
 
 model.set('textarea-value', 'Text');
 ```
+```html
+<textarea name="textarea-value">Text</textarea>
+```
 
 ###### Single select
 ```html
 <select name="single-select-value">
     <option value="A">Option A</option>
     <option value="B">Option B</option>
+    <option value="C">Option C</option>
 </select>
 ```
 ```js
@@ -92,12 +106,20 @@ modelBinder.watch('value: single-select-value', {
 
 model.set('single-select-value', 'A');
 ```
+```html
+<select name="single-select-value">
+    <option value="A" selected>Option A</option>
+    <option value="B">Option B</option>
+    <option value="C">Option C</option>
+</select>
+```
 
 ###### Multiple select
 ```html
 <select name="multiple-select-value" multiple>
     <option value="A">Option A</option>
     <option value="B">Option B</option>
+    <option value="C">Option C</option>
 </select>
 ```
 ```js
@@ -105,7 +127,14 @@ modelBinder.watch('value: multiple-select-value', {
     selector: '[name="multiple-select-value"]'
 });
 
-model.set('multiple-select-value', ['A', 'B']);
+model.set('multiple-select-value', ['A', 'B', 'C']);
+```
+```html
+<select name="multiple-select-value" multiple>
+    <option value="A" selected>Option A</option>
+    <option value="B" selected>Option B</option>
+    <option value="C" selected>Option C</option>
+</select>
 ```
 
 ##### Type `checked`
@@ -120,24 +149,34 @@ modelBinder.watch('checked: single-checkbox-input-checked', {
 
 model.set('single-checkbox-input-checked', true);
 ```
+```html
+<input type="checkbox" name="single-checkbox-input-checked" checked>
+```
 
 ###### Multiple checkboxes
 ```html
 <input type="checkbox" name="multiple-checkbox-input-checked" value="A">
 <input type="checkbox" name="multiple-checkbox-input-checked" value="B">
+<input type="checkbox" name="multiple-checkbox-input-checked" value="C">
 ```
 ```js
 modelBinder.watch('checked: multiple-checkbox-input-checked', {
     selector: '[name="multiple-checkbox-input-checked"]'
 });
 
-model.set('multiple-checkbox-input-checked', ['A', 'B']);
+model.set('multiple-checkbox-input-checked', ['A', 'B', 'C']);
+```
+```html
+<input type="checkbox" name="multiple-checkbox-input-checked" value="A" checked>
+<input type="checkbox" name="multiple-checkbox-input-checked" value="B" checked>
+<input type="checkbox" name="multiple-checkbox-input-checked" value="C" checked>
 ```
 
 ###### Radio buttons
 ```html
 <input type="radio" name="radio-input-checked" value="A">
 <input type="radio" name="radio-input-checked" value="B">
+<input type="radio" name="radio-input-checked" value="C">
 ```
 ```js
 modelBinder.watch('checked: radio-input-checked', {
@@ -146,10 +185,15 @@ modelBinder.watch('checked: radio-input-checked', {
 
 model.set('radio-input-checked', 'A');
 ```
+```html
+<input type="radio" name="radio-input-checked" value="A" checked>
+<input type="radio" name="radio-input-checked" value="B">
+<input type="radio" name="radio-input-checked" value="C">
+```
 
 ##### Type `visible`
 ```html
-<button type="button" name="button-visible">Visible</button>
+<button type="button" name="button-visible" hidden>Visible</button>
 ```
 ```js
 modelBinder.watch('visible: button-visible', {
@@ -157,6 +201,9 @@ modelBinder.watch('visible: button-visible', {
 });
 
 model.set('button-visible', true);
+```
+```html
+<button type="button" name="button-visible">Visible</button>
 ```
 
 ##### Type `hidden`
@@ -170,10 +217,13 @@ modelBinder.watch('hidden: button-hidden', {
 
 model.set('button-hidden', true);
 ```
+```html
+<button type="button" name="button-hidden" hidden>Hidden</button>
+```
 
 ##### Type `enabled`
 ```html
-<button type="button" name="button-enabled">Enabled</button>
+<button type="button" name="button-enabled" disabled>Enabled</button>
 ```
 ```js
 modelBinder.watch('enabled: button-enabled', {
@@ -181,6 +231,9 @@ modelBinder.watch('enabled: button-enabled', {
 });
 
 model.set('button-enabled', true);
+```
+```html
+<button type="button" name="button-enabled">Enabled</button>
 ```
 
 ##### Type `disabled`
@@ -193,6 +246,9 @@ modelBinder.watch('disabled: button-disabled', {
 });
 
 model.set('button-disabled', true);
+```
+```html
+<button type="button" name="button-disabled" disabled>Disabled</button>
 ```
 
 #### Option `selector`
@@ -264,6 +320,9 @@ collectionBinder.listen({
 ```
 
 ## Changelog
+### 0.4.3
+  - Fixed a lot of issues
+
 ### 0.4.2
   - Renaming method `define` to `watch`
   - Update API to getting views

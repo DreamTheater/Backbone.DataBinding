@@ -194,14 +194,6 @@
             return this;
         },
 
-        getViewByCid: function (cid) {
-            var views = this.views;
-
-            return _.find(views, function (view) {
-                return view.cid === cid;
-            });
-        },
-
         getViewByIndex: function (index) {
             return this.views[index];
         },

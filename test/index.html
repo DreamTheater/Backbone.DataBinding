@@ -21,68 +21,74 @@
         <!-- Tests -->
         <script src="backbone/model_binder_test.js"></script>
         <script src="backbone/collection_binder_test.js"></script>
-
-        <script>
-            _.extend(QUnit.config, {
-                hidepassed: true
-            });
-        </script>
     </head>
 
     <body>
         <section id="qunit"></section>
 
         <section id="qunit-fixture">
-            <form id="test-form">
-                <output name="output-html"></output>
-                <output name="output-text"></output>
+            <form id="form-fixture">
+                <fieldset>
+                    <output name="output-html"></output>
+                    <output name="output-text"></output>
+                </fieldset>
 
-                <input type="text" name="text-input-value">
-                <textarea name="textarea-value"></textarea>
+                <fieldset>
+                    <input type="text" name="text-input-value">
+                    <textarea name="textarea-value"></textarea>
+                </fieldset>
 
-                <select name="single-select-value">
-                    <option value="string">Option "string"</option>
-                    <option value="">Option ""</option>
-                    <option value="1">Option "1"</option>
-                    <option value="0">Option "0"</option>
-                    <option value="true">Option "true"</option>
-                    <option value="false">Option "false"</option>
-                </select>
+                <fieldset>
+                    <select name="single-select-value">
+                        <option value="string">Option "string"</option>
+                        <option value="">Option ""</option>
+                        <option value="1">Option "1"</option>
+                        <option value="0">Option "0"</option>
+                        <option value="true">Option "true"</option>
+                        <option value="false">Option "false"</option>
+                    </select>
 
-                <select name="multiple-select-value" multiple>
-                    <option value="string">Option "string"</option>
-                    <option value="">Option ""</option>
-                    <option value="1">Option "1"</option>
-                    <option value="0">Option "0"</option>
-                    <option value="true">Option "true"</option>
-                    <option value="false">Option "false"</option>
-                </select>
+                    <select name="multiple-select-value" multiple>
+                        <option value="string">Option "string"</option>
+                        <option value="">Option ""</option>
+                        <option value="1">Option "1"</option>
+                        <option value="0">Option "0"</option>
+                        <option value="true">Option "true"</option>
+                        <option value="false">Option "false"</option>
+                    </select>
+                </fieldset>
 
-                <input type="radio" name="radio-input-checked" value="string">
-                <input type="radio" name="radio-input-checked" value="">
-                <input type="radio" name="radio-input-checked" value="1">
-                <input type="radio" name="radio-input-checked" value="0">
-                <input type="radio" name="radio-input-checked" value="true">
-                <input type="radio" name="radio-input-checked" value="false">
+                <fieldset>
+                    <input type="radio" name="radio-input-checked" value="string">
+                    <input type="radio" name="radio-input-checked" value="">
+                    <input type="radio" name="radio-input-checked" value="1">
+                    <input type="radio" name="radio-input-checked" value="0">
+                    <input type="radio" name="radio-input-checked" value="true">
+                    <input type="radio" name="radio-input-checked" value="false">
+                </fieldset>
 
-                <input type="checkbox" name="single-checkbox-input-checked" value="on">
+                <fieldset>
+                    <input type="checkbox" name="single-checkbox-input-checked" value="on">
 
-                <input type="checkbox" name="multiple-checkbox-input-checked" value="string">
-                <input type="checkbox" name="multiple-checkbox-input-checked" value="">
-                <input type="checkbox" name="multiple-checkbox-input-checked" value="1">
-                <input type="checkbox" name="multiple-checkbox-input-checked" value="0">
-                <input type="checkbox" name="multiple-checkbox-input-checked" value="true">
-                <input type="checkbox" name="multiple-checkbox-input-checked" value="false">
+                    <input type="checkbox" name="multiple-checkbox-input-checked" value="string">
+                    <input type="checkbox" name="multiple-checkbox-input-checked" value="">
+                    <input type="checkbox" name="multiple-checkbox-input-checked" value="1">
+                    <input type="checkbox" name="multiple-checkbox-input-checked" value="0">
+                    <input type="checkbox" name="multiple-checkbox-input-checked" value="true">
+                    <input type="checkbox" name="multiple-checkbox-input-checked" value="false">
+                </fieldset>
 
-                <button type="button" name="button-visible">Visible</button>
-                <button type="button" name="button-hidden">Hidden</button>
-                <button type="button" name="button-enabled">Enabled</button>
-                <button type="button" name="button-disabled">Disabled</button>
+                <fieldset>
+                    <button type="button" name="button-visible" hidden>Visible</button>
+                    <button type="button" name="button-hidden">Hidden</button>
+                    <button type="button" name="button-enabled" disabled>Enabled</button>
+                    <button type="button" name="button-disabled">Disabled</button>
+                </fieldset>
             </form>
 
-            <section id="test-list">
-                <ul id="odd-id"></ul>
-                <ul id="even-id"></ul>
+            <section id="list-fixture">
+                <ul class="odd"></ul>
+                <ul class="even"></ul>
             </section>
         </section>
     </body>
