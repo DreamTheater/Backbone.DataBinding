@@ -45,11 +45,20 @@
                 },
 
                 setter: function (value) {
-                    if (!_.isNull(value) && !_.isUndefined(value)) {
-                        this.html(value);
+
+                    ////////////////////
+
+                    if (_.isArray(value)) {
+                        value = _.reject(value, function (value) {
+                            return _.isNull(value) || _.isUndefined(value);
+                        });
                     } else {
-                        this.empty();
+                        value = _.isNull(value) || _.isUndefined(value) ? [] : String(value);
                     }
+
+                    ////////////////////
+
+                    this.html(value);
                 }
             },
 
@@ -59,25 +68,45 @@
                 },
 
                 setter: function (value) {
-                    if (!_.isNull(value) && !_.isUndefined(value)) {
-                        this.text(value);
+
+                    ////////////////////
+
+                    if (_.isArray(value)) {
+                        value = _.reject(value, function (value) {
+                            return _.isNull(value) || _.isUndefined(value);
+                        });
                     } else {
-                        this.empty();
+                        value = _.isNull(value) || _.isUndefined(value) ? [] : String(value);
                     }
+
+                    ////////////////////
+
+                    this.text(value);
                 }
             },
 
             value: {
                 getter: function () {
-                    return this.val();
+                    var value = this.val() || [];
+
+                    return this.is('select[multiple]') ? value : String(value);
                 },
 
                 setter: function (value) {
-                    if (!_.isNull(value) && !_.isUndefined(value)) {
-                        this.val(value);
+
+                    ////////////////////
+
+                    if (_.isArray(value)) {
+                        value = _.reject(value, function (value) {
+                            return _.isNull(value) || _.isUndefined(value);
+                        });
                     } else {
-                        this.val(null);
+                        value = _.isNull(value) || _.isUndefined(value) ? [] : String(value);
                     }
+
+                    ////////////////////
+
+                    this.val(value);
                 }
             },
 
@@ -99,7 +128,11 @@
                 },
 
                 setter: function (value) {
-                    var values = _.isArray(value) ? value : [value];
+                    var values = _.isArray(value) ? value : [String(value)];
+
+                    values = _.reject(values, function (value) {
+                        return _.isNull(value) || _.isUndefined(value);
+                    });
 
                     if (this.prop('type') === 'radio') {
                         this.val(values);

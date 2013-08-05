@@ -1,4 +1,4 @@
-/*jshint maxstatements:28, maxlen:117 */
+/*jshint maxstatements:28, maxlen:131 */
 $(function () {
     'use strict';
 
@@ -57,13 +57,28 @@ $(function () {
         var attribute = 'output-html', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        model.set(attribute, 'A');
-        strictEqual($el.html(), 'A');
-
-        model.set(attribute, 'B');
-        strictEqual($el.html(), 'B');
+        model.set(attribute, 'string');
+        strictEqual($el.html(), 'string');
 
         model.set(attribute, '');
+        strictEqual($el.html(), '');
+
+        model.set(attribute, 1);
+        strictEqual($el.html(), '1');
+
+        model.set(attribute, 0);
+        strictEqual($el.html(), '0');
+
+        model.set(attribute, true);
+        strictEqual($el.html(), 'true');
+
+        model.set(attribute, false);
+        strictEqual($el.html(), 'false');
+
+        model.set(attribute, null);
+        strictEqual($el.html(), '');
+
+        model.set(attribute, undefined);
         strictEqual($el.html(), '');
 
         model.unset(attribute);
@@ -74,13 +89,28 @@ $(function () {
         var attribute = 'output-text', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        model.set(attribute, 'A');
-        strictEqual($el.text(), 'A');
-
-        model.set(attribute, 'B');
-        strictEqual($el.text(), 'B');
+        model.set(attribute, 'string');
+        strictEqual($el.text(), 'string');
 
         model.set(attribute, '');
+        strictEqual($el.text(), '');
+
+        model.set(attribute, 1);
+        strictEqual($el.text(), '1');
+
+        model.set(attribute, 0);
+        strictEqual($el.text(), '0');
+
+        model.set(attribute, true);
+        strictEqual($el.text(), 'true');
+
+        model.set(attribute, false);
+        strictEqual($el.text(), 'false');
+
+        model.set(attribute, null);
+        strictEqual($el.text(), '');
+
+        model.set(attribute, undefined);
         strictEqual($el.text(), '');
 
         model.unset(attribute);
@@ -91,13 +121,28 @@ $(function () {
         var attribute = 'text-input-value', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        model.set(attribute, 'A');
-        strictEqual($el.val(), 'A');
-
-        model.set(attribute, 'B');
-        strictEqual($el.val(), 'B');
+        model.set(attribute, 'string');
+        strictEqual($el.val(), 'string');
 
         model.set(attribute, '');
+        strictEqual($el.val(), '');
+
+        model.set(attribute, 1);
+        strictEqual($el.val(), '1');
+
+        model.set(attribute, 0);
+        strictEqual($el.val(), '0');
+
+        model.set(attribute, true);
+        strictEqual($el.val(), 'true');
+
+        model.set(attribute, false);
+        strictEqual($el.val(), 'false');
+
+        model.set(attribute, null);
+        strictEqual($el.val(), '');
+
+        model.set(attribute, undefined);
         strictEqual($el.val(), '');
 
         model.unset(attribute);
@@ -108,13 +153,28 @@ $(function () {
         var attribute = 'textarea-value', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        model.set(attribute, 'A');
-        strictEqual($el.val(), 'A');
-
-        model.set(attribute, 'B');
-        strictEqual($el.val(), 'B');
+        model.set(attribute, 'string');
+        strictEqual($el.val(), 'string');
 
         model.set(attribute, '');
+        strictEqual($el.val(), '');
+
+        model.set(attribute, 1);
+        strictEqual($el.val(), '1');
+
+        model.set(attribute, 0);
+        strictEqual($el.val(), '0');
+
+        model.set(attribute, true);
+        strictEqual($el.val(), 'true');
+
+        model.set(attribute, false);
+        strictEqual($el.val(), 'false');
+
+        model.set(attribute, null);
+        strictEqual($el.val(), '');
+
+        model.set(attribute, undefined);
         strictEqual($el.val(), '');
 
         model.unset(attribute);
@@ -125,13 +185,28 @@ $(function () {
         var attribute = 'single-select-value', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        model.set(attribute, 'A');
-        strictEqual($el.val(), 'A');
-
-        model.set(attribute, 'B');
-        strictEqual($el.val(), 'B');
+        model.set(attribute, 'string');
+        strictEqual($el.val(), 'string');
 
         model.set(attribute, '');
+        strictEqual($el.val(), '');
+
+        model.set(attribute, 1);
+        strictEqual($el.val(), '1');
+
+        model.set(attribute, 0);
+        strictEqual($el.val(), '0');
+
+        model.set(attribute, true);
+        strictEqual($el.val(), 'true');
+
+        model.set(attribute, false);
+        strictEqual($el.val(), 'false');
+
+        model.set(attribute, null);
+        strictEqual($el.val(), null);
+
+        model.set(attribute, undefined);
         strictEqual($el.val(), null);
 
         model.unset(attribute);
@@ -142,47 +217,89 @@ $(function () {
         var attribute = 'multiple-select-value', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        model.set(attribute, ['A']);
-        deepEqual($el.val(), ['A']);
+        model.set(attribute, ['string', 1, true]);
+        deepEqual($el.val(), ['string', '1', 'true']);
 
-        model.set(attribute, ['B']);
-        deepEqual($el.val(), ['B']);
+        model.set(attribute, ['', 0, false]);
+        deepEqual($el.val(), ['', '0', 'false']);
 
-        model.set(attribute, ['A', 'B']);
-        deepEqual($el.val(), ['A', 'B']);
+        model.set(attribute, [null]);
+        deepEqual($el.val(), null);
+
+        model.set(attribute, [undefined]);
+        deepEqual($el.val(), null);
 
         model.set(attribute, []);
-        strictEqual($el.val(), null);
+        deepEqual($el.val(), null);
+
+        model.set(attribute, null);
+        deepEqual($el.val(), null);
+
+        model.set(attribute, undefined);
+        deepEqual($el.val(), null);
 
         model.unset(attribute);
-        strictEqual($el.val(), null);
+        deepEqual($el.val(), null);
     });
 
     test('sync radio-input-checked with model', function () {
         var attribute = 'radio-input-checked', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        model.set(attribute, 'A');
-        strictEqual($el.filter(':checked').val(), 'A');
-
-        model.set(attribute, 'B');
-        strictEqual($el.filter(':checked').val(), 'B');
+        model.set(attribute, 'string');
+        strictEqual($el.filter(':checked').val(), 'string');
 
         model.set(attribute, '');
-        strictEqual($el.filter(':checked').length, 0);
+        strictEqual($el.filter(':checked').val(), '');
+
+        model.set(attribute, 1);
+        strictEqual($el.filter(':checked').val(), '1');
+
+        model.set(attribute, 0);
+        strictEqual($el.filter(':checked').val(), '0');
+
+        model.set(attribute, true);
+        strictEqual($el.filter(':checked').val(), 'true');
+
+        model.set(attribute, false);
+        strictEqual($el.filter(':checked').val(), 'false');
+
+        model.set(attribute, null);
+        strictEqual($el.filter(':checked').val(), undefined);
+
+        model.set(attribute, undefined);
+        strictEqual($el.filter(':checked').val(), undefined);
 
         model.unset(attribute);
-        strictEqual($el.filter(':checked').length, 0);
+        strictEqual($el.filter(':checked').val(), undefined);
     });
 
     test('sync single-checkbox-input-checked with model', function () {
         var attribute = 'single-checkbox-input-checked', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
+        model.set(attribute, 'string');
+        ok($el.is(':checked'));
+
+        model.set(attribute, '');
+        ok(!$el.is(':checked'));
+
+        model.set(attribute, 1);
+        ok($el.is(':checked'));
+
+        model.set(attribute, 0);
+        ok(!$el.is(':checked'));
+
         model.set(attribute, true);
         ok($el.is(':checked'));
 
         model.set(attribute, false);
+        ok(!$el.is(':checked'));
+
+        model.set(attribute, null);
+        ok(!$el.is(':checked'));
+
+        model.set(attribute, undefined);
         ok(!$el.is(':checked'));
 
         model.unset(attribute);
@@ -193,30 +310,57 @@ $(function () {
         var attribute = 'multiple-checkbox-input-checked', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        model.set(attribute, ['A']);
-        strictEqual($el.filter(':checked').val(), 'A');
+        model.set(attribute, ['string', 1, true]);
+        deepEqual(_.pluck($el.filter(':checked'), 'value'), ['string', '1', 'true']);
 
-        model.set(attribute, ['B']);
-        strictEqual($el.filter(':checked').val(), 'B');
+        model.set(attribute, ['', 0, false]);
+        deepEqual(_.pluck($el.filter(':checked'), 'value'), ['', '0', 'false']);
 
-        model.set(attribute, ['A', 'B']);
-        strictEqual($el.filter(':checked').length, 2);
+        model.set(attribute, [null]);
+        deepEqual(_.pluck($el.filter(':checked'), 'value'), []);
+
+        model.set(attribute, [undefined]);
+        deepEqual(_.pluck($el.filter(':checked'), 'value'), []);
 
         model.set(attribute, []);
-        strictEqual($el.filter(':checked').length, 0);
+        deepEqual(_.pluck($el.filter(':checked'), 'value'), []);
+
+        model.set(attribute, null);
+        deepEqual(_.pluck($el.filter(':checked'), 'value'), []);
+
+        model.set(attribute, undefined);
+        deepEqual(_.pluck($el.filter(':checked'), 'value'), []);
 
         model.unset(attribute);
-        strictEqual($el.filter(':checked').length, 0);
+        deepEqual(_.pluck($el.filter(':checked'), 'value'), []);
     });
 
     test('sync button-visible with model', function () {
         var attribute = 'button-visible', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
+        model.set(attribute, 'string');
+        ok($el.is(':visible'));
+
+        model.set(attribute, '');
+        ok(!$el.is(':visible'));
+
+        model.set(attribute, 1);
+        ok($el.is(':visible'));
+
+        model.set(attribute, 0);
+        ok(!$el.is(':visible'));
+
         model.set(attribute, true);
         ok($el.is(':visible'));
 
         model.set(attribute, false);
+        ok(!$el.is(':visible'));
+
+        model.set(attribute, null);
+        ok(!$el.is(':visible'));
+
+        model.set(attribute, undefined);
         ok(!$el.is(':visible'));
 
         model.unset(attribute);
@@ -227,10 +371,28 @@ $(function () {
         var attribute = 'button-hidden', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
+        model.set(attribute, 'string');
+        ok($el.is(':hidden'));
+
+        model.set(attribute, '');
+        ok(!$el.is(':hidden'));
+
+        model.set(attribute, 1);
+        ok($el.is(':hidden'));
+
+        model.set(attribute, 0);
+        ok(!$el.is(':hidden'));
+
         model.set(attribute, true);
         ok($el.is(':hidden'));
 
         model.set(attribute, false);
+        ok(!$el.is(':hidden'));
+
+        model.set(attribute, null);
+        ok(!$el.is(':hidden'));
+
+        model.set(attribute, undefined);
         ok(!$el.is(':hidden'));
 
         model.unset(attribute);
@@ -241,10 +403,28 @@ $(function () {
         var attribute = 'button-enabled', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
+        model.set(attribute, 'string');
+        ok($el.is(':enabled'));
+
+        model.set(attribute, '');
+        ok(!$el.is(':enabled'));
+
+        model.set(attribute, 1);
+        ok($el.is(':enabled'));
+
+        model.set(attribute, 0);
+        ok(!$el.is(':enabled'));
+
         model.set(attribute, true);
         ok($el.is(':enabled'));
 
         model.set(attribute, false);
+        ok(!$el.is(':enabled'));
+
+        model.set(attribute, null);
+        ok(!$el.is(':enabled'));
+
+        model.set(attribute, undefined);
         ok(!$el.is(':enabled'));
 
         model.unset(attribute);
@@ -255,10 +435,28 @@ $(function () {
         var attribute = 'button-disabled', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
+        model.set(attribute, 'string');
+        ok($el.is(':disabled'));
+
+        model.set(attribute, '');
+        ok(!$el.is(':disabled'));
+
+        model.set(attribute, 1);
+        ok($el.is(':disabled'));
+
+        model.set(attribute, 0);
+        ok(!$el.is(':disabled'));
+
         model.set(attribute, true);
         ok($el.is(':disabled'));
 
         model.set(attribute, false);
+        ok(!$el.is(':disabled'));
+
+        model.set(attribute, null);
+        ok(!$el.is(':disabled'));
+
+        model.set(attribute, undefined);
         ok(!$el.is(':disabled'));
 
         model.unset(attribute);
@@ -269,16 +467,25 @@ $(function () {
         var attribute = 'output-html', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        $el.html('A').trigger('change');
-        strictEqual(attributes[attribute], 'A');
-
-        $el.html('B').trigger('change');
-        strictEqual(attributes[attribute], 'B');
+        $el.html('string').trigger('change');
+        strictEqual(attributes[attribute], 'string');
 
         $el.html('').trigger('change');
         strictEqual(attributes[attribute], '');
 
-        $el.html(null).trigger('change');
+        $el.html('1').trigger('change');
+        strictEqual(attributes[attribute], '1');
+
+        $el.html('0').trigger('change');
+        strictEqual(attributes[attribute], '0');
+
+        $el.html('true').trigger('change');
+        strictEqual(attributes[attribute], 'true');
+
+        $el.html('false').trigger('change');
+        strictEqual(attributes[attribute], 'false');
+
+        $el.empty().trigger('change');
         strictEqual(attributes[attribute], '');
     });
 
@@ -286,30 +493,51 @@ $(function () {
         var attribute = 'output-text', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        $el.text('A').trigger('change');
-        strictEqual(attributes[attribute], 'A');
-
-        $el.text('B').trigger('change');
-        strictEqual(attributes[attribute], 'B');
+        $el.text('string').trigger('change');
+        strictEqual(attributes[attribute], 'string');
 
         $el.text('').trigger('change');
         strictEqual(attributes[attribute], '');
 
-        $el.text(null).trigger('change');
-        strictEqual(attributes[attribute], 'null');
+        $el.text('1').trigger('change');
+        strictEqual(attributes[attribute], '1');
+
+        $el.text('0').trigger('change');
+        strictEqual(attributes[attribute], '0');
+
+        $el.text('true').trigger('change');
+        strictEqual(attributes[attribute], 'true');
+
+        $el.text('false').trigger('change');
+        strictEqual(attributes[attribute], 'false');
+
+        $el.empty().trigger('change');
+        strictEqual(attributes[attribute], '');
     });
 
     test('sync model with text-input-value', function () {
         var attribute = 'text-input-value', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        $el.val('A').trigger('change');
-        strictEqual(attributes[attribute], 'A');
-
-        $el.val('B').trigger('change');
-        strictEqual(attributes[attribute], 'B');
+        $el.val('string').trigger('change');
+        strictEqual(attributes[attribute], 'string');
 
         $el.val('').trigger('change');
+        strictEqual(attributes[attribute], '');
+
+        $el.val('1').trigger('change');
+        strictEqual(attributes[attribute], '1');
+
+        $el.val('0').trigger('change');
+        strictEqual(attributes[attribute], '0');
+
+        $el.val('true').trigger('change');
+        strictEqual(attributes[attribute], 'true');
+
+        $el.val('false').trigger('change');
+        strictEqual(attributes[attribute], 'false');
+
+        $el.val(null).trigger('change');
         strictEqual(attributes[attribute], '');
     });
 
@@ -317,13 +545,25 @@ $(function () {
         var attribute = 'textarea-value', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        $el.val('A').trigger('change');
-        strictEqual(attributes[attribute], 'A');
-
-        $el.val('B').trigger('change');
-        strictEqual(attributes[attribute], 'B');
+        $el.val('string').trigger('change');
+        strictEqual(attributes[attribute], 'string');
 
         $el.val('').trigger('change');
+        strictEqual(attributes[attribute], '');
+
+        $el.val('1').trigger('change');
+        strictEqual(attributes[attribute], '1');
+
+        $el.val('0').trigger('change');
+        strictEqual(attributes[attribute], '0');
+
+        $el.val('true').trigger('change');
+        strictEqual(attributes[attribute], 'true');
+
+        $el.val('false').trigger('change');
+        strictEqual(attributes[attribute], 'false');
+
+        $el.val(null).trigger('change');
         strictEqual(attributes[attribute], '');
     });
 
@@ -331,48 +571,69 @@ $(function () {
         var attribute = 'single-select-value', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        $el.val('A').trigger('change');
-        strictEqual(attributes[attribute], 'A');
-
-        $el.val('B').trigger('change');
-        strictEqual(attributes[attribute], 'B');
+        $el.val('string').trigger('change');
+        strictEqual(attributes[attribute], 'string');
 
         $el.val('').trigger('change');
-        strictEqual(attributes[attribute], null);
+        strictEqual(attributes[attribute], '');
+
+        $el.val('1').trigger('change');
+        strictEqual(attributes[attribute], '1');
+
+        $el.val('0').trigger('change');
+        strictEqual(attributes[attribute], '0');
+
+        $el.val('true').trigger('change');
+        strictEqual(attributes[attribute], 'true');
+
+        $el.val('false').trigger('change');
+        strictEqual(attributes[attribute], 'false');
 
         $el.val(null).trigger('change');
-        strictEqual(attributes[attribute], null);
+        strictEqual(attributes[attribute], '');
     });
 
     test('sync model with multiple-select-value', function () {
         var attribute = 'multiple-select-value', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        $el.val(['A']).trigger('change');
-        deepEqual(attributes[attribute], ['A']);
+        $el.val(['string', '1', 'true']).trigger('change');
+        deepEqual(attributes[attribute], ['string', '1', 'true']);
 
-        $el.val(['B']).trigger('change');
-        deepEqual(attributes[attribute], ['B']);
-
-        $el.val(['A', 'B']).trigger('change');
-        deepEqual(attributes[attribute], ['A', 'B']);
+        $el.val(['', '0', 'false']).trigger('change');
+        deepEqual(attributes[attribute], ['', '0', 'false']);
 
         $el.val([]).trigger('change');
-        deepEqual(attributes[attribute], null);
+        deepEqual(attributes[attribute], []);
+
+        $el.val(null).trigger('change');
+        deepEqual(attributes[attribute], ['']);
     });
 
     test('sync model with radio-input-checked', function () {
         var attribute = 'radio-input-checked', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        $el.filter('[value="A"]').prop('checked', true).trigger('change');
-        strictEqual(attributes[attribute], 'A');
+        $el.filter('[value="string"]').prop('checked', true).trigger('change');
+        strictEqual(attributes[attribute], 'string');
 
-        $el.filter('[value="B"]').prop('checked', true).trigger('change');
-        strictEqual(attributes[attribute], 'B');
+        $el.filter('[value=""]').prop('checked', true).trigger('change');
+        strictEqual(attributes[attribute], '');
 
-        $el.prop('checked', false).trigger('change');
-        strictEqual(attributes[attribute], undefined);
+        $el.filter('[value="1"]').prop('checked', true).trigger('change');
+        strictEqual(attributes[attribute], '1');
+
+        $el.filter('[value="0"]').prop('checked', true).trigger('change');
+        strictEqual(attributes[attribute], '0');
+
+        $el.filter('[value="true"]').prop('checked', true).trigger('change');
+        strictEqual(attributes[attribute], 'true');
+
+        $el.filter('[value="false"]').prop('checked', true).trigger('change');
+        strictEqual(attributes[attribute], 'false');
+
+        $el.val(null).trigger('change');
+        strictEqual(attributes[attribute], '');
     });
 
     test('sync model with single-checkbox-input-checked', function () {
@@ -390,14 +651,11 @@ $(function () {
         var attribute = 'multiple-checkbox-input-checked', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
-        $el.prop('checked', false).filter('[value="A"]').prop('checked', true).trigger('change');
-        deepEqual(attributes[attribute], ['A']);
+        $el.prop('checked', false).filter('[value="string"], [value="1"], [value="true"]').prop('checked', true).trigger('change');
+        deepEqual(attributes[attribute], ['string', '1', 'true']);
 
-        $el.prop('checked', false).filter('[value="B"]').prop('checked', true).trigger('change');
-        deepEqual(attributes[attribute], ['B']);
-
-        $el.prop('checked', true).trigger('change');
-        deepEqual(attributes[attribute], ['A', 'B']);
+        $el.prop('checked', false).filter('[value=""], [value="0"], [value="false"]').prop('checked', true).trigger('change');
+        deepEqual(attributes[attribute], ['', '0', 'false']);
 
         $el.prop('checked', false).trigger('change');
         deepEqual(attributes[attribute], []);
