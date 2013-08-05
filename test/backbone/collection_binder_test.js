@@ -16,7 +16,7 @@ $(function () {
                     render: function () {
                         var model = this.model;
 
-                        this.$el.data('model', model).text(model.id);
+                        this.$el.text(model.id).data('model', model);
 
                         return this;
                     }
@@ -73,44 +73,49 @@ $(function () {
     ///////////
 
     test('initialize with models', function () {
-        var oddIds = [], evenIds = [], view = this.view,
-            oddIdList = view.$('#odd-id'), evenIdList = view.$('#even-id');
+        var collection = this.collection, view = this.view,
+            oddIdList = view.$('#odd-id'), evenIdList = view.$('#even-id'),
 
-        oddIdList.children().each(function () {
-            oddIds.push($(this).data('model').id);
-        });
+            oddModels = oddIdList.children().map(function () {
+                return $(this).data('model');
+            }).get(),
 
-        evenIdList.children().each(function () {
-            evenIds.push($(this).data('model').id);
-        });
+            evenModels = evenIdList.children().map(function () {
+                return $(this).data('model');
+            }).get();
 
-        deepEqual(oddIds, [0, 2, 4, 6, 8]);
-        deepEqual(evenIds, [1, 3, 5, 7, 9]);
+        deepEqual(oddModels, collection.filter(function (model) {
+            return model.id % 2 === 0;
+        }));
+
+        deepEqual(evenModels, collection.filter(function (model) {
+            return model.id % 2 === 1;
+        }));
     });
 
-    test('add', function () {
+    test('add model', function () {
         var collection = this.collection, view = this.view,
             oddIdList = view.$('#odd-id'), evenIdList = view.$('#even-id');
 
         collection.add({ id: 10 });
-        strictEqual(oddIdList.children().last().data('model').id, 10);
+        strictEqual(oddIdList.children().last().data('model'), collection.get(10));
 
         collection.add({ id: 11 });
-        strictEqual(evenIdList.children().last().data('model').id, 11);
+        strictEqual(evenIdList.children().last().data('model'), collection.get(11));
     });
 
-    test('remove', function () {
+    test('remove model', function () {
         var collection = this.collection, view = this.view,
             oddIdList = view.$('#odd-id'), evenIdList = view.$('#even-id');
 
         collection.remove({ id: 8 });
-        strictEqual(oddIdList.children().last().data('model').id, 6);
+        strictEqual(oddIdList.children().last().data('model'), collection.get(6));
 
         collection.remove({ id: 9 });
-        strictEqual(evenIdList.children().last().data('model').id, 7);
+        strictEqual(evenIdList.children().last().data('model'), collection.get(7));
     });
 
-    test('reset', function () {
+    test('reset models', function () {
         var collection = this.collection, view = this.view,
             oddIdList = view.$('#odd-id'), evenIdList = view.$('#even-id');
 
@@ -122,18 +127,18 @@ $(function () {
         strictEqual(oddIdList.children().length, 1);
         strictEqual(evenIdList.children().length, 1);
 
-        strictEqual(oddIdList.children().first().data('model').id, 10);
-        strictEqual(evenIdList.children().first().data('model').id, 11);
+        strictEqual(oddIdList.children().first().data('model'), collection.get(10));
+        strictEqual(evenIdList.children().first().data('model'), collection.get(11));
     });
 
-    test('sort', function () {
+    test('sort models', function () {
         var collection = this.collection, view = this.view,
             oddIdList = view.$('#odd-id'), evenIdList = view.$('#even-id');
 
         collection.add({ id: -1 });
-        strictEqual(evenIdList.children().first().data('model').id, -1);
+        strictEqual(evenIdList.children().first().data('model'), collection.get(-1));
 
         collection.add({ id: -2 });
-        strictEqual(oddIdList.children().first().data('model').id, -2);
+        strictEqual(oddIdList.children().first().data('model'), collection.get(-2));
     });
 });
