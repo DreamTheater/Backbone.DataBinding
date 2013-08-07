@@ -45,12 +45,12 @@
                 }
 
                 if (view.$el.parent().length === 0) {
-                    var element = this._resolveElement.call({
+                    var $el = this._resolveElement.call({
                         view: this.view,
                         options: this.options
                     }, model);
 
-                    view.$el.appendTo(element);
+                    view.$el.appendTo($el);
                 }
             },
 
@@ -160,12 +160,12 @@
                 this.dummy = dummy;
 
                 if (dummy.$el.parent().length === 0) {
-                    var element = this._resolveElement.call({
+                    var $el = this._resolveElement.call({
                         view: this.view,
                         options: this.options
                     });
 
-                    dummy.$el.appendTo(element);
+                    dummy.$el.appendTo($el);
                 }
             }
 

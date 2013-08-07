@@ -373,10 +373,7 @@
 
             var match = binding.match(/^\s*([-\w]+)\s*:\s*([-\w]+)\s*$/),
 
-                type = match[1],
-                attribute = match[2],
-
-                selector = options.selector;
+                type = match[1], attribute = match[2];
 
             ////////////////////
 
@@ -388,14 +385,22 @@
 
             this.handlers[binding] = _.defaults(options, {
                 getter: _.wrap(callbacks.getter, function (fn) {
-                    var $el = selector ? this.$(selector) : this.$el,
+                    var $el = this._resolveElement.call({
+                            view: this.view,
+                            options: options
+                        }),
+
                         value = fn ? fn.call($el) : $el.attr(type);
 
                     return this.model.set(attribute, value, options);
                 }),
 
                 setter: _.wrap(callbacks.setter, function (fn) {
-                    var $el = selector ? this.$(selector) : this.$el,
+                    var $el = this._resolveElement.call({
+                            view: this.view,
+                            options: options
+                        }),
+
                         value = this.model.get(attribute);
 
                     return fn ? fn.call($el, value) : $el.attr(type, value);
@@ -415,10 +420,25 @@
 
             ////////////////////
 
+            if (getter) options.getter = _.bind(getter, this);
+            if (setter) options.setter = _.bind(setter, this);
+        },
+
+        _resolveElement: function () {
+
+            ////////////////////
+
+            var selector = this.options.selector;
+
+            ////////////////////
+
             var view = this.view;
 
-            if (getter) options.getter = _.bind(getter, view);
-            if (setter) options.setter = _.bind(setter, view);
+            if (_.isFunction(selector)) {
+                selector = selector.call(view);
+            }
+
+            return selector ? view.$(selector) : view.$el;
         },
 
         _resolveEvents: function (binding) {
@@ -487,12 +507,12 @@
                 }
 
                 if (view.$el.parent().length === 0) {
-                    var element = this._resolveElement.call({
+                    var $el = this._resolveElement.call({
                         view: this.view,
                         options: this.options
                     }, model);
 
-                    view.$el.appendTo(element);
+                    view.$el.appendTo($el);
                 }
             },
 
@@ -602,12 +622,12 @@
                 this.dummy = dummy;
 
                 if (dummy.$el.parent().length === 0) {
-                    var element = this._resolveElement.call({
+                    var $el = this._resolveElement.call({
                         view: this.view,
                         options: this.options
                     });
 
-                    dummy.$el.appendTo(element);
+                    dummy.$el.appendTo($el);
                 }
             }
 
