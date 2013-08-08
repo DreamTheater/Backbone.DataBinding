@@ -10,9 +10,9 @@ $(function () {
         el: '#form-fixture',
 
         initialize: function () {
-            var modelBinder = new Backbone.ModelBinder(this, this.model);
+            var modelBinder = this.modelBinder = Backbone.ModelBinder(this, this.model);
 
-            this.modelBinder = modelBinder.watch({
+            modelBinder.watch({
                 'html: output-html': { selector: '[name="output-html"]' },
                 'text: output-text': { selector: '[name="output-text"]' },
 
@@ -30,6 +30,8 @@ $(function () {
                 'enabled: button-enabled': { selector: '[name="button-enabled"]' },
                 'disabled: button-disabled': { selector: '[name="button-disabled"]' }
             });
+
+            modelBinder.watch('id: id');
         }
     });
 

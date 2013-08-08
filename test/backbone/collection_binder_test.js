@@ -1,3 +1,4 @@
+/*jshint maxstatements:13, maxlen:109 */
 $(function () {
     'use strict';
 
@@ -9,7 +10,7 @@ $(function () {
         el: '#list-fixture',
 
         initialize: function () {
-            var collectionBinder = new Backbone.CollectionBinder(this, this.collection, {
+            var collectionBinder = this.collectionBinder = Backbone.CollectionBinder(this, this.collection, {
                 view: Backbone.View.extend({
                     tagName: 'li',
 
@@ -24,7 +25,7 @@ $(function () {
 
                 dummy: Backbone.View.extend({
                     render: function () {
-                        this.$el.text('I\'m a dummy!');
+                        this.$el.text('I\'m a dummy!').data('view', this);
 
                         return this;
                     }
@@ -35,7 +36,7 @@ $(function () {
                 }
             });
 
-            this.collectionBinder = collectionBinder.listen();
+            collectionBinder.listen();
         }
     });
 
@@ -136,5 +137,25 @@ $(function () {
 
         collection.add({ id: -2 });
         strictEqual($oddIdList.children().first().data('model'), collection.get(-2));
+    });
+
+    test('dummy', function () {
+        var collection = this.collection, view = this.view, collectionBinder = view.collectionBinder;
+
+        collection.reset();
+        ok(view.$el.children().last().data('view'));
+        ok(_.has(collectionBinder, 'dummy'));
+
+        collection.add({ id: 0 });
+        ok(!view.$el.children().last().data('view'));
+        ok(_.has(collectionBinder, 'dummy'));
+
+        collection.remove({ id: 0 });
+        ok(view.$el.children().last().data('view'));
+        ok(_.has(collectionBinder, 'dummy'));
+
+        collection.reset({ id: 0 });
+        ok(!view.$el.children().last().data('view'));
+        ok(!_.has(collectionBinder, 'dummy'));
     });
 });

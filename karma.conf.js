@@ -24,7 +24,7 @@ module.exports = function (config) {
         ],
 
         preprocessors: {
-            'src/**/*.js': 'coverage'
+            'src/**/*.js': ['coverage']
         },
 
         reporters: ['progress', 'coverage'],
@@ -32,12 +32,10 @@ module.exports = function (config) {
         reportSlowerThan: 50,
 
         coverageReporter: {
-            type: 'text',
+            type: 'html',
             dir: 'coverage_reports'
         },
 
-        browsers: ['Firefox'],
-
-        singleRun: true
+        browsers: ['Firefox']
     });
 };

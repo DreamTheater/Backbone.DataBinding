@@ -51,6 +51,13 @@ module.exports = function (grunt) {
                 src: '<%= concat.dist.dest %>',
                 dest: 'dist/<%= pkg.name %>.min.js'
             }
+        },
+
+        karma: {
+            test: {
+                configFile: 'karma.conf.js',
+                singleRun: true
+            }
         }
     });
 
@@ -61,10 +68,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-karma');
 
     ///////////
     // TASKS //
     ///////////
 
-    grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'karma', 'concat', 'uglify']);
 };

@@ -48,13 +48,7 @@
 
                     ////////////////////
 
-                    if (_.isArray(value)) {
-                        value = _.reject(value, function (value) {
-                            return _.isNull(value) || _.isUndefined(value);
-                        });
-                    } else {
-                        value = _.isNull(value) || _.isUndefined(value) ? [] : String(value);
-                    }
+                    value = _.isNull(value) || _.isUndefined(value) ? '' : String(value);
 
                     ////////////////////
 
@@ -71,13 +65,7 @@
 
                     ////////////////////
 
-                    if (_.isArray(value)) {
-                        value = _.reject(value, function (value) {
-                            return _.isNull(value) || _.isUndefined(value);
-                        });
-                    } else {
-                        value = _.isNull(value) || _.isUndefined(value) ? [] : String(value);
-                    }
+                    value = _.isNull(value) || _.isUndefined(value) ? '' : String(value);
 
                     ////////////////////
 

@@ -1,4 +1,4 @@
-/*jshint maxstatements:12, maxlen:102 */
+/*jshint maxstatements:12 */
 (function (self) {
     'use strict';
 
@@ -36,7 +36,7 @@
     _.extend(CollectionBinder, {
         handlers: {
             add: function (model) {
-                var views = this.views, view = this.getViewByModel(model) || this._prepareView(model),
+                var views = this.views, view = this._resolveView(model) || this._prepareView(model),
 
                     index = _.indexOf(views, view);
 
@@ -55,7 +55,7 @@
             },
 
             remove: function (model) {
-                var views = this.views, view = this.getViewByModel(model),
+                var views = this.views, view = this._resolveView(model),
 
                     index = _.indexOf(views, view);
 
@@ -154,7 +154,7 @@
         },
 
         renderDummy: function () {
-            var dummy = this.getDummy() || this._prepareDummy();
+            var dummy = this.dummy || this._prepareDummy();
 
             if (dummy) {
                 this.dummy = dummy;
@@ -173,7 +173,7 @@
         },
 
         removeDummy: function () {
-            var dummy = this.getDummy();
+            var dummy = this.dummy;
 
             delete this.dummy;
 
@@ -185,29 +185,13 @@
         },
 
         detachDummy: function () {
-            var dummy = this.getDummy();
+            var dummy = this.dummy;
 
             if (dummy) {
                 dummy.$el.detach();
             }
 
             return this;
-        },
-
-        getViewByIndex: function (index) {
-            return this.views[index];
-        },
-
-        getViewByModel: function (model) {
-            var views = this.views;
-
-            return _.find(views, function (view) {
-                return view.model === model;
-            });
-        },
-
-        getDummy: function () {
-            return this.dummy;
         },
 
         startListening: function (event) {
@@ -329,6 +313,14 @@
             }
 
             return selector ? view.$(selector) : view.$el;
+        },
+
+        _resolveView: function (model) {
+            var views = this.views;
+
+            return _.find(views, function (view) {
+                return view.model === model;
+            });
         },
 
         _prepareView: function (model) {
