@@ -1,6 +1,12 @@
 /*jshint maxstatements:12 */
-(function (self) {
+(function () {
     'use strict';
+
+    ////////////////////
+
+    var scope;
+
+    ////////////////////
 
     var CollectionBinder = Backbone.CollectionBinder = function (view, collection, options) {
 
@@ -12,7 +18,7 @@
 
         ////////////////////
 
-        self = _.extend(this, {
+        scope = _.extend(this, {
             view: view,
             collection: collection,
             options: options
@@ -24,7 +30,7 @@
 
         _.extend(view, {
             remove: _.wrap(view.remove, function (fn) {
-                self.removeViews().removeDummy();
+                scope.removeViews().removeDummy();
 
                 fn.call(this);
 

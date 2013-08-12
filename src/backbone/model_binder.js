@@ -1,5 +1,11 @@
-(function (self) {
+(function () {
     'use strict';
+
+    ////////////////////
+
+    var scope;
+
+    ////////////////////
 
     var ModelBinder = Backbone.ModelBinder = function (view, model) {
 
@@ -11,7 +17,7 @@
 
         ////////////////////
 
-        self = _.extend(this, {
+        scope = _.extend(this, {
             view: view,
             model: model
         }, {
@@ -23,13 +29,13 @@
         _.extend(view, {
             setElement: _.wrap(view.setElement, function (fn, element, delegate) {
                 if (this.$el) {
-                    self.undelegateEvents();
+                    scope.undelegateEvents();
                 }
 
                 fn.call(this, element, delegate);
 
                 if (delegate !== false) {
-                    self.delegateEvents();
+                    scope.delegateEvents();
                 }
 
                 return this;

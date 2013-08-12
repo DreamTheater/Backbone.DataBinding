@@ -29,13 +29,13 @@ module.exports = function (config) {
 
         reporters: ['progress', 'coverage'],
 
-        reportSlowerThan: 50,
-
         coverageReporter: {
             type: 'html',
             dir: 'coverage_reports'
         },
 
-        browsers: ['Firefox']
+        browsers: ['Firefox'],
+
+        reportSlowerThan: 100
     });
 };
