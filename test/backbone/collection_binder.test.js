@@ -1,5 +1,4 @@
-/*jshint maxstatements:13, maxlen:109 */
-$(function () {
+(function () {
     'use strict';
 
     ///////////////////
@@ -158,4 +157,4 @@ $(function () {
         ok(!view.$el.children().last().data('view'));
         ok(!_.has(collectionBinder, 'dummy'));
     });
-});
+}());

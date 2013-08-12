@@ -426,13 +426,19 @@
 
             ////////////////////
 
-            var view = this.view;
+            var $el, view = this.view;
 
             if (_.isFunction(selector)) {
                 selector = selector.call(view);
             }
 
-            return selector ? view.$(selector) : view.$el;
+            if (selector) {
+                $el = view.$(selector).data('selector', selector);
+            } else {
+                $el = view.$el;
+            }
+
+            return $el;
         },
 
         _resolveEvents: function (binding) {
@@ -768,13 +774,19 @@
 
             ////////////////////
 
-            var view = this.view;
+            var $el, view = this.view;
 
             if (_.isFunction(selector)) {
                 selector = selector.call(view, model);
             }
 
-            return selector ? view.$(selector) : view.$el;
+            if (selector) {
+                $el = view.$(selector).data('selector', selector);
+            } else {
+                $el = view.$el;
+            }
+
+            return $el;
         },
 
         _resolveView: function (model) {

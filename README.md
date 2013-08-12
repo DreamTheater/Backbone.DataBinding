@@ -4,7 +4,19 @@
 [travis-badge]: https://secure.travis-ci.org/DreamTheater/Backbone.DataBinding.png
 [travis-link]: https://travis-ci.org/DreamTheater/Backbone.DataBinding
 
-# Backbone.DataBinding [![NPM Version][npm-badge]][npm-link] [![Build Status][travis-badge]][travis-link]
+[coveralls-badge]: https://coveralls.io/repos/DreamTheater/Backbone.DataBinding/badge.png
+[coveralls-link]: https://coveralls.io/r/DreamTheater/Backbone.DataBinding
+
+[gemnasium-badge]: https://gemnasium.com/DreamTheater/Backbone.DataBinding.png
+[gemnasium-link]: https://gemnasium.com/DreamTheater/Backbone.DataBinding
+
+# Backbone.DataBinding
+
+[![NPM Version][npm-badge]][npm-link]
+[![Build Status][travis-badge]][travis-link]
+[![Coverage Status][coveralls-badge]][coveralls-link]
+[![Dependency Status][gemnasium-badge]][gemnasium-link]
+
 The plugin implements a two-way data binding between views and models/collections.
 
 **Dependencies:**
@@ -32,48 +44,48 @@ Use `modelBinder.watch(binding, options)` method to define bindings between view
 #### Binding types
 ##### Type `html`
 ```html
-<output name="output-html"></output>
+<output name="html-content"></output>
 ```
 ```js
-modelBinder.watch('html: output-html', {
-    selector: '[name="output-html"]'
+modelBinder.watch('html: html-content', {
+    selector: '[name="html-content"]'
 });
 
-model.set('output-html', 'HTML');
+model.set('html-content', 'HTML');
 ```
 ```html
-<output name="output-html">HTML</output>
+<output name="html-content">HTML</output>
 ```
 
 ##### Type `text`
 ```html
-<output name="output-text"></output>
+<output name="text-content"></output>
 ```
 ```js
-modelBinder.watch('text: output-text', {
-    selector: '[name="output-text"]'
+modelBinder.watch('text: text-content', {
+    selector: '[name="text-content"]'
 });
 
-model.set('output-text', 'Text');
+model.set('text-content', 'Text');
 ```
 ```html
-<output name="output-text">Text</output>
+<output name="text-content">Text</output>
 ```
 
 ##### Type `value`
 ###### Text input
 ```html
-<input type="text" name="text-input-value">
+<input type="text" name="text-field-value">
 ```
 ```js
-modelBinder.watch('value: text-input-value', {
-    selector: '[name="text-input-value"]'
+modelBinder.watch('value: text-field-value', {
+    selector: '[name="text-field-value"]'
 });
 
-model.set('text-input-value', 'Value');
+model.set('text-field-value', 'Value');
 ```
 ```html
-<input type="text" name="text-input-value" value="Value">
+<input type="text" name="text-field-value" value="Value">
 ```
 
 ###### Text area
@@ -140,55 +152,55 @@ model.set('multiple-select-value', ['A', 'B', 'C']);
 ##### Type `checked`
 ###### Single checkbox
 ```html
-<input type="checkbox" name="single-checkbox-input-checked">
+<input type="checkbox" name="single-checkbox-checked">
 ```
 ```js
-modelBinder.watch('checked: single-checkbox-input-checked', {
-    selector: '[name="single-checkbox-input-checked"]'
+modelBinder.watch('checked: single-checkbox-checked', {
+    selector: '[name="single-checkbox-checked"]'
 });
 
-model.set('single-checkbox-input-checked', true);
+model.set('single-checkbox-checked', true);
 ```
 ```html
-<input type="checkbox" name="single-checkbox-input-checked" checked>
+<input type="checkbox" name="single-checkbox-checked" checked>
 ```
 
 ###### Multiple checkboxes
 ```html
-<input type="checkbox" name="multiple-checkbox-input-checked" value="A">
-<input type="checkbox" name="multiple-checkbox-input-checked" value="B">
-<input type="checkbox" name="multiple-checkbox-input-checked" value="C">
+<input type="checkbox" name="checkbox-group-checked" value="A">
+<input type="checkbox" name="checkbox-group-checked" value="B">
+<input type="checkbox" name="checkbox-group-checked" value="C">
 ```
 ```js
-modelBinder.watch('checked: multiple-checkbox-input-checked', {
-    selector: '[name="multiple-checkbox-input-checked"]'
+modelBinder.watch('checked: checkbox-group-checked', {
+    selector: '[name="checkbox-group-checked"]'
 });
 
-model.set('multiple-checkbox-input-checked', ['A', 'B', 'C']);
+model.set('checkbox-group-checked', ['A', 'B', 'C']);
 ```
 ```html
-<input type="checkbox" name="multiple-checkbox-input-checked" value="A" checked>
-<input type="checkbox" name="multiple-checkbox-input-checked" value="B" checked>
-<input type="checkbox" name="multiple-checkbox-input-checked" value="C" checked>
+<input type="checkbox" name="checkbox-group-checked" value="A" checked>
+<input type="checkbox" name="checkbox-group-checked" value="B" checked>
+<input type="checkbox" name="checkbox-group-checked" value="C" checked>
 ```
 
 ###### Radio buttons
 ```html
-<input type="radio" name="radio-input-checked" value="A">
-<input type="radio" name="radio-input-checked" value="B">
-<input type="radio" name="radio-input-checked" value="C">
+<input type="radio" name="radio-button-checked" value="A">
+<input type="radio" name="radio-button-checked" value="B">
+<input type="radio" name="radio-button-checked" value="C">
 ```
 ```js
-modelBinder.watch('checked: radio-input-checked', {
-    selector: '[name="radio-input-checked"]'
+modelBinder.watch('checked: radio-button-checked', {
+    selector: '[name="radio-button-checked"]'
 });
 
-model.set('radio-input-checked', 'A');
+model.set('radio-button-checked', 'A');
 ```
 ```html
-<input type="radio" name="radio-input-checked" value="A" checked>
-<input type="radio" name="radio-input-checked" value="B">
-<input type="radio" name="radio-input-checked" value="C">
+<input type="radio" name="radio-button-checked" value="A" checked>
+<input type="radio" name="radio-button-checked" value="B">
+<input type="radio" name="radio-button-checked" value="C">
 ```
 
 ##### Type `visible`

@@ -1,5 +1,4 @@
-/*jshint maxstatements:28, maxlen:117 */
-$(function () {
+(function () {
     'use strict';
 
     ///////////////////
@@ -7,23 +6,21 @@ $(function () {
     ///////////////////
 
     var View = Backbone.View.extend({
-        el: '#form-fixture',
-
         initialize: function () {
             var modelBinder = this.modelBinder = Backbone.ModelBinder(this, this.model);
 
             modelBinder.watch({
-                'html: output-html': { selector: '[name="output-html"]' },
-                'text: output-text': { selector: '[name="output-text"]' },
+                'html: html-content': { selector: '[name="html-content"]' },
+                'text: text-content': { selector: '[name="text-content"]' },
 
-                'value: text-input-value': { selector: '[name="text-input-value"]' },
+                'value: text-field-value': { selector: '[name="text-field-value"]' },
                 'value: textarea-value': { selector: '[name="textarea-value"]' },
                 'value: single-select-value': { selector: '[name="single-select-value"]' },
                 'value: multiple-select-value': { selector: '[name="multiple-select-value"]' },
 
-                'checked: radio-input-checked': { selector: '[name="radio-input-checked"]' },
-                'checked: single-checkbox-input-checked': { selector: '[name="single-checkbox-input-checked"]' },
-                'checked: multiple-checkbox-input-checked': { selector: '[name="multiple-checkbox-input-checked"]' },
+                'checked: radio-button-checked': { selector: '[name="radio-button-checked"]' },
+                'checked: single-checkbox-checked': { selector: '[name="single-checkbox-checked"]' },
+                'checked: checkbox-group-checked': { selector: '[name="checkbox-group-checked"]' },
 
                 'visible: button-visible': { selector: '[name="button-visible"]' },
                 'hidden: button-hidden': { selector: '[name="button-hidden"]' },
@@ -42,7 +39,26 @@ $(function () {
     module('Backbone.ModelBinder', {
         setup: function () {
             this.view = new View({
-                model: this.model = new Backbone.Model()
+                el: '#form-fixture',
+
+                model: this.model = new Backbone.Model({
+                    'html-content': null,
+                    'text-content': null,
+
+                    'text-field-value': null,
+                    'textarea-value': null,
+                    'single-select-value': null,
+                    'multiple-select-value': null,
+
+                    'radio-button-checked': null,
+                    'single-checkbox-checked': null,
+                    'checkbox-group-checked': null,
+
+                    'button-visible': null,
+                    'button-hidden': null,
+                    'button-enabled': null,
+                    'button-disabled': null
+                })
             });
         },
 
@@ -55,8 +71,8 @@ $(function () {
     // TESTS //
     ///////////
 
-    test('sync output-html with model', function () {
-        var attribute = 'output-html', model = this.model,
+    test('sync html-content with model', function () {
+        var attribute = 'html-content', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
         model.set(attribute, 'string');
@@ -87,8 +103,8 @@ $(function () {
         strictEqual($el.html(), '');
     });
 
-    test('sync output-text with model', function () {
-        var attribute = 'output-text', model = this.model,
+    test('sync text-content with model', function () {
+        var attribute = 'text-content', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
         model.set(attribute, 'string');
@@ -119,8 +135,8 @@ $(function () {
         strictEqual($el.text(), '');
     });
 
-    test('sync text-input-value with model', function () {
-        var attribute = 'text-input-value', model = this.model,
+    test('sync text-field-value with model', function () {
+        var attribute = 'text-field-value', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
         model.set(attribute, 'string');
@@ -244,8 +260,8 @@ $(function () {
         deepEqual($el.val(), null);
     });
 
-    test('sync radio-input-checked with model', function () {
-        var attribute = 'radio-input-checked', model = this.model,
+    test('sync radio-button-checked with model', function () {
+        var attribute = 'radio-button-checked', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
         model.set(attribute, 'string');
@@ -276,8 +292,8 @@ $(function () {
         strictEqual($el.filter(':checked').val(), undefined);
     });
 
-    test('sync single-checkbox-input-checked with model', function () {
-        var attribute = 'single-checkbox-input-checked', model = this.model,
+    test('sync single-checkbox-checked with model', function () {
+        var attribute = 'single-checkbox-checked', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
         model.set(attribute, 'string');
@@ -308,8 +324,8 @@ $(function () {
         ok(!$el.is(':checked'));
     });
 
-    test('sync multiple-checkbox-input-checked with model', function () {
-        var attribute = 'multiple-checkbox-input-checked', model = this.model,
+    test('sync checkbox-group-checked with model', function () {
+        var attribute = 'checkbox-group-checked', model = this.model,
             $el = this.view.$('[name="' + attribute + '"]');
 
         model.set(attribute, ['string', 1, true]);
@@ -465,8 +481,8 @@ $(function () {
         ok(!$el.is(':disabled'));
     });
 
-    test('sync model with output-html', function () {
-        var attribute = 'output-html', attributes = this.model.attributes,
+    test('sync model with html-content', function () {
+        var attribute = 'html-content', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
         $el.html('string').trigger('change');
@@ -491,8 +507,8 @@ $(function () {
         strictEqual(attributes[attribute], '');
     });
 
-    test('sync model with output-text', function () {
-        var attribute = 'output-text', attributes = this.model.attributes,
+    test('sync model with text-content', function () {
+        var attribute = 'text-content', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
         $el.text('string').trigger('change');
@@ -517,8 +533,8 @@ $(function () {
         strictEqual(attributes[attribute], '');
     });
 
-    test('sync model with text-input-value', function () {
-        var attribute = 'text-input-value', attributes = this.model.attributes,
+    test('sync model with text-field-value', function () {
+        var attribute = 'text-field-value', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
         $el.val('string').trigger('change');
@@ -609,8 +625,8 @@ $(function () {
         deepEqual(attributes[attribute], []);
     });
 
-    test('sync model with radio-input-checked', function () {
-        var attribute = 'radio-input-checked', attributes = this.model.attributes,
+    test('sync model with radio-button-checked', function () {
+        var attribute = 'radio-button-checked', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
         $el.val(['string']).trigger('change');
@@ -635,8 +651,8 @@ $(function () {
         strictEqual(attributes[attribute], undefined);
     });
 
-    test('sync model with single-checkbox-input-checked', function () {
-        var attribute = 'single-checkbox-input-checked', attributes = this.model.attributes,
+    test('sync model with single-checkbox-checked', function () {
+        var attribute = 'single-checkbox-checked', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
         $el.prop('checked', true).trigger('change');
@@ -646,8 +662,8 @@ $(function () {
         strictEqual(attributes[attribute], false);
     });
 
-    test('sync model with multiple-checkbox-input-checked', function () {
-        var attribute = 'multiple-checkbox-input-checked', attributes = this.model.attributes,
+    test('sync model with checkbox-group-checked', function () {
+        var attribute = 'checkbox-group-checked', attributes = this.model.attributes,
             $el = this.view.$('[name="' + attribute + '"]');
 
         $el.val(['string', '1', 'true']).trigger('change');
@@ -703,4 +719,4 @@ $(function () {
         $el.prop('disabled', false).trigger('change');
         strictEqual(attributes[attribute], false);
     });
-});
+}());

@@ -1,11 +1,1 @@
-$(function () {
-    'use strict';
-
-    QUnit.stop();
-
-    $.get('base/test/index.html', function (html) {
-        $(html).children().appendTo(document.body);
-
-        QUnit.start();
-    });
-});
+$(window.__html__['test/index.html']).children().appendTo(document.body);
