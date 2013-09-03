@@ -4,17 +4,13 @@
 [travis-badge]: https://secure.travis-ci.org/DreamTheater/Backbone.DataBinding.png
 [travis-link]: https://travis-ci.org/DreamTheater/Backbone.DataBinding
 
-[coveralls-badge]: https://coveralls.io/repos/DreamTheater/Backbone.DataBinding/badge.png
-[coveralls-link]: https://coveralls.io/r/DreamTheater/Backbone.DataBinding
-
 [gemnasium-badge]: https://gemnasium.com/DreamTheater/Backbone.DataBinding.png
-[gemnasium-link]: https://gemnasium.com/DreamTheater/Backbone.DataBinding
+[gemnasium-link]: https://gemnasium.com/DreamTheater/Backbone.DataBinding#tab-dev_dependencies
 
 # Backbone.DataBinding
 
 [![NPM Version][npm-badge]][npm-link]
 [![Build Status][travis-badge]][travis-link]
-[![Coverage Status][coveralls-badge]][coveralls-link]
 [![Dependency Status][gemnasium-badge]][gemnasium-link]
 
 The plugin implements a two-way data binding between views and models/collections.

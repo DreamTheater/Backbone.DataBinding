@@ -28,11 +28,7 @@
         <script src="backbone/model_binder.test.js"></script>
         <script src="backbone/collection_binder.test.js"></script>
 
-        <script>
-            $(function () {
-                mocha.checkLeaks().globals([]).run();
-            });
-        </script>
+        <script>$(mocha.run);</script>
     </head>
 
     <body>

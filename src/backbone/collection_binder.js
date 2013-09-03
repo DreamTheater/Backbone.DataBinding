@@ -4,7 +4,7 @@
 
     ////////////////////
 
-    var scope;
+    var collectionBinder;
 
     ////////////////////
 
@@ -18,7 +18,7 @@
 
         ////////////////////
 
-        scope = _.extend(this, {
+        collectionBinder = _.extend(this, {
             view: view,
             collection: collection,
             options: options
@@ -29,8 +29,16 @@
         ////////////////////
 
         _.extend(view, {
+            render: _.wrap(view.render, function (fn) {
+                fn.call(this);
+
+                collectionBinder.refresh();
+
+                return this;
+            }),
+
             remove: _.wrap(view.remove, function (fn) {
-                scope.removeViews().removeDummy();
+                collectionBinder.removeViews().removeDummy();
 
                 fn.call(this);
 
@@ -53,7 +61,7 @@
                 if (view.$el.parent().length === 0) {
                     var $el = this._resolveElement.call({
                         view: this.view,
-                        options: this.options
+                        selector: this.options.selector
                     }, model);
 
                     view.$el.appendTo($el);
@@ -168,7 +176,7 @@
                 if (dummy.$el.parent().length === 0) {
                     var $el = this._resolveElement.call({
                         view: this.view,
-                        options: this.options
+                        selector: this.options.selector
                     });
 
                     dummy.$el.appendTo($el);
@@ -305,26 +313,13 @@
         },
 
         _resolveElement: function (model) {
-
-            ////////////////////
-
-            var selector = this.options.selector;
-
-            ////////////////////
-
-            var $el, view = this.view;
+            var view = this.view, selector = this.selector;
 
             if (_.isFunction(selector)) {
                 selector = selector.call(view, model);
             }
 
-            if (selector) {
-                $el = view.$(selector).data('selector', selector);
-            } else {
-                $el = view.$el;
-            }
-
-            return $el;
+            return selector ? view.$(selector) : view.$el;
         },
 
         _resolveView: function (model) {

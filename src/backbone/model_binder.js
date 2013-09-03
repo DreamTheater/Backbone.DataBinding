@@ -3,7 +3,7 @@
 
     ////////////////////
 
-    var scope;
+    var modelBinder;
 
     ////////////////////
 
@@ -17,7 +17,7 @@
 
         ////////////////////
 
-        scope = _.extend(this, {
+        modelBinder = _.extend(this, {
             view: view,
             model: model
         }, {
@@ -27,15 +27,23 @@
         ////////////////////
 
         _.extend(view, {
+            render: _.wrap(view.render, function (fn) {
+                fn.call(this);
+
+                modelBinder.refresh();
+
+                return this;
+            }),
+
             setElement: _.wrap(view.setElement, function (fn, element, delegate) {
                 if (this.$el) {
-                    scope.undelegateEvents();
+                    modelBinder.undelegateEvents();
                 }
 
                 fn.call(this, element, delegate);
 
                 if (delegate !== false) {
-                    scope.delegateEvents();
+                    modelBinder.delegateEvents();
                 }
 
                 return this;
@@ -374,7 +382,7 @@
                 getter: _.wrap(callbacks.getter, function (fn) {
                     var $el = this._resolveElement.call({
                             view: this.view,
-                            options: options
+                            selector: options.selector
                         }),
 
                         value = fn ? fn.call($el) : $el.attr(type);
@@ -385,7 +393,7 @@
                 setter: _.wrap(callbacks.setter, function (fn) {
                     var $el = this._resolveElement.call({
                             view: this.view,
-                            options: options
+                            selector: options.selector
                         }),
 
                         value = this.model.get(attribute);
@@ -412,26 +420,13 @@
         },
 
         _resolveElement: function () {
-
-            ////////////////////
-
-            var selector = this.options.selector;
-
-            ////////////////////
-
-            var $el, view = this.view;
+            var view = this.view, selector = this.selector;
 
             if (_.isFunction(selector)) {
                 selector = selector.call(view);
             }
 
-            if (selector) {
-                $el = view.$(selector).data('selector', selector);
-            } else {
-                $el = view.$el;
-            }
-
-            return $el;
+            return selector ? view.$(selector) : view.$el;
         },
 
         _resolveEvents: function (binding) {
