@@ -1,5 +1,18 @@
-(function () {
+(function (factory) {
     'use strict';
+
+    if (typeof exports !== 'undefined') {
+        module.exports = factory({
+            _: require('underscore'),
+            Backbone: require('backbone')
+        });
+    } else {
+        factory(window);
+    }
+}(function (environment) {
+    'use strict';
+
+    var _ = environment._, Backbone = environment.Backbone;
 
     ////////////////////
 
@@ -446,4 +459,6 @@
             return events.join(' ');
         }
     });
-}());
+
+    return ModelBinder;
+}));

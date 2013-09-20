@@ -5,7 +5,7 @@
 [travis-link]: https://travis-ci.org/DreamTheater/Backbone.DataBinding
 
 [gemnasium-badge]: https://gemnasium.com/DreamTheater/Backbone.DataBinding.png
-[gemnasium-link]: https://gemnasium.com/DreamTheater/Backbone.DataBinding#tab-dev_dependencies
+[gemnasium-link]: https://gemnasium.com/DreamTheater/Backbone.DataBinding
 
 # Backbone.DataBinding
 
@@ -18,7 +18,7 @@ The plugin implements a two-way data binding between views and models/collection
 **Dependencies:**
 
   - [Backbone](https://github.com/documentcloud/backbone) `>= 1.0.0`
-  - [Underscore](https://github.com/documentcloud/underscore) `>= 1.5.1`
+  - [Underscore](https://github.com/documentcloud/underscore) `>= 1.5.2`
   - [jQuery](https://github.com/jquery/jquery) `>= 2.0.3`
 
 ## Getting Started
@@ -328,6 +328,9 @@ collectionBinder.listen({
 ```
 
 ## Changelog
+### 0.4.4
+  - Added CommonJS support
+
 ### 0.4.3
   - Fixed a lot of issues
 

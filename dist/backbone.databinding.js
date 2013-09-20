@@ -1,12 +1,25 @@
 /**
- * Backbone.DataBinding v0.4.3
+ * Backbone.DataBinding v0.4.4
  * https://github.com/DreamTheater/Backbone.DataBinding
  *
  * Copyright (c) 2013 Dmytro Nemoga
  * Released under the MIT license
  */
-(function () {
+(function (factory) {
     'use strict';
+
+    if (typeof exports !== 'undefined') {
+        module.exports = factory({
+            _: require('underscore'),
+            Backbone: require('backbone')
+        });
+    } else {
+        factory(window);
+    }
+}(function (environment) {
+    'use strict';
+
+    var _ = environment._, Backbone = environment.Backbone;
 
     ////////////////////
 
@@ -453,11 +466,26 @@
             return events.join(' ');
         }
     });
-}());
+
+    return ModelBinder;
+}));
 
 /*jshint maxstatements:12 */
-(function () {
+(function (factory) {
     'use strict';
+
+    if (typeof exports !== 'undefined') {
+        module.exports = factory({
+            _: require('underscore'),
+            Backbone: require('backbone')
+        });
+    } else {
+        factory(window);
+    }
+}(function (environment) {
+    'use strict';
+
+    var _ = environment._, Backbone = environment.Backbone;
 
     ////////////////////
 
@@ -825,4 +853,6 @@
             return dummy.render();
         }
     });
-}());
+
+    return CollectionBinder;
+}));

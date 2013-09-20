@@ -21,7 +21,7 @@ module.exports = function (config) {
 
             // Fixtures
             'test/index.html',
-            'test/fixture_loader.js',
+            'test/window.js',
 
             // Tests
             'test/backbone/model_binder.test.js',
