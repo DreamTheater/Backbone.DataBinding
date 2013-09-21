@@ -1,18 +1,23 @@
 (function (factory) {
     'use strict';
 
-    if (typeof exports !== 'undefined') {
-        module.exports = factory({
-            _: require('underscore'),
-            Backbone: require('backbone')
-        });
-    } else {
-        factory(window);
-    }
-}(function (environment) {
+    var isNode = typeof module === 'object' && typeof exports === 'object';
+
+    ////////////////////
+
+    var root = isNode ? {
+        _: require('underscore'),
+        Backbone: require('backbone')
+    } : window;
+
+    ////////////////////
+
+    (isNode ? exports : Backbone).ModelBinder = factory(root, isNode);
+
+}(function (root) {
     'use strict';
 
-    var _ = environment._, Backbone = environment.Backbone;
+    var _ = root._, Backbone = root.Backbone;
 
     ////////////////////
 
@@ -127,14 +132,14 @@
 
             checked: {
                 getter: function () {
-                    var value, values = _.chain(this).filter(function (el) {
-                        return el.checked;
+                    var value, values = _.chain(this).where({
+                        checked: true
                     }).pluck('value').value();
 
                     if (this.prop('type') === 'radio') {
                         value = values[0];
-                    } else if (this.prop('value') === 'on') {
-                        value = !!values[0];
+                    } else if (this.length === 1) {
+                        value = this.prop('checked');
                     } else {
                         value = values;
                     }
@@ -143,15 +148,13 @@
                 },
 
                 setter: function (value) {
-                    var values = _.isArray(value) ? value : [String(value)];
-
-                    values = _.reject(values, function (value) {
+                    var values = _.chain([value]).flatten().reject(function (value) {
                         return _.isNull(value) || _.isUndefined(value);
-                    });
+                    }).value();
 
                     if (this.prop('type') === 'radio') {
                         this.val(values);
-                    } else if (this.prop('value') === 'on') {
+                    } else if (this.length === 1) {
                         this.prop('checked', value);
                     } else {
                         this.val(values);
