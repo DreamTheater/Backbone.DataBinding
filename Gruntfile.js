@@ -75,5 +75,5 @@ module.exports = function (grunt) {
     // TASKS //
     ///////////
 
-    grunt.registerTask('default', ['jshint', 'karma', 'concat', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'karma']);
 };
