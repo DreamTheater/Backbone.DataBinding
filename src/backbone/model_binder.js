@@ -109,7 +109,7 @@
                 getter: function () {
                     var value = this.val() || [];
 
-                    return this.is('select[multiple]') ? value : String(value);
+                    return this.is('[multiple]') ? value : String(value);
                 },
 
                 setter: function (value) {

@@ -17,7 +17,7 @@ The plugin implements a two-way data binding between views and models/collection
 
 **Dependencies:**
 
-  - [Backbone](https://github.com/documentcloud/backbone) `>= 1.0.0`
+  - [Backbone](https://github.com/documentcloud/backbone) `>= 1.1.0`
   - [Underscore](https://github.com/documentcloud/underscore) `>= 1.5.2`
   - [jQuery](https://github.com/jquery/jquery) `>= 2.0.3`
 
