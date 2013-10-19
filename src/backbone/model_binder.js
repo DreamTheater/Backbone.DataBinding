@@ -70,6 +70,8 @@
     };
 
     _.extend(ModelBinder, {
+        extend: Backbone.View.extend
+    }, {
         handlers: {
             html: {
                 getter: function () {
@@ -205,8 +207,8 @@
     });
 
     _.extend(ModelBinder.prototype, {
-        constructor: ModelBinder,
-
+        constructor: ModelBinder
+    }, {
         watch: function (binding, options) {
 
             ////////////////////
@@ -384,11 +386,16 @@
 
             var match = binding.match(/^\s*([-\w]+)\s*:\s*([-\w]+)\s*$/),
 
-                type = match[1], attribute = match[2];
+                type = match[1],
+                attribute = match[2];
 
             ////////////////////
 
-            var callbacks = this.constructor.handlers[type] || {};
+            var constructor = this.constructor;
+
+            ////////////////////
+
+            var callbacks = constructor.handlers[type] || {};
 
             ////////////////////
 

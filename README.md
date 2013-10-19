@@ -328,6 +328,9 @@ collectionBinder.listen({
 ```
 
 ## Changelog
+### 0.4.5
+  - `Backbone.ModelBinder` and `Backbone.CollectionBinder` could be extended
+
 ### 0.4.4
   - Added CommonJS support
 

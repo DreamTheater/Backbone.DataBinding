@@ -66,6 +66,8 @@
     };
 
     _.extend(CollectionBinder, {
+        extend: Backbone.View.extend
+    }, {
         handlers: {
             add: function (model) {
                 var views = this.views, view = this._resolveView(model) || this._prepareView(model),
@@ -129,8 +131,8 @@
     });
 
     _.extend(CollectionBinder.prototype, {
-        constructor: CollectionBinder,
-
+        constructor: CollectionBinder
+    }, {
         listen: function (options) {
 
             ////////////////////
@@ -160,16 +162,30 @@
         },
 
         renderViews: function (collection) {
-            collection.each(this.constructor.handlers.add, this);
+
+            ////////////////////
+
+            var constructor = this.constructor;
+
+            ////////////////////
+
+            collection.each(constructor.handlers.add, this);
 
             return this;
         },
 
         removeViews: function () {
+
+            ////////////////////
+
+            var constructor = this.constructor;
+
+            ////////////////////
+
             var views = this.views;
 
             while (views.length > 0) {
-                this.constructor.handlers.remove.call(this, views[0].model);
+                constructor.handlers.remove.call(this, views[0].model);
             }
 
             return this;
@@ -274,7 +290,11 @@
 
             ////////////////////
 
-            var callbacks = this.constructor.handlers;
+            var constructor = this.constructor;
+
+            ////////////////////
+
+            var callbacks = constructor.handlers;
 
             ////////////////////
 
