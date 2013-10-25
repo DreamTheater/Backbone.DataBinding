@@ -231,13 +231,6 @@
             ////////////////////
 
             _.each(bindings, function (options, binding) {
-
-                ////////////////////
-
-                options = options || {};
-
-                ////////////////////
-
                 this._addHandlers(binding, options);
             }, this);
 
@@ -250,12 +243,12 @@
 
             ////////////////////
 
-            var callbacks = _.pluck(this.handlers, 'setter');
+            var handlers = _.pluck(this.handlers, 'setter');
 
             ////////////////////
 
-            _.each(callbacks, function (callback) {
-                if (callback) callback();
+            _.each(handlers, function (handler) {
+                if (handler) handler();
             });
 
             return this;
@@ -391,6 +384,10 @@
 
             ////////////////////
 
+            options = options || {};
+
+            ////////////////////
+
             var match = binding.match(/^\s*([-\w]+)\s*:\s*([-\w]+)\s*$/),
 
                 type = match[1],
@@ -402,14 +399,17 @@
 
             ////////////////////
 
-            var callbacks = constructor.handlers[type] || {};
+            var handlers = constructor.handlers[type],
+
+                getter = handlers && handlers.getter,
+                setter = handlers && handlers.setter;
 
             ////////////////////
 
             this.undelegateEvents(binding).stopListening(binding);
 
             this.handlers[binding] = _.defaults(options, {
-                getter: _.wrap(callbacks.getter, function (fn) {
+                getter: _.wrap(getter, function (fn) {
                     var $el = this._resolveElement.call({
                             view: this.view,
                             selector: options.selector
@@ -420,7 +420,7 @@
                     return this.model.set(attribute, value, options);
                 }),
 
-                setter: _.wrap(callbacks.setter, function (fn) {
+                setter: _.wrap(setter, function (fn) {
                     var $el = this._resolveElement.call({
                             view: this.view,
                             selector: options.selector
@@ -432,12 +432,14 @@
                 })
             });
 
-            this._bindCallbacks(options);
+            this._bindHandlers(options);
 
             this.delegateEvents(binding).startListening(binding);
+
+            return this;
         },
 
-        _bindCallbacks: function (options) {
+        _bindHandlers: function (options) {
 
             ////////////////////
 
@@ -447,6 +449,8 @@
 
             if (getter) options.getter = _.bind(getter, this);
             if (setter) options.setter = _.bind(setter, this);
+
+            return this;
         },
 
         _resolveElement: function () {
@@ -616,16 +620,7 @@
         constructor: CollectionBinder
     }, {
         listen: function (options) {
-
-            ////////////////////
-
-            options = options || {};
-
-            ////////////////////
-
-            this._addHandlers(options);
-
-            this.refresh();
+            this._addHandlers(options).refresh();
 
             return this;
         },
@@ -634,11 +629,13 @@
 
             ////////////////////
 
-            var callback = this.handlers.reset;
+            var handler = this.handlers.reset;
 
             ////////////////////
 
-            if (callback) callback(this.collection);
+            if (handler) {
+                handler(this.collection);
+            }
 
             return this;
         },
@@ -736,11 +733,11 @@
 
             ////////////////////
 
-            _.each(handlers, function (callback, event) {
+            _.each(handlers, function (handler, event) {
                 this.stopListening(event);
 
-                if (callback) {
-                    this.view.listenTo(this.collection, event, callback);
+                if (handler) {
+                    this.view.listenTo(this.collection, event, handler);
                 }
             }, this);
 
@@ -759,9 +756,9 @@
 
             ////////////////////
 
-            _.each(handlers, function (callback, event) {
-                if (callback) {
-                    this.view.stopListening(this.collection, event, callback);
+            _.each(handlers, function (handler, event) {
+                if (handler) {
+                    this.view.stopListening(this.collection, event, handler);
                 }
             }, this);
 
@@ -772,24 +769,33 @@
 
             ////////////////////
 
+            options = options || {};
+
+            ////////////////////
+
             var constructor = this.constructor;
 
             ////////////////////
 
-            var callbacks = constructor.handlers;
+            var handlers = constructor.handlers,
+
+                add = handlers && handlers.add,
+                remove = handlers && handlers.remove,
+                reset = handlers && handlers.reset,
+                sort = handlers && handlers.sort;
 
             ////////////////////
 
             this.stopListening();
 
             this.handlers = _.defaults(options, {
-                add: _.wrap(callbacks.add, function (fn, model) {
+                add: _.wrap(add, function (fn, model) {
                     this.detachDummy();
 
                     fn.call(this, model);
                 }),
 
-                remove: _.wrap(callbacks.remove, function (fn, model) {
+                remove: _.wrap(remove, function (fn, model) {
                     fn.call(this, model);
 
                     if (this.collection.isEmpty()) {
@@ -797,7 +803,7 @@
                     }
                 }),
 
-                reset: _.wrap(callbacks.reset, function (fn, collection) {
+                reset: _.wrap(reset, function (fn, collection) {
                     this.removeDummy();
 
                     fn.call(this, collection);
@@ -807,17 +813,19 @@
                     }
                 }),
 
-                sort: _.wrap(callbacks.sort, function (fn, collection) {
+                sort: _.wrap(sort, function (fn, collection) {
                     fn.call(this, collection);
                 })
             });
 
-            this._bindCallbacks(options);
+            this._bindHandlers(options);
 
             this.startListening();
+
+            return this;
         },
 
-        _bindCallbacks: function (options) {
+        _bindHandlers: function (options) {
 
             ////////////////////
 
@@ -830,6 +838,8 @@
             if (remove) options.remove = _.bind(remove, this);
             if (reset) options.reset = _.bind(reset, this);
             if (sort) options.sort = _.bind(sort, this);
+
+            return this;
         },
 
         _resolveElement: function (model) {

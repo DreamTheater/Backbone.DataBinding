@@ -224,13 +224,6 @@
             ////////////////////
 
             _.each(bindings, function (options, binding) {
-
-                ////////////////////
-
-                options = options || {};
-
-                ////////////////////
-
                 this._addHandlers(binding, options);
             }, this);
 
@@ -243,12 +236,12 @@
 
             ////////////////////
 
-            var callbacks = _.pluck(this.handlers, 'setter');
+            var handlers = _.pluck(this.handlers, 'setter');
 
             ////////////////////
 
-            _.each(callbacks, function (callback) {
-                if (callback) callback();
+            _.each(handlers, function (handler) {
+                if (handler) handler();
             });
 
             return this;
@@ -384,6 +377,10 @@
 
             ////////////////////
 
+            options = options || {};
+
+            ////////////////////
+
             var match = binding.match(/^\s*([-\w]+)\s*:\s*([-\w]+)\s*$/),
 
                 type = match[1],
@@ -395,14 +392,17 @@
 
             ////////////////////
 
-            var callbacks = constructor.handlers[type] || {};
+            var handlers = constructor.handlers[type],
+
+                getter = handlers && handlers.getter,
+                setter = handlers && handlers.setter;
 
             ////////////////////
 
             this.undelegateEvents(binding).stopListening(binding);
 
             this.handlers[binding] = _.defaults(options, {
-                getter: _.wrap(callbacks.getter, function (fn) {
+                getter: _.wrap(getter, function (fn) {
                     var $el = this._resolveElement.call({
                             view: this.view,
                             selector: options.selector
@@ -413,7 +413,7 @@
                     return this.model.set(attribute, value, options);
                 }),
 
-                setter: _.wrap(callbacks.setter, function (fn) {
+                setter: _.wrap(setter, function (fn) {
                     var $el = this._resolveElement.call({
                             view: this.view,
                             selector: options.selector
@@ -425,12 +425,14 @@
                 })
             });
 
-            this._bindCallbacks(options);
+            this._bindHandlers(options);
 
             this.delegateEvents(binding).startListening(binding);
+
+            return this;
         },
 
-        _bindCallbacks: function (options) {
+        _bindHandlers: function (options) {
 
             ////////////////////
 
@@ -440,6 +442,8 @@
 
             if (getter) options.getter = _.bind(getter, this);
             if (setter) options.setter = _.bind(setter, this);
+
+            return this;
         },
 
         _resolveElement: function () {
