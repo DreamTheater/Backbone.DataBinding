@@ -279,13 +279,13 @@
                 expect($el.val()).to.equal('false');
 
                 model.set(attribute, null);
-                expect($el.val()).to.equal(null);
+                expect($el.val()).to.equal('');
 
                 model.set(attribute, undefined);
-                expect($el.val()).to.equal(null);
+                expect($el.val()).to.equal('');
 
                 model.unset(attribute);
-                expect($el.val()).to.equal(null);
+                expect($el.val()).to.equal('');
             });
         });
 
@@ -420,31 +420,31 @@
                 var attribute = 'button-visible', $el = view.$('[name="' + attribute + '"]');
 
                 model.set(attribute, 'string');
-                expect($el.is(':visible')).to.equal(true);
+                expect($el.prop('hidden')).to.equal(false);
 
                 model.set(attribute, '');
-                expect($el.is(':visible')).to.equal(false);
+                expect($el.prop('hidden')).to.equal(true);
 
                 model.set(attribute, 1);
-                expect($el.is(':visible')).to.equal(true);
+                expect($el.prop('hidden')).to.equal(false);
 
                 model.set(attribute, 0);
-                expect($el.is(':visible')).to.equal(false);
+                expect($el.prop('hidden')).to.equal(true);
 
                 model.set(attribute, true);
-                expect($el.is(':visible')).to.equal(true);
+                expect($el.prop('hidden')).to.equal(false);
 
                 model.set(attribute, false);
-                expect($el.is(':visible')).to.equal(false);
+                expect($el.prop('hidden')).to.equal(true);
 
                 model.set(attribute, null);
-                expect($el.is(':visible')).to.equal(false);
+                expect($el.prop('hidden')).to.equal(true);
 
                 model.set(attribute, undefined);
-                expect($el.is(':visible')).to.equal(false);
+                expect($el.prop('hidden')).to.equal(true);
 
                 model.unset(attribute);
-                expect($el.is(':visible')).to.equal(false);
+                expect($el.prop('hidden')).to.equal(true);
             });
         });
 
@@ -453,31 +453,31 @@
                 var attribute = 'button-hidden', $el = view.$('[name="' + attribute + '"]');
 
                 model.set(attribute, 'string');
-                expect($el.is(':hidden')).to.equal(true);
+                expect($el.prop('hidden')).to.equal(true);
 
                 model.set(attribute, '');
-                expect($el.is(':hidden')).to.equal(false);
+                expect($el.prop('hidden')).to.equal(false);
 
                 model.set(attribute, 1);
-                expect($el.is(':hidden')).to.equal(true);
+                expect($el.prop('hidden')).to.equal(true);
 
                 model.set(attribute, 0);
-                expect($el.is(':hidden')).to.equal(false);
+                expect($el.prop('hidden')).to.equal(false);
 
                 model.set(attribute, true);
-                expect($el.is(':hidden')).to.equal(true);
+                expect($el.prop('hidden')).to.equal(true);
 
                 model.set(attribute, false);
-                expect($el.is(':hidden')).to.equal(false);
+                expect($el.prop('hidden')).to.equal(false);
 
                 model.set(attribute, null);
-                expect($el.is(':hidden')).to.equal(false);
+                expect($el.prop('hidden')).to.equal(false);
 
                 model.set(attribute, undefined);
-                expect($el.is(':hidden')).to.equal(false);
+                expect($el.prop('hidden')).to.equal(false);
 
                 model.unset(attribute);
-                expect($el.is(':hidden')).to.equal(false);
+                expect($el.prop('hidden')).to.equal(false);
             });
         });
 
@@ -486,31 +486,31 @@
                 var attribute = 'button-enabled', $el = view.$('[name="' + attribute + '"]');
 
                 model.set(attribute, 'string');
-                expect($el.is(':enabled')).to.equal(true);
+                expect($el.prop('disabled')).to.equal(false);
 
                 model.set(attribute, '');
-                expect($el.is(':enabled')).to.equal(false);
+                expect($el.prop('disabled')).to.equal(true);
 
                 model.set(attribute, 1);
-                expect($el.is(':enabled')).to.equal(true);
+                expect($el.prop('disabled')).to.equal(false);
 
                 model.set(attribute, 0);
-                expect($el.is(':enabled')).to.equal(false);
+                expect($el.prop('disabled')).to.equal(true);
 
                 model.set(attribute, true);
-                expect($el.is(':enabled')).to.equal(true);
+                expect($el.prop('disabled')).to.equal(false);
 
                 model.set(attribute, false);
-                expect($el.is(':enabled')).to.equal(false);
+                expect($el.prop('disabled')).to.equal(true);
 
                 model.set(attribute, null);
-                expect($el.is(':enabled')).to.equal(false);
+                expect($el.prop('disabled')).to.equal(true);
 
                 model.set(attribute, undefined);
-                expect($el.is(':enabled')).to.equal(false);
+                expect($el.prop('disabled')).to.equal(true);
 
                 model.unset(attribute);
-                expect($el.is(':enabled')).to.equal(false);
+                expect($el.prop('disabled')).to.equal(true);
             });
         });
 
@@ -519,31 +519,31 @@
                 var attribute = 'button-disabled', $el = view.$('[name="' + attribute + '"]');
 
                 model.set(attribute, 'string');
-                expect($el.is(':disabled')).to.equal(true);
+                expect($el.prop('disabled')).to.equal(true);
 
                 model.set(attribute, '');
-                expect($el.is(':disabled')).to.equal(false);
+                expect($el.prop('disabled')).to.equal(false);
 
                 model.set(attribute, 1);
-                expect($el.is(':disabled')).to.equal(true);
+                expect($el.prop('disabled')).to.equal(true);
 
                 model.set(attribute, 0);
-                expect($el.is(':disabled')).to.equal(false);
+                expect($el.prop('disabled')).to.equal(false);
 
                 model.set(attribute, true);
-                expect($el.is(':disabled')).to.equal(true);
+                expect($el.prop('disabled')).to.equal(true);
 
                 model.set(attribute, false);
-                expect($el.is(':disabled')).to.equal(false);
+                expect($el.prop('disabled')).to.equal(false);
 
                 model.set(attribute, null);
-                expect($el.is(':disabled')).to.equal(false);
+                expect($el.prop('disabled')).to.equal(false);
 
                 model.set(attribute, undefined);
-                expect($el.is(':disabled')).to.equal(false);
+                expect($el.prop('disabled')).to.equal(false);
 
                 model.unset(attribute);
-                expect($el.is(':disabled')).to.equal(false);
+                expect($el.prop('disabled')).to.equal(false);
             });
         });
 

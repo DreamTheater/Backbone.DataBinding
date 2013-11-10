@@ -122,8 +122,10 @@
                         value = _.reject(value, function (value) {
                             return _.isNull(value) || _.isUndefined(value);
                         });
+                    } else if (_.isNull(value) || _.isUndefined(value)) {
+                        value = this.is('[multiple]') ? [] : '';
                     } else {
-                        value = _.isNull(value) || _.isUndefined(value) ? [] : String(value);
+                        value = String(value);
                     }
 
                     ////////////////////
@@ -166,7 +168,7 @@
 
             visible: {
                 getter: function () {
-                    return this.is(':visible');
+                    return !this.prop('hidden');
                 },
 
                 setter: function (value) {
@@ -176,17 +178,17 @@
 
             hidden: {
                 getter: function () {
-                    return this.is(':hidden');
+                    return this.prop('hidden');
                 },
 
                 setter: function (value) {
-                    this.prop('hidden', value);
+                    this.prop('hidden', !!value);
                 }
             },
 
             enabled: {
                 getter: function () {
-                    return this.is(':enabled');
+                    return !this.prop('disabled');
                 },
 
                 setter: function (value) {
@@ -196,11 +198,11 @@
 
             disabled: {
                 getter: function () {
-                    return this.is(':disabled');
+                    return this.prop('disabled');
                 },
 
                 setter: function (value) {
-                    this.prop('disabled', value);
+                    this.prop('disabled', !!value);
                 }
             }
         }

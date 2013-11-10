@@ -37,7 +37,7 @@
 
     "scripts": {
         "pretest": "./node_modules/.bin/grunt jshint concat uglify",
-        "test": "./node_modules/.bin/grunt karma"
+        "test": "./node_modules/.bin/grunt karma && ./node_modules/.bin/mocha test/**/*.test.js"
     },
 
     "dependencies": {
