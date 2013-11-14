@@ -63,9 +63,14 @@
                                 tagName: 'li',
 
                                 render: function () {
-                                    var model = this.model;
+                                    var model = this.model,
 
-                                    this.$el.text(model.cid).data('model', model);
+                                        text = JSON.stringify({
+                                            cid: model.cid,
+                                            attributes: model.attributes
+                                        });
+
+                                    this.$el.text(text).data('model', model);
 
                                     return this;
                                 }
@@ -73,7 +78,7 @@
 
                             dummy: Backbone.View.extend({
                                 render: function () {
-                                    this.$el.text('Dummy').data('view', this);
+                                    this.$el.text('List is empty').data('view', this);
 
                                     return this;
                                 }

@@ -134,7 +134,18 @@
         constructor: CollectionBinder
     }, {
         listen: function (options) {
-            this._addHandlers(options).refresh();
+
+            ////////////////////
+
+            options = options || {};
+
+            ////////////////////
+
+            this.stopListening()
+                ._addHandlers(options)
+                .startListening();
+
+            this.refresh();
 
             return this;
         },
@@ -143,42 +154,32 @@
 
             ////////////////////
 
-            var handler = this.handlers.reset;
+            var reset = this.handlers.reset;
 
             ////////////////////
 
-            if (handler) {
-                handler(this.collection);
+            if (reset) {
+                reset(this.collection);
             }
 
             return this;
         },
 
         renderViews: function (collection) {
+            var models = collection.models;
 
-            ////////////////////
-
-            var constructor = this.constructor;
-
-            ////////////////////
-
-            collection.each(constructor.handlers.add, this);
+            _.each(models, function (model) {
+                this.handlers.add(model);
+            }, this);
 
             return this;
         },
 
         removeViews: function () {
-
-            ////////////////////
-
-            var constructor = this.constructor;
-
-            ////////////////////
-
             var views = this.views;
 
             while (views.length > 0) {
-                constructor.handlers.remove.call(this, views[0].model);
+                this.handlers.remove(views[0].model);
             }
 
             return this;
@@ -283,10 +284,6 @@
 
             ////////////////////
 
-            options = options || {};
-
-            ////////////////////
-
             var constructor = this.constructor;
 
             ////////////////////
@@ -299,8 +296,6 @@
                 sort = handlers && handlers.sort;
 
             ////////////////////
-
-            this.stopListening();
 
             this.handlers = _.defaults(options, {
                 add: _.wrap(add, function (fn, model) {
@@ -333,8 +328,6 @@
             });
 
             this._bindHandlers(options);
-
-            this.startListening();
 
             return this;
         },

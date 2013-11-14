@@ -39,7 +39,7 @@
             view: view,
             model: model
         }, {
-            handlers: {}
+            bindings: {}
         });
 
         ////////////////////
@@ -226,7 +226,18 @@
             ////////////////////
 
             _.each(bindings, function (options, binding) {
-                this._addHandlers(binding, options);
+
+                ////////////////////
+
+                options = options || {};
+
+                ////////////////////
+
+                this.stopListening(binding)
+                    .undelegateEvents(binding)
+                    ._addBinding(binding, options)
+                    .delegateEvents(binding)
+                    .startListening(binding);
             }, this);
 
             this.refresh();
@@ -238,12 +249,12 @@
 
             ////////////////////
 
-            var handlers = _.pluck(this.handlers, 'setter');
+            var setters = _.pluck(this.bindings, 'setter');
 
             ////////////////////
 
-            _.each(handlers, function (handler) {
-                if (handler) handler();
+            _.each(setters, function (setter) {
+                if (setter) setter();
             });
 
             return this;
@@ -253,15 +264,15 @@
 
             ////////////////////
 
-            var handlers = this.handlers;
+            var bindings = this.bindings;
 
             if (binding) {
-                handlers = _.pick(handlers, binding);
+                bindings = _.pick(bindings, binding);
             }
 
             ////////////////////
 
-            _.each(handlers, function (options, binding) {
+            _.each(bindings, function (options, binding) {
 
                 ////////////////////
 
@@ -288,15 +299,15 @@
 
             ////////////////////
 
-            var handlers = this.handlers;
+            var bindings = this.bindings;
 
             if (binding) {
-                handlers = _.pick(handlers, binding);
+                bindings = _.pick(bindings, binding);
             }
 
             ////////////////////
 
-            _.each(handlers, function (options, binding) {
+            _.each(bindings, function (options, binding) {
 
                 ////////////////////
 
@@ -321,15 +332,15 @@
 
             ////////////////////
 
-            var handlers = this.handlers;
+            var bindings = this.bindings;
 
             if (binding) {
-                handlers = _.pick(handlers, binding);
+                bindings = _.pick(bindings, binding);
             }
 
             ////////////////////
 
-            _.each(handlers, function (options, binding) {
+            _.each(bindings, function (options, binding) {
 
                 ////////////////////
 
@@ -351,15 +362,15 @@
 
             ////////////////////
 
-            var handlers = this.handlers;
+            var bindings = this.bindings;
 
             if (binding) {
-                handlers = _.pick(handlers, binding);
+                bindings = _.pick(bindings, binding);
             }
 
             ////////////////////
 
-            _.each(handlers, function (options) {
+            _.each(bindings, function (options) {
 
                 ////////////////////
 
@@ -375,11 +386,7 @@
             return this;
         },
 
-        _addHandlers: function (binding, options) {
-
-            ////////////////////
-
-            options = options || {};
+        _addBinding: function (binding, options) {
 
             ////////////////////
 
@@ -401,9 +408,7 @@
 
             ////////////////////
 
-            this.undelegateEvents(binding).stopListening(binding);
-
-            this.handlers[binding] = _.defaults(options, {
+            this.bindings[binding] = _.defaults(options, {
                 getter: _.wrap(getter, function (fn) {
                     var $el = this._resolveElement.call({
                             view: this.view,
@@ -428,8 +433,6 @@
             });
 
             this._bindHandlers(options);
-
-            this.delegateEvents(binding).startListening(binding);
 
             return this;
         },
