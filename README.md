@@ -407,3 +407,7 @@ collectionBinder.listen({
 
 ### 0.1.0
   - Initial release
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/DreamTheater/backbone.databinding/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
